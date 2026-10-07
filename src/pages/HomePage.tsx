@@ -10,6 +10,7 @@ import { FilterTabs } from '../components/FilterTabs';
 import { BridgeCard } from '../components/BridgeCard';
 import { BrutalistCard } from '../components/BrutalistCard';
 import { BrutalistButton } from '../components/BrutalistButton';
+import { BrutalistBadge } from '../components/BrutalistBadge';
 import { LegendGuide } from '../components/LegendGuide';
 import { FilterTabType, BridgeOpportunity } from '../types';
 import { Sparkles, SlidersHorizontal, Sun, Info } from 'lucide-react';
@@ -28,7 +29,10 @@ export function HomePage({ onOpenHolidayDrawer }: HomePageProps) {
     plannedLeaveDates,
     maxAlPerBridge,
     setMaxAlPerBridge,
+    annualLeaveBalance,
   } = useLeaveStore();
+
+  const remainingAl = Math.max(0, annualLeaveBalance - plannedLeaveDates.length);
 
   const [activeTab, setActiveTab] = useState<FilterTabType>('ALL');
   const [isHowToUseOpen, setIsHowToUseOpen] = useState(true);
@@ -85,8 +89,8 @@ export function HomePage({ onOpenHolidayDrawer }: HomePageProps) {
 
   return (
     <div className="neobrutalist-container">
-      {/* 1. Header */}
-      <Header onOpenHolidayDrawer={onOpenHolidayDrawer} />
+      {/* 1. Header (Navbar with State Selector & Reset on Top Right) */}
+      <Header />
 
       {/* 2. Hero Section */}
       <HeroSection
@@ -101,7 +105,36 @@ export function HomePage({ onOpenHolidayDrawer }: HomePageProps) {
       )}
 
       {/* 4. Leave Arbitrage Planner Controls & Stats */}
-      <div ref={plannerRef}>
+      <div ref={plannerRef} style={{ paddingTop: '0.5rem' }}>
+        {/* Status Badges Row */}
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '0.4rem',
+            alignItems: 'center',
+            marginBottom: '0.75rem',
+          }}
+        >
+          <BrutalistBadge
+            color="var(--accent-yellow)"
+            style={{ cursor: 'pointer' }}
+            onClick={onOpenHolidayDrawer}
+          >
+            {observedHolidayIds.length} HOLIDAYS OBSERVED
+          </BrutalistBadge>
+
+          <BrutalistBadge
+            color={remainingAl > 3 ? 'var(--accent-cyan)' : 'var(--accent-pink)'}
+          >
+            {remainingAl} / {annualLeaveBalance} AL REMAINING
+          </BrutalistBadge>
+
+          <BrutalistBadge color="var(--weekend-bg)">
+            {weekendType === 'SAT_SUN' ? 'SAT–SUN WEEKEND' : 'FRI–SAT WEEKEND'}
+          </BrutalistBadge>
+        </div>
+
         <ControlBar onOpenHolidayDrawer={onOpenHolidayDrawer} />
         <SummaryStats bridges={allBridges} plannedLeaveDates={plannedLeaveDates} />
         <LegendGuide />
