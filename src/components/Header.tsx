@@ -1,8 +1,12 @@
 import { useLeaveStore } from '../store/useLeaveStore';
 import { MalaysianState, STATE_NAMES } from '../types';
-import { Palmtree, RefreshCw } from 'lucide-react';
+import { RefreshCw, HelpCircle } from 'lucide-react';
 
-export function Header() {
+interface HeaderProps {
+  onOpenHelp?: () => void;
+}
+
+export function Header({ onOpenHelp }: HeaderProps) {
   const { state, setState, resetToDefaults } = useLeaveStore();
 
   const stateOptions = (Object.keys(STATE_NAMES) as MalaysianState[]).map((key) => ({
@@ -22,51 +26,36 @@ export function Header() {
         width: '100%',
       }}
     >
-      {/* Brand on Left */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', minWidth: 0 }}>
-        <div
+      {/* Brand on Left (Two stacked rows, no icon, no subtitle) */}
+      <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <h1
           style={{
-            backgroundColor: 'var(--accent-yellow)',
-            border: 'var(--border-width) solid var(--border-color)',
-            borderRadius: 'var(--border-radius-sm)',
-            padding: '0.35rem',
-            boxShadow: '2px 2px 0px var(--border-color)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
+            fontSize: '1.2rem',
+            fontWeight: 900,
+            textTransform: 'uppercase',
+            letterSpacing: '-0.5px',
+            lineHeight: 0.95,
+            margin: 0,
+            color: 'var(--text-color)',
+            whiteSpace: 'nowrap',
           }}
         >
-          <Palmtree size={22} strokeWidth={2.5} color="var(--border-color)" />
-        </div>
-        <div style={{ minWidth: 0 }}>
-          <h1
-            style={{
-              fontSize: '1.45rem',
-              fontWeight: 900,
-              textTransform: 'uppercase',
-              letterSpacing: '-0.5px',
-              lineHeight: 1,
-              margin: 0,
-              color: 'var(--text-color)',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            CUTI READY
-          </h1>
-          <span
-            style={{
-              fontSize: '0.62rem',
-              fontWeight: 800,
-              textTransform: 'uppercase',
-              letterSpacing: '0.4px',
-              color: 'var(--text-muted)',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            MALAYSIA • 2026
-          </span>
-        </div>
+          CUTI
+        </h1>
+        <h1
+          style={{
+            fontSize: '1.2rem',
+            fontWeight: 900,
+            textTransform: 'uppercase',
+            letterSpacing: '-0.5px',
+            lineHeight: 0.95,
+            margin: 0,
+            color: 'var(--text-color)',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          READY
+        </h1>
       </div>
 
       {/* State Selector & Reset Button on Top Right */}
@@ -133,6 +122,27 @@ export function Header() {
         >
           <RefreshCw size={14} color="var(--border-color)" />
         </button>
+
+        {onOpenHelp && (
+          <button
+            onClick={onOpenHelp}
+            title="How leave arbitrage works"
+            style={{
+              backgroundColor: 'var(--accent-yellow)',
+              border: '2px solid var(--border-color)',
+              borderRadius: 'var(--border-radius-sm)',
+              padding: '0.42rem',
+              cursor: 'pointer',
+              boxShadow: '2px 2px 0px var(--border-color)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <HelpCircle size={14} color="var(--border-color)" />
+          </button>
+        )}
       </div>
     </header>
   );

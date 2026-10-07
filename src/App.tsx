@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import { HomePage } from './pages/HomePage';
-import { HolidayConfigDrawer } from './components/HolidayConfigDrawer';
+import { HowToUseModal } from './components/HowToUseModal';
 
 export default function App() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isHowToUseOpen, setIsHowToUseOpen] = useState(false);
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)' }}>
-      <HomePage onOpenHolidayDrawer={() => setIsDrawerOpen(true)} />
-      <HolidayConfigDrawer
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
+      <HomePage onOpenHowToUse={() => setIsHowToUseOpen(true)} />
+
+      <HowToUseModal
+        isOpen={isHowToUseOpen}
+        onClose={() => setIsHowToUseOpen(false)}
       />
     </div>
   );

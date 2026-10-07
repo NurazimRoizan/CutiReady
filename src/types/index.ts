@@ -103,6 +103,8 @@ export type LeavePreset = 'MINIMUM_11' | 'CORPORATE_15' | 'ALL' | 'CUSTOM';
 
 export type FilterTabType = 'ALL' | 'HIGH_ROI' | 'ZERO_AL' | 'Q1' | 'Q2' | 'Q3' | 'Q4';
 
+export type AppTab = 'BRIDGES' | 'PLAN' | 'RULES';
+
 export interface UserPreferences {
   selectedYear: number;
   state: MalaysianState;

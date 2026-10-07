@@ -1,5 +1,4 @@
 import { BrutalistButton } from './BrutalistButton';
-import { Sticker } from './Sticker';
 import { useLeaveStore } from '../store/useLeaveStore';
 
 interface HeroSectionProps {
@@ -24,17 +23,6 @@ export function HeroSection({
 
   return (
     <section style={{ textAlign: 'center', position: 'relative', marginBottom: '2.5rem' }}>
-      {/* Playful Floating Sticker matching Wallo */}
-      <div style={{ position: 'absolute', top: '-14px', left: '0px', zIndex: 2 }}>
-        <Sticker
-          color="var(--accent-pink)"
-          rotation={-3}
-          style={{ fontSize: '0.78rem', padding: '0.2rem 0.55rem' }}
-        >
-          2026 Engine Live!
-        </Sticker>
-      </div>
-
       {/* Main Massive Hero Header */}
       <h1
         style={{
@@ -42,7 +30,7 @@ export function HeroSection({
           textTransform: 'uppercase',
           letterSpacing: '-1.2px',
           lineHeight: '1.05',
-          marginTop: '1.5rem',
+          marginTop: '0.75rem',
           marginBottom: '1rem',
           color: 'var(--text-color)',
         }}

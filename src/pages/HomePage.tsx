@@ -1,25 +1,19 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo } from 'react';
 import { useLeaveStore } from '../store/useLeaveStore';
 import { buildNormalizedCalendar, findBridgeOpportunities } from '../engine/calendarEngine';
 import { Header } from '../components/Header';
-import { HeroSection } from '../components/HeroSection';
-import { HowToUseSection } from '../components/HowToUseSection';
-import { ControlBar } from '../components/ControlBar';
-import { SummaryStats } from '../components/SummaryStats';
-import { FilterTabs } from '../components/FilterTabs';
-import { BridgeCard } from '../components/BridgeCard';
-import { BrutalistCard } from '../components/BrutalistCard';
-import { BrutalistButton } from '../components/BrutalistButton';
-import { BrutalistBadge } from '../components/BrutalistBadge';
-import { LegendGuide } from '../components/LegendGuide';
-import { FilterTabType, BridgeOpportunity } from '../types';
-import { Sparkles, SlidersHorizontal, Sun, Info } from 'lucide-react';
+import { BottomNavBar } from '../components/BottomNavBar';
+import { BridgesView } from './BridgesView';
+import { MyPlanView } from './MyPlanView';
+import { RulesView } from './RulesView';
+import { AppTab } from '../types';
+import { Sparkles, Info } from 'lucide-react';
 
 interface HomePageProps {
-  onOpenHolidayDrawer: () => void;
+  onOpenHowToUse: () => void;
 }
 
-export function HomePage({ onOpenHolidayDrawer }: HomePageProps) {
+export function HomePage({ onOpenHowToUse }: HomePageProps) {
   const {
     selectedYear,
     state,
@@ -28,19 +22,9 @@ export function HomePage({ onOpenHolidayDrawer }: HomePageProps) {
     allowSaturdayReplacements,
     plannedLeaveDates,
     maxAlPerBridge,
-    setMaxAlPerBridge,
-    annualLeaveBalance,
   } = useLeaveStore();
 
-  const remainingAl = Math.max(0, annualLeaveBalance - plannedLeaveDates.length);
-
-  const [activeTab, setActiveTab] = useState<FilterTabType>('ALL');
-  const [isHowToUseOpen, setIsHowToUseOpen] = useState(true);
-  const plannerRef = useRef<HTMLDivElement>(null);
-
-  const handleScrollToPlanner = () => {
-    plannerRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const [currentTab, setCurrentTab] = useState<AppTab>('BRIDGES');
 
   // Deterministically compute normalized calendar and bridge opportunities
   const calendar = useMemo(() => {
@@ -65,177 +49,47 @@ export function HomePage({ onOpenHolidayDrawer }: HomePageProps) {
     return findBridgeOpportunities(calendar, maxAlPerBridge);
   }, [calendar, maxAlPerBridge]);
 
-  // Compute tab counts
-  const tabCounts = useMemo(() => {
-    const counts: Record<FilterTabType, number> = {
-      ALL: allBridges.length,
-      HIGH_ROI: allBridges.filter((b) => b.roiMultiplier >= 3).length,
-      ZERO_AL: allBridges.filter((b) => b.alDaysRequired === 0).length,
-      Q1: allBridges.filter((b) => b.quarter === 'Q1').length,
-      Q2: allBridges.filter((b) => b.quarter === 'Q2').length,
-      Q3: allBridges.filter((b) => b.quarter === 'Q3').length,
-      Q4: allBridges.filter((b) => b.quarter === 'Q4').length,
-    };
-    return counts;
-  }, [allBridges]);
-
-  // Filter bridges according to active tab
-  const filteredBridges = useMemo(() => {
-    if (activeTab === 'ALL') return allBridges;
-    if (activeTab === 'HIGH_ROI') return allBridges.filter((b) => b.roiMultiplier >= 3);
-    if (activeTab === 'ZERO_AL') return allBridges.filter((b) => b.alDaysRequired === 0);
-    return allBridges.filter((b) => b.quarter === activeTab);
-  }, [allBridges, activeTab]);
+  // Count planned bridges
+  const plannedBridgesCount = useMemo(() => {
+    return allBridges.filter((b) =>
+      b.annualLeaveDates.some((d) => plannedLeaveDates.includes(d))
+    ).length;
+  }, [allBridges, plannedLeaveDates]);
 
   return (
-    <div className="neobrutalist-container">
-      {/* 1. Header (Navbar with State Selector & Reset on Top Right) */}
-      <Header />
+    <div
+      className="neobrutalist-container"
+      style={{
+        paddingBottom: '5.5rem',
+      }}
+    >
+      {/* 1. Header (Navbar with State Selector, Reset & Help Buttons) */}
+      <Header onOpenHelp={onOpenHowToUse} />
 
-      {/* 2. Hero Section */}
-      <HeroSection
-        onScrollToPlanner={handleScrollToPlanner}
-        onToggleHowToUse={() => setIsHowToUseOpen(!isHowToUseOpen)}
-        isHowToUseOpen={isHowToUseOpen}
-      />
-
-      {/* 3. How to Use Section (4-Step Onboarding Guide) */}
-      {isHowToUseOpen && (
-        <HowToUseSection onClose={() => setIsHowToUseOpen(false)} />
-      )}
-
-      {/* 4. Leave Arbitrage Planner Controls & Stats */}
-      <div ref={plannerRef} style={{ paddingTop: '0.5rem' }}>
-        {/* Status Badges Row */}
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '0.4rem',
-            alignItems: 'center',
-            marginBottom: '0.75rem',
-          }}
-        >
-          <BrutalistBadge
-            color="var(--accent-yellow)"
-            style={{ cursor: 'pointer' }}
-            onClick={onOpenHolidayDrawer}
-          >
-            {observedHolidayIds.length} HOLIDAYS OBSERVED
-          </BrutalistBadge>
-
-          <BrutalistBadge
-            color={remainingAl > 3 ? 'var(--accent-cyan)' : 'var(--accent-pink)'}
-          >
-            {remainingAl} / {annualLeaveBalance} AL REMAINING
-          </BrutalistBadge>
-
-          <BrutalistBadge color="var(--weekend-bg)">
-            {weekendType === 'SAT_SUN' ? 'SAT–SUN WEEKEND' : 'FRI–SAT WEEKEND'}
-          </BrutalistBadge>
-        </div>
-
-        <ControlBar onOpenHolidayDrawer={onOpenHolidayDrawer} />
-        <SummaryStats bridges={allBridges} plannedLeaveDates={plannedLeaveDates} />
-        <LegendGuide />
-      </div>
-
-      {/* 5. Filter Tabs */}
-      <div style={{ marginTop: '1.25rem', marginBottom: '0.5rem' }}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '0.4rem',
-          }}
-        >
-          <h2
-            style={{
-              fontSize: '0.95rem',
-              fontWeight: 900,
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px',
-              margin: 0,
-            }}
-          >
-            DISCOVERED LONG WEEKENDS
-          </h2>
-          <span
-            style={{
-              fontSize: '0.72rem',
-              fontWeight: 800,
-              color: 'var(--text-muted)',
-              textTransform: 'uppercase',
-            }}
-          >
-            {filteredBridges.length} OF {allBridges.length} BRIDGES
-          </span>
-        </div>
-
-        <FilterTabs
-          activeTab={activeTab}
-          onChangeTab={setActiveTab}
-          counts={tabCounts}
+      {/* 2. Active Tab Content View */}
+      {currentTab === 'BRIDGES' && (
+        <BridgesView
+          bridges={allBridges}
+          onOpenHowToUse={onOpenHowToUse}
+          onGoToPlan={() => setCurrentTab('PLAN')}
+          onGoToRules={() => setCurrentTab('RULES')}
         />
-      </div>
-
-      {/* 5. List of Bridge Opportunities */}
-      {filteredBridges.length > 0 ? (
-        <div>
-          {filteredBridges.map((bridge: BridgeOpportunity) => (
-            <BridgeCard key={bridge.id} bridge={bridge} />
-          ))}
-        </div>
-      ) : (
-        <BrutalistCard
-          headerColor="var(--accent-orange)"
-          title="NO BRIDGES FOUND FOR THIS FILTER"
-        >
-          <div style={{ textAlign: 'center', padding: '1rem 0.5rem' }}>
-            <Sun
-              size={36}
-              style={{ margin: '0 auto 0.75rem auto', color: 'var(--text-color)' }}
-            />
-            <p
-              style={{
-                fontSize: '0.9rem',
-                fontWeight: 700,
-                marginBottom: '1rem',
-                lineHeight: 1.4,
-              }}
-            >
-              No long weekends match the currently selected filter with a max limit of{' '}
-              <strong>{maxAlPerBridge} AL days</strong>. Try increasing the AL slider or switching to the ALL tab.
-            </p>
-            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-              <BrutalistButton
-                size="sm"
-                color="var(--accent-yellow)"
-                onClick={() => setActiveTab('ALL')}
-              >
-                VIEW ALL BRIDGES
-              </BrutalistButton>
-              {maxAlPerBridge < 5 && (
-                <BrutalistButton
-                  size="sm"
-                  color="var(--accent-cyan)"
-                  onClick={() => setMaxAlPerBridge(maxAlPerBridge + 1)}
-                >
-                  <SlidersHorizontal size={14} />
-                  ALLOW +1 AL DAY
-                </BrutalistButton>
-              )}
-            </div>
-          </div>
-        </BrutalistCard>
       )}
 
-      {/* 6. Footer Disclaimer & Stat Note */}
+      {currentTab === 'PLAN' && (
+        <MyPlanView
+          bridges={allBridges}
+          onGoToBridges={() => setCurrentTab('BRIDGES')}
+        />
+      )}
+
+      {currentTab === 'RULES' && <RulesView />}
+
+      {/* 3. Global Footer Disclaimer */}
       <footer
         style={{
-          marginTop: '2rem',
-          marginBottom: '2.5rem',
+          marginTop: '2.5rem',
+          marginBottom: '1rem',
           paddingTop: '1rem',
           borderTop: '2px solid var(--border-subtle)',
           textAlign: 'center',
@@ -281,6 +135,15 @@ export function HomePage({ onOpenHolidayDrawer }: HomePageProps) {
           <span>Tap any day tile to toggle individual AL bookings</span>
         </div>
       </footer>
+
+      {/* 4. Sticky Bottom Navigation Bar */}
+      <BottomNavBar
+        currentTab={currentTab}
+        onChangeTab={setCurrentTab}
+        bridgesCount={allBridges.length}
+        plannedCount={plannedBridgesCount}
+        observedCount={observedHolidayIds.length}
+      />
     </div>
   );
 }
