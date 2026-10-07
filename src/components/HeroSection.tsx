@@ -1,6 +1,6 @@
 import { BrutalistButton } from './BrutalistButton';
-import { BrutalistBadge } from './BrutalistBadge';
-import { Sparkles, Calendar, ShieldCheck, ArrowDown, HelpCircle } from 'lucide-react';
+import { Sticker } from './Sticker';
+import { useLeaveStore } from '../store/useLeaveStore';
 
 interface HeroSectionProps {
   onScrollToPlanner: () => void;
@@ -13,172 +13,203 @@ export function HeroSection({
   onToggleHowToUse,
   isHowToUseOpen,
 }: HeroSectionProps) {
-  return (
-    <div
-      style={{
-        backgroundColor: 'var(--bg-secondary)',
-        border: 'var(--border-width-thick) solid var(--border-color)',
-        borderRadius: 'var(--border-radius)',
-        boxShadow: 'var(--shadow-offset) var(--shadow-offset) 0px var(--border-color)',
-        padding: '1.25rem 1rem',
-        marginBottom: '1.25rem',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Top Tag & Year Badge */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '0.5rem',
-          flexWrap: 'wrap',
-          marginBottom: '0.65rem',
-        }}
-      >
-        <BrutalistBadge color="var(--accent-pink)" size="sm">
-          <Sparkles size={11} strokeWidth={3} />
-          <span>LEAVE ARBITRAGE ENGINE</span>
-        </BrutalistBadge>
+  const { annualLeaveBalance, setAlBalance } = useLeaveStore();
 
-        <BrutalistBadge color="var(--accent-cyan)" size="sm">
-          MALAYSIA • 2026
-        </BrutalistBadge>
+  const alPresets = [8, 12, 14, 16, 20];
+
+  const handleAlSelect = (val: number) => {
+    setAlBalance(val);
+    onScrollToPlanner();
+  };
+
+  return (
+    <section style={{ textAlign: 'center', position: 'relative', marginBottom: '2.5rem' }}>
+      {/* Playful Floating Sticker matching Wallo */}
+      <div style={{ position: 'absolute', top: '-14px', left: '0px', zIndex: 2 }}>
+        <Sticker
+          color="var(--accent-pink)"
+          rotation={-3}
+          style={{ fontSize: '0.78rem', padding: '0.2rem 0.55rem' }}
+        >
+          2026 Engine Live!
+        </Sticker>
       </div>
 
-      {/* Main Punchy Heading */}
-      <h2
+      {/* Main Massive Hero Header */}
+      <h1
         style={{
-          fontSize: '1.75rem',
-          fontWeight: 900,
+          fontSize: 'clamp(2.1rem, 9.5vw, 3.2rem)',
           textTransform: 'uppercase',
-          letterSpacing: '-0.8px',
-          lineHeight: 1.05,
-          margin: '0 0 0.5rem 0',
+          letterSpacing: '-1.2px',
+          lineHeight: '1.05',
+          marginTop: '1.5rem',
+          marginBottom: '1rem',
           color: 'var(--text-color)',
         }}
       >
-        HACK YOUR ANNUAL LEAVE.
-      </h2>
+        The Leave Hack<br />
+        For Malaysian<br />
+        <span
+          style={{
+            backgroundColor: 'var(--accent-cyan)',
+            padding: '0.1rem 0.5rem',
+            border: 'var(--border-width) solid var(--border-color)',
+            display: 'inline-block',
+            marginTop: '0.3rem',
+            boxShadow: '3px 3px 0px var(--border-color)',
+          }}
+        >
+          Workers & Teams
+        </span>
+      </h1>
 
-      {/* Value Proposition Subheading */}
+      {/* Bold Explanatory Lead Paragraph */}
       <p
         style={{
-          fontSize: '0.85rem',
+          fontSize: '1.02rem',
           fontWeight: 700,
-          lineHeight: 1.45,
+          margin: '0 auto 1.75rem auto',
+          lineHeight: '1.45',
+          opacity: 0.9,
           color: 'var(--text-color)',
-          margin: '0 0 0.85rem 0',
         }}
       >
-        Turn <strong>14 days of Annual Leave</strong> into <strong>40+ contiguous days off</strong> by mathematically bridging company-observed public holidays with weekends.
+        Turn <strong>14 days of Annual Leave</strong> into <strong>40+ contiguous days off</strong>. Zero-hallucination deterministic calendar arithmetic that combines your company-observed public holidays, rest days, and <em>Cuti Ganti</em> rollovers into optimal long weekends.
       </p>
 
-      {/* Reality Check Note */}
-      <div
-        style={{
-          backgroundColor: 'var(--bg-primary)',
-          border: '2px solid var(--border-color)',
-          borderRadius: 'var(--border-radius-sm)',
-          padding: '0.55rem 0.75rem',
-          marginBottom: '0.95rem',
-          fontSize: '0.74rem',
-          fontWeight: 600,
-          lineHeight: 1.35,
-          color: 'var(--text-color)',
-        }}
-      >
-        <strong>⚠️ No Fake Promises:</strong> Viral social media infographics assume everyone gets 20 public holidays. Under <strong>Employment Act 1955 (Section 60D)</strong>, your company might only grant <strong>11 days</strong>. CutiReady tailors calculations to your exact company policy and state.
-      </div>
-
-      {/* 3 Core Benefit Chips */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '0.35rem',
-          marginBottom: '1rem',
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: 'var(--bg-secondary)',
-            border: '1.5px solid var(--border-color)',
-            borderRadius: 'var(--border-radius-sm)',
-            padding: '0.4rem 0.25rem',
-            textAlign: 'center',
-            boxShadow: '1px 1px 0px var(--border-color)',
-          }}
-        >
-          <Calendar size={13} style={{ margin: '0 auto 0.15rem auto' }} />
-          <div style={{ fontSize: '0.65rem', fontWeight: 900, textTransform: 'uppercase' }}>
-            EA 1955 RULES
-          </div>
-          <div style={{ fontSize: '0.58rem', fontWeight: 600, color: 'var(--text-muted)' }}>
-            Cuti Ganti math
-          </div>
-        </div>
-
-        <div
-          style={{
-            backgroundColor: 'var(--bg-secondary)',
-            border: '1.5px solid var(--border-color)',
-            borderRadius: 'var(--border-radius-sm)',
-            padding: '0.4rem 0.25rem',
-            textAlign: 'center',
-            boxShadow: '1px 1px 0px var(--border-color)',
-          }}
-        >
-          <Sparkles size={13} style={{ margin: '0 auto 0.15rem auto' }} />
-          <div style={{ fontSize: '0.65rem', fontWeight: 900, textTransform: 'uppercase' }}>
-            UP TO 4.5X ROI
-          </div>
-          <div style={{ fontSize: '0.58rem', fontWeight: 600, color: 'var(--text-muted)' }}>
-            Max contiguous
-          </div>
-        </div>
-
-        <div
-          style={{
-            backgroundColor: 'var(--bg-secondary)',
-            border: '1.5px solid var(--border-color)',
-            borderRadius: 'var(--border-radius-sm)',
-            padding: '0.4rem 0.25rem',
-            textAlign: 'center',
-            boxShadow: '1px 1px 0px var(--border-color)',
-          }}
-        >
-          <ShieldCheck size={13} style={{ margin: '0 auto 0.15rem auto' }} />
-          <div style={{ fontSize: '0.65rem', fontWeight: 900, textTransform: 'uppercase' }}>
-            100% OFFLINE
-          </div>
-          <div style={{ fontSize: '0.58rem', fontWeight: 600, color: 'var(--text-muted)' }}>
-            Zero data stored
-          </div>
-        </div>
-      </div>
-
-      {/* CTA Action Buttons */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '0.5rem' }}>
+      {/* Stacked Full-Width Dual Action Hero Buttons */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '100%' }}>
         <BrutalistButton
           color="var(--accent-yellow)"
-          size="md"
           onClick={onScrollToPlanner}
+          style={{
+            fontSize: '1.15rem',
+            padding: '1.1rem',
+            width: '100%',
+            boxShadow: 'var(--shadow-offset) var(--shadow-offset) 0px var(--border-color)',
+          }}
         >
-          <ArrowDown size={16} strokeWidth={2.5} />
-          <span>FIND BRIDGES</span>
+          JUMP INTO 2026 BRIDGES ↓
         </BrutalistButton>
 
         <BrutalistButton
-          color="var(--bg-primary)"
-          size="md"
+          color="var(--accent-pink)"
           onClick={onToggleHowToUse}
+          style={{
+            fontSize: '1.02rem',
+            padding: '0.85rem',
+            width: '100%',
+            boxShadow: 'var(--shadow-offset) var(--shadow-offset) 0px var(--border-color)',
+          }}
         >
-          <HelpCircle size={15} strokeWidth={2.5} />
-          <span>{isHowToUseOpen ? 'CLOSE GUIDE' : 'HOW TO USE'}</span>
+          {isHowToUseOpen ? 'HIDE ONBOARDING GUIDE ↑' : 'HOW LEAVE ARBITRAGE WORKS ↗'}
         </BrutalistButton>
       </div>
-    </div>
+
+      {/* Subtext info row */}
+      <div
+        style={{
+          marginTop: '0.85rem',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '0.45rem',
+          flexWrap: 'wrap',
+        }}
+      >
+        <span style={{ fontSize: '0.82rem', fontWeight: 700, opacity: 0.75, color: 'var(--text-color)' }}>
+          Employment Act 1955 (Section 60D) Compliant
+        </span>
+        <span
+          style={{
+            fontSize: '0.82rem',
+            fontWeight: 800,
+            textDecoration: 'underline',
+            cursor: 'pointer',
+            color: 'var(--text-color)',
+          }}
+          onClick={onToggleHowToUse}
+        >
+          (How it works)
+        </span>
+      </div>
+
+      {/* Quick Interactive Leave Config Box (Wallo's Join Box Heritage) */}
+      <div
+        style={{
+          marginTop: '2rem',
+          backgroundColor: 'var(--bg-secondary)',
+          border: 'var(--border-width) solid var(--border-color)',
+          boxShadow: 'var(--shadow-offset) var(--shadow-offset) 0px var(--border-color)',
+          borderRadius: '12px',
+          padding: '1.25rem 1rem',
+          width: '100%',
+          boxSizing: 'border-box',
+          textAlign: 'center',
+        }}
+      >
+        <div
+          style={{
+            fontSize: '0.85rem',
+            fontWeight: 900,
+            textTransform: 'uppercase',
+            marginBottom: '0.5rem',
+            letterSpacing: '0.5px',
+            color: 'var(--text-color)',
+          }}
+        >
+          HOW MANY ANNUAL LEAVE DAYS DO YOU GET?
+        </div>
+
+        <p
+          style={{
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            color: 'var(--text-muted)',
+            margin: '0 0 0.85rem 0',
+          }}
+        >
+          Tap your leave quota to calculate tailored Malaysian break opportunities:
+        </p>
+
+        <div
+          style={{
+            display: 'flex',
+            gap: '0.4rem',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
+          {alPresets.map((val) => {
+            const isSelected = annualLeaveBalance === val;
+            return (
+              <button
+                key={val}
+                type="button"
+                onClick={() => handleAlSelect(val)}
+                style={{
+                  backgroundColor: isSelected ? 'var(--accent-yellow)' : 'var(--bg-primary)',
+                  color: 'var(--text-color)',
+                  border: '2px solid var(--border-color)',
+                  borderRadius: 'var(--border-radius-sm)',
+                  padding: '0.5rem 0.75rem',
+                  fontSize: '0.82rem',
+                  fontWeight: 900,
+                  textTransform: 'uppercase',
+                  cursor: 'pointer',
+                  boxShadow: isSelected
+                    ? '2px 2px 0px var(--border-color)'
+                    : '1px 1px 0px var(--border-color)',
+                  transition: 'all 0.08s ease',
+                  userSelect: 'none',
+                }}
+              >
+                {val} DAYS
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 }
