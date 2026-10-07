@@ -50,10 +50,13 @@ export function BridgeCard({ bridge }: BridgeCardProps) {
 
   // Header banner color varies based on ROI
   let headerColor = 'var(--accent-yellow)';
+  let headerBadgeText = 'STANDARD BRIDGE';
   if (bridge.alDaysRequired === 0) {
     headerColor = 'var(--accent-cyan)';
+    headerBadgeText = '⚡ FREE (0 AL)';
   } else if (bridge.roiMultiplier >= 4) {
     headerColor = 'var(--accent-green)';
+    headerBadgeText = `🔥 MEGA (${bridge.roiMultiplier}x ROI)`;
   }
 
   return (
@@ -65,7 +68,7 @@ export function BridgeCard({ bridge }: BridgeCardProps) {
           <span>{bridge.title}</span>
         </div>
       }
-      subtitle={`${bridge.quarter}`}
+      subtitle={`${headerBadgeText} • ${bridge.quarter}`}
       style={{ marginBottom: '1.15rem' }}
     >
       {/* 1. Dates and Badges Header */}
