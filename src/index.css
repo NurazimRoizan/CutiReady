@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Surfaces & Canvas */
+  --bg-primary: #fef3c7;      /* Warm soft pastel cream (main canvas) */
+  --bg-secondary: #ffffff;    /* Pure white (cards, modals) */
+  --neutral-dark: #222222;    /* Deep charcoal surfaces */
+
+  /* High-Octane Accents (Wallo Heritage) */
+  --accent-yellow: #fde047;   /* Primary CTA, hero badges, high-contrast labels */
+  --accent-pink: #f9a8d4;     /* Secondary actions, alerts, special badges */
+  --accent-cyan: #67e8f9;     /* Tertiary accents, info chips, tags */
+  --accent-green: #86efac;    /* Success / high ROI / optimal leave badges */
+  --accent-orange: #fed7aa;   /* Amber / warning / alert tags */
+  --accent-purple: #d8b4fe;   /* Alternate celebration / highlight badge */
+
+  /* Day Strip Semantic Tokens */
+  --weekend-bg: #e2e8f0;      /* Slate gray pill for weekends */
+  --weekend-text: #1e293b;
+  --ph-bg: #a7f3d0;           /* Emerald green pill for Public Holidays */
+  --ph-text: #064e3b;
+  --replacement-bg: #99f6e4;  /* Teal pill for Replacement Holidays */
+  --replacement-text: #115e59;
+  --al-bg: #fef08a;           /* Amber pill for recommended Annual Leave */
+  --al-text: #713f12;
+  --workday-bg: #f3f4f6;      /* Subtle gray pill for regular workdays */
+  --workday-text: #374151;
+
+  /* Text & Borders */
+  --text-color: #000000;      /* High-contrast pure black text */
+  --text-muted: #555555;      /* Muted secondary labels & timestamps */
+  --border-color: #000000;    /* Solid black borders & shadows */
+  --border-subtle: #e5e7eb;   /* Light gray card dividers */
+  --danger-bg: #fee2e2;       /* Alert / error card tinted background */
+
+  /* Neobrutalist Geometry */
+  --border-width: 3px;        /* Standard 3px chunky border */
+  --border-width-thick: 4px;  /* Heavy 4px border for hero cards & buttons */
+  --border-radius: 8px;       /* Standard card & button radius */
+  --border-radius-sm: 6px;    /* Nested sub-card radius */
+  --border-radius-pill: 100px;/* Pills & metric badges */
+  --shadow-offset: 4px;       /* 4px solid offset */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-primary);
+  color: var(--text-color);
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* Global Container Utility clamped to mobile-first width */
+.neobrutalist-container {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem;
+  width: 100%;
+}
+
+/* Custom scrollbar for horizontal day strips */
+::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-color);
+  border-radius: 4px;
+}

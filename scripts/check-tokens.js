@@ -8,9 +8,12 @@
  *   node scripts/check-tokens.js [optional-file-or-dir]
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
 
 // Permitted files (CSS files legitimately define hex constants in :root)
@@ -54,8 +57,8 @@ function scanFile(filePath) {
       return;
     }
 
-    let match;
     HEX_REGEX.lastIndex = 0;
+    let match;
     while ((match = HEX_REGEX.exec(line)) !== null) {
       violations.push({
         file: relPath,

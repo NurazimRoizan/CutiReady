@@ -37,6 +37,21 @@ Place this `:root` definition in `src/index.css` (or main stylesheet):
   --accent-yellow: #fde047;   /* Primary CTA, hero badges, high-contrast labels */
   --accent-pink: #f9a8d4;     /* Secondary actions, alerts, special badges */
   --accent-cyan: #67e8f9;     /* Tertiary accents, info chips, tags */
+  --accent-green: #86efac;    /* Success / high ROI / optimal leave badges */
+  --accent-orange: #fed7aa;   /* Amber / warning / alert tags */
+  --accent-purple: #d8b4fe;   /* Alternate celebration / highlight badge */
+
+  /* Day Strip Semantic Tokens */
+  --weekend-bg: #e2e8f0;      /* Slate gray pill for weekends */
+  --weekend-text: #1e293b;
+  --ph-bg: #a7f3d0;           /* Emerald green pill for Public Holidays */
+  --ph-text: #064e3b;
+  --replacement-bg: #99f6e4;  /* Teal pill for Replacement Holidays */
+  --replacement-text: #115e59;
+  --al-bg: #fef08a;           /* Amber pill for recommended Annual Leave */
+  --al-text: #713f12;
+  --workday-bg: #f3f4f6;      /* Subtle gray pill for regular workdays */
+  --workday-text: #374151;
   
   /* Text & Borders */
   --text-color: #000000;      /* High-contrast pure black text */
