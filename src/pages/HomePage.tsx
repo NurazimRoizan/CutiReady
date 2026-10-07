@@ -1,7 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useLeaveStore } from '../store/useLeaveStore';
 import { buildNormalizedCalendar, findBridgeOpportunities } from '../engine/calendarEngine';
 import { Header } from '../components/Header';
+import { HeroSection } from '../components/HeroSection';
+import { HowToUseSection } from '../components/HowToUseSection';
 import { ControlBar } from '../components/ControlBar';
 import { SummaryStats } from '../components/SummaryStats';
 import { FilterTabs } from '../components/FilterTabs';
@@ -29,6 +31,12 @@ export function HomePage({ onOpenHolidayDrawer }: HomePageProps) {
   } = useLeaveStore();
 
   const [activeTab, setActiveTab] = useState<FilterTabType>('ALL');
+  const [isHowToUseOpen, setIsHowToUseOpen] = useState(true);
+  const plannerRef = useRef<HTMLDivElement>(null);
+
+  const handleScrollToPlanner = () => {
+    plannerRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   // Deterministically compute normalized calendar and bridge opportunities
   const calendar = useMemo(() => {
@@ -80,14 +88,24 @@ export function HomePage({ onOpenHolidayDrawer }: HomePageProps) {
       {/* 1. Header */}
       <Header onOpenHolidayDrawer={onOpenHolidayDrawer} />
 
-      {/* 2. Control Bar */}
-      <ControlBar onOpenHolidayDrawer={onOpenHolidayDrawer} />
+      {/* 2. Hero Section */}
+      <HeroSection
+        onScrollToPlanner={handleScrollToPlanner}
+        onToggleHowToUse={() => setIsHowToUseOpen(!isHowToUseOpen)}
+        isHowToUseOpen={isHowToUseOpen}
+      />
 
-      {/* 3. Summary Stats Banner */}
-      <SummaryStats bridges={allBridges} plannedLeaveDates={plannedLeaveDates} />
+      {/* 3. How to Use Section (4-Step Onboarding Guide) */}
+      {isHowToUseOpen && (
+        <HowToUseSection onClose={() => setIsHowToUseOpen(false)} />
+      )}
 
-      {/* 4. Full Color Guide & Legend */}
-      <LegendGuide />
+      {/* 4. Leave Arbitrage Planner Controls & Stats */}
+      <div ref={plannerRef}>
+        <ControlBar onOpenHolidayDrawer={onOpenHolidayDrawer} />
+        <SummaryStats bridges={allBridges} plannedLeaveDates={plannedLeaveDates} />
+        <LegendGuide />
+      </div>
 
       {/* 5. Filter Tabs */}
       <div style={{ marginTop: '1.25rem', marginBottom: '0.5rem' }}>

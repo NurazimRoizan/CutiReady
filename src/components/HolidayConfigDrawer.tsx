@@ -61,7 +61,8 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
         zIndex: 9999,
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'flex-end',
+        alignItems: 'center',
+        padding: '1rem',
       }}
       onClick={onClose}
     >
@@ -69,19 +70,15 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
         onClick={(e) => e.stopPropagation()}
         style={{
           width: '100%',
-          maxWidth: '560px',
-          maxHeight: '92vh',
+          maxWidth: '540px',
+          maxHeight: '88vh',
           backgroundColor: 'var(--bg-secondary)',
-          borderTop: 'var(--border-width-thick) solid var(--border-color)',
-          borderLeft: 'var(--border-width) solid var(--border-color)',
-          borderRight: 'var(--border-width) solid var(--border-color)',
-          borderTopLeftRadius: '16px',
-          borderTopRightRadius: '16px',
+          border: 'var(--border-width-thick) solid var(--border-color)',
+          borderRadius: 'var(--border-radius)',
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: '0px -6px 0px var(--border-color)',
+          boxShadow: '6px 6px 0px var(--border-color)',
           overflow: 'hidden',
-          animation: 'slideUp 0.2s ease-out',
         }}
       >
         {/* Header */}
