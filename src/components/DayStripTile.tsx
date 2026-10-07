@@ -30,8 +30,8 @@ export function DayStripTile({
     textColor = 'var(--ph-text)';
     typeLabel = day.holidayName ? `PH: ${day.holidayName.split(' ')[0]}` : 'HOLIDAY';
   } else if (day.type === 'REPLACEMENT_HOLIDAY') {
-    bgColor = 'var(--replacement-bg)';
-    textColor = 'var(--replacement-text)';
+    bgColor = 'var(--accent-cyan)';
+    textColor = 'var(--text-color)';
     typeLabel = 'CUTI GANTI';
   } else if (day.type === 'WORKDAY') {
     // This workday is part of the bridge, so it's a recommended / planned AL day!

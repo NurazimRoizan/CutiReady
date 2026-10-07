@@ -8,6 +8,7 @@ import { FilterTabs } from '../components/FilterTabs';
 import { BridgeCard } from '../components/BridgeCard';
 import { BrutalistCard } from '../components/BrutalistCard';
 import { BrutalistButton } from '../components/BrutalistButton';
+import { BrutalistBadge } from '../components/BrutalistBadge';
 import { FilterTabType, BridgeOpportunity } from '../types';
 import { Sparkles, SlidersHorizontal, Sun, Info } from 'lucide-react';
 
@@ -123,6 +124,48 @@ export function HomePage({ onOpenHolidayDrawer }: HomePageProps) {
           onChangeTab={setActiveTab}
           counts={tabCounts}
         />
+
+        {/* Color Legend for Visual Day Strip */}
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '0.35rem',
+            alignItems: 'center',
+            marginTop: '0.5rem',
+            marginBottom: '0.85rem',
+            padding: '0.45rem 0.65rem',
+            backgroundColor: 'var(--bg-secondary)',
+            border: '2px solid var(--border-color)',
+            borderRadius: 'var(--border-radius-sm)',
+            boxShadow: '2px 2px 0px var(--border-color)',
+          }}
+        >
+          <span
+            style={{
+              fontSize: '0.65rem',
+              fontWeight: 900,
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
+              color: 'var(--text-muted)',
+              marginRight: '0.2rem',
+            }}
+          >
+            Strip Legend:
+          </span>
+          <BrutalistBadge size="sm" color="var(--ph-bg)">
+            Public Holiday
+          </BrutalistBadge>
+          <BrutalistBadge size="sm" color="var(--accent-cyan)">
+            Cuti Ganti
+          </BrutalistBadge>
+          <BrutalistBadge size="sm" color="var(--al-bg)">
+            Take AL
+          </BrutalistBadge>
+          <BrutalistBadge size="sm" color="var(--weekend-bg)">
+            Weekend
+          </BrutalistBadge>
+        </div>
       </div>
 
       {/* 5. List of Bridge Opportunities */}

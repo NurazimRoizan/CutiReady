@@ -23,8 +23,8 @@
   --weekend-text: #1e293b;
   --ph-bg: #a7f3d0;           /* Emerald green pill for Public Holidays */
   --ph-text: #064e3b;
-  --replacement-bg: #99f6e4;  /* Teal pill for Replacement Holidays */
-  --replacement-text: #115e59;
+  --replacement-bg: var(--accent-cyan);  /* Accent Cyan pill for Replacement Holidays (Cuti Ganti) */
+  --replacement-text: var(--text-color);
   --al-bg: #fef08a;           /* Amber pill for recommended Annual Leave */
   --al-text: #713f12;
   --workday-bg: #f3f4f6;      /* Subtle gray pill for regular workdays */
