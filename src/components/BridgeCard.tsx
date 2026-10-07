@@ -48,14 +48,12 @@ export function BridgeCard({ bridge }: BridgeCardProps) {
     }
   };
 
-  // Header banner color varies based on ROI
-  let headerColor = 'var(--accent-yellow)';
-  let headerBadgeText = 'STANDARD BRIDGE';
+  // Consistent signature yellow header banner to avoid clashing with day-strip calendar tiles
+  const headerColor = 'var(--accent-yellow)';
+  let headerBadgeText = 'STANDARD';
   if (bridge.alDaysRequired === 0) {
-    headerColor = 'var(--accent-cyan)';
     headerBadgeText = '⚡ FREE (0 AL)';
   } else if (bridge.roiMultiplier >= 4) {
-    headerColor = 'var(--accent-green)';
     headerBadgeText = `🔥 MEGA (${bridge.roiMultiplier}x ROI)`;
   }
 
@@ -107,15 +105,26 @@ export function BridgeCard({ bridge }: BridgeCardProps) {
         </div>
 
         <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
-          <BrutalistBadge color="var(--accent-yellow)">
+          <BrutalistBadge color="var(--bg-primary)">
             {bridge.totalDaysOff} DAYS OFF
           </BrutalistBadge>
 
           {bridge.alDaysRequired === 0 ? (
-            <BrutalistBadge color="var(--accent-green)">0 AL NEEDED</BrutalistBadge>
+            <BrutalistBadge color="var(--accent-cyan)">
+              ⚡ 0 AL • FREE BREAK
+            </BrutalistBadge>
+          ) : bridge.roiMultiplier >= 4 ? (
+            <>
+              <BrutalistBadge color="var(--accent-green)">
+                🔥 {bridge.roiMultiplier}x ROI
+              </BrutalistBadge>
+              <BrutalistBadge color="var(--accent-pink)">
+                SPEND {bridge.alDaysRequired} AL
+              </BrutalistBadge>
+            </>
           ) : (
             <BrutalistBadge color="var(--accent-pink)">
-              SPEND {bridge.alDaysRequired} AL ({bridge.roiMultiplier}x ROI)
+              SPEND {bridge.alDaysRequired} AL ({bridge.roiMultiplier}x)
             </BrutalistBadge>
           )}
         </div>

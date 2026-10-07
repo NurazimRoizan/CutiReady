@@ -69,11 +69,11 @@ export function LegendGuide() {
           <BrutalistBadge size="sm" color="var(--accent-cyan)">
             🔵 Cuti Ganti
           </BrutalistBadge>
-          <BrutalistBadge size="sm" color="var(--al-bg)">
-            🟡 Take AL
+          <BrutalistBadge size="sm" color="var(--accent-pink)">
+            🌸 Take AL (Pink)
           </BrutalistBadge>
-          <BrutalistBadge size="sm" color="var(--accent-green)">
-            ⚡ Free / Mega Break
+          <BrutalistBadge size="sm" color="var(--weekend-bg)">
+            ⚪ Weekend
           </BrutalistBadge>
         </div>
 
@@ -126,7 +126,7 @@ export function LegendGuide() {
                 cursor: 'pointer',
               }}
             >
-              🗓️ 1. Visual Day Strip Colors
+              🗓️ 1. Day Strip Colors
             </button>
             <button
               type="button"
@@ -144,7 +144,7 @@ export function LegendGuide() {
                 cursor: 'pointer',
               }}
             >
-              🃏 2. Bridge Card Banners & Badges
+              🃏 2. Card Banners & Badges
             </button>
           </div>
 
@@ -241,26 +241,26 @@ export function LegendGuide() {
               >
                 <div
                   style={{
-                    backgroundColor: 'var(--al-bg)',
+                    backgroundColor: 'var(--accent-pink)',
                     border: '2px dashed var(--border-color)',
                     borderRadius: 'var(--border-radius-sm)',
                     padding: '0.2rem 0.5rem',
                     fontSize: '0.7rem',
                     fontWeight: 900,
                     textTransform: 'uppercase',
-                    color: 'var(--al-text)',
+                    color: 'var(--text-color)',
                     whiteSpace: 'nowrap',
                     marginTop: '2px',
                   }}
                 >
-                  🟡 Amber (Dashed)
+                  🌸 Pink (Dashed)
                 </div>
                 <div>
                   <div style={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase' }}>
                     Recommended Annual Leave (AL)
                   </div>
                   <div style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.3 }}>
-                    Workdays strategically converted into leave to bridge the holiday with weekends. Tap any tile to lock into your leave plan.
+                    Strategic workday leave bridging adjacent holidays and weekends. Border turns solid with a checkmark once planned!
                   </div>
                 </div>
               </div>
@@ -298,7 +298,7 @@ export function LegendGuide() {
                     Statutory Weekend / Rest Day
                   </div>
                   <div style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.3 }}>
-                    Standard weekend: Saturday & Sunday (or Friday & Saturday in Kedah, Kelantan, and Terengganu).
+                    Standard non-working rest day: Saturday & Sunday (or Friday & Saturday in Kedah, Kelantan, and Terengganu).
                   </div>
                 </div>
               </div>
@@ -308,83 +308,7 @@ export function LegendGuide() {
           {/* Tab 2: Bridge Cards & Badges Breakdown */}
           {activeTab === 'CARDS' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              {/* Cyan Header */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '0.65rem',
-                  backgroundColor: 'var(--bg-primary)',
-                  border: '2px solid var(--border-color)',
-                  borderRadius: 'var(--border-radius-sm)',
-                  padding: '0.5rem 0.65rem',
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: 'var(--accent-cyan)',
-                    border: '2px solid var(--border-color)',
-                    borderRadius: 'var(--border-radius-sm)',
-                    padding: '0.2rem 0.5rem',
-                    fontSize: '0.7rem',
-                    fontWeight: 900,
-                    textTransform: 'uppercase',
-                    color: 'var(--text-color)',
-                    whiteSpace: 'nowrap',
-                    marginTop: '2px',
-                  }}
-                >
-                  ⚡ Cyan Banner
-                </div>
-                <div>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase' }}>
-                    Free Long Weekend (0 AL Needed)
-                  </div>
-                  <div style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.3 }}>
-                    A natural long weekend created directly by gazetted holidays adjacent to weekends. Pure free time off!
-                  </div>
-                </div>
-              </div>
-
-              {/* Green Header */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '0.65rem',
-                  backgroundColor: 'var(--bg-primary)',
-                  border: '2px solid var(--border-color)',
-                  borderRadius: 'var(--border-radius-sm)',
-                  padding: '0.5rem 0.65rem',
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: 'var(--accent-green)',
-                    border: '2px solid var(--border-color)',
-                    borderRadius: 'var(--border-radius-sm)',
-                    padding: '0.2rem 0.5rem',
-                    fontSize: '0.7rem',
-                    fontWeight: 900,
-                    textTransform: 'uppercase',
-                    color: 'var(--text-color)',
-                    whiteSpace: 'nowrap',
-                    marginTop: '2px',
-                  }}
-                >
-                  🔥 Green Banner
-                </div>
-                <div>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase' }}>
-                    Mega High-ROI Bridge (≥ 4.0x Return)
-                  </div>
-                  <div style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.3 }}>
-                    Super efficient leave opportunity. For every 1 AL day invested, you unlock 4 or more contiguous days away from the desk.
-                  </div>
-                </div>
-              </div>
-
-              {/* Yellow Header */}
+              {/* Card Header */}
               <div
                 style={{
                   display: 'flex',
@@ -410,19 +334,95 @@ export function LegendGuide() {
                     marginTop: '2px',
                   }}
                 >
-                  🌴 Yellow Banner
+                  🌴 Yellow Header
                 </div>
                 <div>
                   <div style={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase' }}>
-                    Standard Bridge
+                    Consistent Neobrutalist Anchor
                   </div>
                   <div style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.3 }}>
-                    Standard leave arbitrage opportunity yielding 3.0x to 3.9x days off per AL day.
+                    Every card uses the signature bold yellow banner so card frames never clash with calendar day tiles inside.
                   </div>
                 </div>
               </div>
 
-              {/* Pink Badge */}
+              {/* Cyan 0 AL Badge */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '0.65rem',
+                  backgroundColor: 'var(--bg-primary)',
+                  border: '2px solid var(--border-color)',
+                  borderRadius: 'var(--border-radius-sm)',
+                  padding: '0.5rem 0.65rem',
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: 'var(--accent-cyan)',
+                    border: '2px solid var(--border-color)',
+                    borderRadius: 'var(--border-radius-sm)',
+                    padding: '0.2rem 0.5rem',
+                    fontSize: '0.7rem',
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    color: 'var(--text-color)',
+                    whiteSpace: 'nowrap',
+                    marginTop: '2px',
+                  }}
+                >
+                  ⚡ Cyan Badge
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase' }}>
+                    Free Long Weekend (0 AL Needed)
+                  </div>
+                  <div style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.3 }}>
+                    Natural 3 to 4-day break created directly by gazetted holidays adjacent to weekends. Pure free time off!
+                  </div>
+                </div>
+              </div>
+
+              {/* Green Mega ROI Badge */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '0.65rem',
+                  backgroundColor: 'var(--bg-primary)',
+                  border: '2px solid var(--border-color)',
+                  borderRadius: 'var(--border-radius-sm)',
+                  padding: '0.5rem 0.65rem',
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: 'var(--accent-green)',
+                    border: '2px solid var(--border-color)',
+                    borderRadius: 'var(--border-radius-sm)',
+                    padding: '0.2rem 0.5rem',
+                    fontSize: '0.7rem',
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    color: 'var(--text-color)',
+                    whiteSpace: 'nowrap',
+                    marginTop: '2px',
+                  }}
+                >
+                  🔥 Green Badge
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase' }}>
+                    Mega High-ROI (≥ 4.0x Multiplier)
+                  </div>
+                  <div style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.3 }}>
+                    Top-tier leave efficiency. Investing just 1 or 2 AL days unlocks 5 to 9 consecutive days away from work.
+                  </div>
+                </div>
+              </div>
+
+              {/* Pink Spend AL Badge */}
               <div
                 style={{
                   display: 'flex',
@@ -452,10 +452,10 @@ export function LegendGuide() {
                 </div>
                 <div>
                   <div style={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase' }}>
-                    AL Days Required & ROI Multiplier
+                    Annual Leave Investment Required
                   </div>
                   <div style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.3 }}>
-                    Shows the exact number of Annual Leave days needed and the calculated return ratio (Total Days Off ÷ AL Days).
+                    Indicates how many AL days to spend. Matches the exact pink tiles on the day-strip for instant recognition!
                   </div>
                 </div>
               </div>
@@ -493,7 +493,7 @@ export function LegendGuide() {
                     Locked Into Leave Plan
                   </div>
                   <div style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.3 }}>
-                    Indicates you have locked this bridge into your planned quota, automatically deducting from your remaining AL balance.
+                    Locks this bridge into your personal quota and deducts days from your remaining AL balance.
                   </div>
                 </div>
               </div>

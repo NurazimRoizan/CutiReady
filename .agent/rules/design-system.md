@@ -48,8 +48,8 @@ Place this `:root` definition in `src/index.css` (or main stylesheet):
   --ph-text: #064e3b;
   --replacement-bg: var(--accent-cyan);  /* Accent Cyan pill for Replacement Holidays (Cuti Ganti) */
   --replacement-text: var(--text-color);
-  --al-bg: #fef08a;           /* Amber pill for recommended Annual Leave */
-  --al-text: #713f12;
+  --al-bg: var(--accent-pink);           /* Accent Pink pill for recommended Annual Leave (AL) */
+  --al-text: var(--text-color);
   --workday-bg: #f3f4f6;      /* Subtle gray pill for regular workdays */
   --workday-text: #374151;
   

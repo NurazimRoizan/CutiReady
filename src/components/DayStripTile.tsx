@@ -35,10 +35,10 @@ export function DayStripTile({
     typeLabel = 'CUTI GANTI';
   } else if (day.type === 'WORKDAY') {
     // This workday is part of the bridge, so it's a recommended / planned AL day!
-    bgColor = 'var(--al-bg)';
-    textColor = 'var(--al-text)';
-    typeLabel = isPlanned ? 'PLANNED AL' : 'TAKE AL';
-    isDashed = true;
+    bgColor = 'var(--accent-pink)';
+    textColor = 'var(--text-color)';
+    typeLabel = isPlanned ? '✓ PLANNED' : 'TAKE AL';
+    isDashed = !isPlanned;
   }
 
   const borderStyle = isDashed
