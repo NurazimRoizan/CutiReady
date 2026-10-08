@@ -31,9 +31,9 @@ export function LegendModal({ isOpen, onClose }: LegendModalProps) {
 
   const calendarColors = [
     {
-      badge: <BrutalistBadge size="sm" color="var(--ph-bg)" textColor="var(--ph-text)">🍫 Cuti Umum (PH)</BrutalistBadge>,
+      badge: <BrutalistBadge size="sm" color="var(--ph-bg)" textColor="var(--ph-text)">🌸 Cuti Umum (PH)</BrutalistBadge>,
       title: 'Gazetted Public Holiday',
-      desc: 'Cuti am rasmi kerajaan / gazet negeri (Mauve Bark). Gaji jalan, 0 AL ditolak.',
+      desc: 'Cuti am rasmi kerajaan / gazet negeri (Powder Blush). Gaji jalan, 0 AL ditolak.',
     },
     {
       badge: <BrutalistBadge size="sm" color="var(--replacement-bg)" textColor="var(--replacement-text)">🐫 Cuti Ganti</BrutalistBadge>,

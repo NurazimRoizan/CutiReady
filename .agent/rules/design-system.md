@@ -31,7 +31,7 @@ Place this `:root` definition in `src/index.css` (or main stylesheet):
   /* Surfaces & Canvas */
   --bg-primary: #ffd6af;      /* Soft Apricot: Warm pastel canvas */
   --bg-secondary: #ffffff;    /* Pure crisp white: Cards, modals */
-  --neutral-dark: #6b4b3e;    /* Mauve Bark: Deep espresso surfaces */
+  --neutral-dark: #daa49a;    /* Powder Blush: Warm dusty rose surfaces */
 
   /* High-Octane Accents (Wisteria & Camel Palette) */
   --accent-yellow: #bea7e5;   /* Wisteria: Primary CTA, active tabs, hero highlight */
@@ -39,13 +39,13 @@ Place this `:root` definition in `src/index.css` (or main stylesheet):
   --accent-cyan: #ffd6af;     /* Soft Apricot: Tertiary accents, chips */
   --accent-green: #bea7e5;    /* Wisteria: Confirmed / locked state */
   --accent-orange: #c49e85;   /* Camel: Highlight / alert tags */
-  --accent-purple: #6b4b3e;   /* Mauve Bark: Dark contrast badge */
+  --accent-purple: #daa49a;   /* Powder Blush: Warm blush accent badge */
 
   /* Day Strip Semantic Tokens */
   --weekend-bg: #f8f4f9;      /* Ghost White pill for weekends */
   --weekend-text: #000000;    /* Solid black text on weekends */
-  --ph-bg: #6b4b3e;           /* Mauve Bark pill for Public Holidays */
-  --ph-text: #ffffff;         /* Crisp white text on Public Holidays */
+  --ph-bg: #daa49a;           /* Powder Blush pill for Public Holidays */
+  --ph-text: #000000;         /* Solid black text on Public Holidays */
   --replacement-bg: #c49e85;  /* Camel pill for Replacement Holidays (Cuti Ganti) */
   --replacement-text: #ffffff;/* Crisp white text on Replacement Holidays */
   --al-bg: #bea7e5;           /* Wisteria pill for recommended Annual Leave (AL) */
