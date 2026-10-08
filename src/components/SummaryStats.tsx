@@ -103,7 +103,11 @@ export function SummaryStats({ bridges, plannedLeaveDates }: SummaryStatsProps) 
                 justifyContent: 'center',
               }}
             >
-              <item.icon size={12} strokeWidth={2.5} color="var(--border-color)" />
+              <item.icon
+                size={12}
+                strokeWidth={2.5}
+                color={item.color === 'var(--accent-pink)' ? 'var(--accent-pink-text)' : 'var(--border-color)'}
+              />
             </div>
           </div>
 

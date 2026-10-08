@@ -25,7 +25,9 @@ export function BrutalistCard({
 }: BrutalistCardProps) {
   const computedHeaderTextColor =
     headerTextColor ||
-    (headerColor === 'var(--accent-yellow)' || headerColor === 'var(--accent-purple)'
+    (headerColor === 'var(--accent-pink)' || headerColor === 'var(--accent-purple)'
+      ? 'var(--accent-pink-text)'
+      : headerColor === 'var(--accent-yellow)'
       ? 'var(--accent-yellow-text)'
       : 'var(--text-color)');
 

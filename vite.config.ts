@@ -13,8 +13,8 @@ export default defineConfig({
         name: 'CutiReady — Malaysian Holiday Leave Arbitrage',
         short_name: 'CutiReady',
         description: 'Maximize Malaysian long weekends and optimize annual leave with EA 1955 statutory compliance.',
-        theme_color: '#fdfbf7',
-        background_color: '#fdfbf7',
+        theme_color: '#fffae3',
+        background_color: '#fffae3',
         display: 'standalone',
         orientation: 'portrait',
         icons: [

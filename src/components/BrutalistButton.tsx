@@ -43,7 +43,9 @@ export function BrutalistButton({
 
   const computedTextColor =
     textColor ||
-    (color === 'var(--accent-yellow)' || color === 'var(--accent-purple)'
+    (color === 'var(--accent-pink)' || color === 'var(--accent-purple)' || color === 'var(--replacement-bg)'
+      ? 'var(--accent-pink-text)'
+      : color === 'var(--accent-yellow)'
       ? 'var(--accent-yellow-text)'
       : 'var(--text-color)');
 
