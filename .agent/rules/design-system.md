@@ -43,21 +43,21 @@ Place this `:root` definition in `src/index.css` (or main stylesheet):
 
   /* Day Strip Semantic Tokens */
   --weekend-bg: #f8f4f9;      /* Ghost White pill for weekends */
-  --weekend-text: #6b4b3e;    /* Mauve Bark text on weekends */
+  --weekend-text: #000000;    /* Solid black text on weekends */
   --ph-bg: #6b4b3e;           /* Mauve Bark pill for Public Holidays */
   --ph-text: #ffffff;         /* Crisp white text on Public Holidays */
   --replacement-bg: #c49e85;  /* Camel pill for Replacement Holidays (Cuti Ganti) */
   --replacement-text: #ffffff;/* Crisp white text on Replacement Holidays */
   --al-bg: #bea7e5;           /* Wisteria pill for recommended Annual Leave (AL) */
-  --al-text: #6b4b3e;         /* Mauve Bark text on Wisteria */
+  --al-text: #000000;         /* Solid black text on Wisteria */
   --workday-bg: #f8f4f9;      /* Ghost White pill for regular workdays */
-  --workday-text: #6b4b3e;    /* Mauve Bark text on regular workdays */
+  --workday-text: #000000;    /* Solid black text on regular workdays */
   
-  /* Text & Borders (Mauve Bark Line Art) */
-  --text-color: #6b4b3e;      /* Mauve Bark high-contrast typography */
-  --text-muted: #8d6f61;      /* Warm Bark secondary labels & timestamps */
-  --border-color: #6b4b3e;    /* Mauve Bark chunky borders & directional 4px drop shadows */
-  --border-subtle: #c49e85;   /* Camel card dividers */
+  /* Text & Borders (Solid Black High-Contrast Ink) */
+  --text-color: #000000;      /* Pure solid black typography */
+  --text-muted: #555555;      /* Crisp dark charcoal secondary labels */
+  --border-color: #000000;    /* Solid black chunky borders & directional 4px drop shadows */
+  --border-subtle: #d1b8a5;   /* Warm card dividers */
   --danger-bg: #fde8e8;       /* Soft tinted danger background */
 
   /* Neobrutalist Geometry */
