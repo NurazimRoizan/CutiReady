@@ -10,9 +10,6 @@ import { generateFullPlanICS, copyFullPlanToClipboard } from '../utils/icsExport
 import {
   CalendarPlus,
   CalendarCheck,
-  Download,
-  Copy,
-  Check,
   Trash2,
   Sparkles,
   ArrowRight,
@@ -165,7 +162,6 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
                 onClick={handleExportAll}
                 style={{ width: '100%', fontSize: '0.82rem', padding: '0.6rem 0.4rem' }}
               >
-                <Download size={14} strokeWidth={2.5} />
                 <span>EXPORT .ICS</span>
               </BrutalistButton>
 
@@ -175,8 +171,7 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
                 onClick={handleCopySummary}
                 style={{ width: '100%', fontSize: '0.82rem', padding: '0.6rem 0.4rem' }}
               >
-                {copied ? <Check size={14} strokeWidth={2.5} /> : <Copy size={14} strokeWidth={2.5} />}
-                <span>{copied ? 'Dah Copy!' : 'Copy Ayat Boss'}</span>
+                <span>{copied ? 'DAH COPY!' : 'COPY AYAT BOSS'}</span>
               </BrutalistButton>
             </div>
           </div>

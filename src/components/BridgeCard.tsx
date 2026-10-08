@@ -179,6 +179,7 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
                 ? 'var(--accent-orange)'
                 : 'var(--accent-yellow)'
             }
+            style={{ padding: '0.4rem 0.25rem', fontSize: '0.74rem', whiteSpace: 'nowrap' }}
           >
             <span>
               {isFullyPlanned
@@ -194,6 +195,7 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
           size="sm"
           onClick={() => generateBridgeICS(bridge)}
           color="var(--bg-primary)"
+          style={{ padding: '0.4rem 0.25rem', fontSize: '0.74rem', whiteSpace: 'nowrap' }}
         >
           <span>EXPORT .ICS</span>
         </BrutalistButton>
@@ -202,6 +204,7 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
           size="sm"
           onClick={handleCopy}
           color={copied ? 'var(--accent-green)' : 'var(--bg-secondary)'}
+          style={{ padding: '0.4rem 0.25rem', fontSize: '0.74rem', whiteSpace: 'nowrap' }}
         >
           <span>{copied ? 'COPIED!' : 'COPY AYAT BOSS'}</span>
         </BrutalistButton>

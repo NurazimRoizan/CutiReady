@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrutalistButton } from './BrutalistButton';
 import { X, HelpCircle } from 'lucide-react';
 
@@ -7,6 +8,15 @@ interface HowToUseModalProps {
 }
 
 export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const steps = [

@@ -7,9 +7,9 @@ import { BridgeCard } from '../components/BridgeCard';
 import { BrutalistCard } from '../components/BrutalistCard';
 import { BrutalistButton } from '../components/BrutalistButton';
 import { BrutalistBadge } from '../components/BrutalistBadge';
-import { LegendGuide } from '../components/LegendGuide';
+import { LegendModal } from '../components/LegendModal';
 import { FilterTabType, BridgeOpportunity } from '../types';
-import { SlidersHorizontal, Sun, CalendarCheck } from 'lucide-react';
+import { Sun, CalendarCheck, Palette } from 'lucide-react';
 
 interface BridgesViewProps {
   bridges: BridgeOpportunity[];
@@ -36,6 +36,7 @@ export function BridgesView({
   } = useLeaveStore();
 
   const [activeTab, setActiveTab] = useState<FilterTabType>('ALL');
+  const [isLegendOpen, setIsLegendOpen] = useState(false);
   const bridgesListRef = useRef<HTMLDivElement>(null);
 
   const remainingAl = Math.max(0, annualLeaveBalance - plannedLeaveDates.length);
@@ -143,6 +144,16 @@ export function BridgesView({
             {plannedLeaveDates.length} HARI DAH LOCK →
           </BrutalistBadge>
         )}
+
+        <BrutalistBadge
+          color="var(--accent-yellow)"
+          style={{ cursor: 'pointer' }}
+          onClick={() => setIsLegendOpen(true)}
+          title="Buka panduan maksud warna dan simbol"
+        >
+          <Palette size={12} strokeWidth={2.5} />
+          PANDUAN WARNA
+        </BrutalistBadge>
       </div>
 
       {/* 3. Inline Max AL Slider Pill */}
@@ -155,57 +166,62 @@ export function BridgesView({
           boxShadow: 'var(--shadow-offset) var(--shadow-offset) 0px var(--border-color)',
           marginBottom: '1rem',
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '0.75rem',
+          flexDirection: 'column',
+          gap: '0.5rem',
         }}
       >
-        <div style={{ flex: 1 }}>
-          <div
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <span
             style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '0.2rem',
+              fontSize: '0.75rem',
+              fontWeight: 900,
+              textTransform: 'uppercase',
+              letterSpacing: '0.4px',
             }}
           >
-            <span
-              style={{
-                fontSize: '0.75rem',
-                fontWeight: 900,
-                textTransform: 'uppercase',
-                letterSpacing: '0.4px',
-              }}
-            >
-              Had AL Sekali Cuti:
-            </span>
-            <span
-              style={{
-                fontSize: '0.72rem',
-                fontWeight: 900,
-                backgroundColor: 'var(--accent-yellow)',
-                border: '1px solid var(--border-color)',
-                borderRadius: 'var(--border-radius-pill)',
-                padding: '0.05rem 0.4rem',
-              }}
-            >
-              {maxAlPerBridge} {maxAlPerBridge === 1 ? 'HARI' : 'HARI'}
-            </span>
+            Had AL Sekali Cuti:
+          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+            {[1, 2, 3, 4, 5].map((lvl) => (
+              <button
+                key={lvl}
+                type="button"
+                onClick={() => setMaxAlPerBridge(lvl)}
+                style={{
+                  backgroundColor: maxAlPerBridge === lvl ? 'var(--accent-yellow)' : 'var(--bg-primary)',
+                  border: '1.5px solid var(--border-color)',
+                  borderRadius: 'var(--border-radius-sm)',
+                  padding: '0.1rem 0.4rem',
+                  fontSize: '0.68rem',
+                  fontWeight: 900,
+                  cursor: 'pointer',
+                  boxShadow: maxAlPerBridge === lvl ? '1px 1px 0px var(--border-color)' : 'none',
+                }}
+              >
+                {lvl}H
+              </button>
+            ))}
           </div>
-          <input
-            type="range"
-            min={1}
-            max={5}
-            step={1}
-            value={maxAlPerBridge}
-            onChange={(e) => setMaxAlPerBridge(Number(e.target.value))}
-            style={{
-              width: '100%',
-              accentColor: 'var(--text-color)',
-              cursor: 'pointer',
-            }}
-          />
         </div>
+        <input
+          type="range"
+          min={1}
+          max={5}
+          step={1}
+          value={maxAlPerBridge}
+          onChange={(e) => setMaxAlPerBridge(Number(e.target.value))}
+          style={{
+            width: '100%',
+            accentColor: 'var(--text-color)',
+            cursor: 'pointer',
+          }}
+        />
       </div>
 
       {/* 4. Filter Tabs & Header */}
@@ -216,6 +232,8 @@ export function BridgesView({
             justifyContent: 'space-between',
             alignItems: 'center',
             marginBottom: '0.4rem',
+            flexWrap: 'wrap',
+            gap: '0.4rem',
           }}
         >
           <h2
@@ -229,16 +247,39 @@ export function BridgesView({
           >
             SENARAI CUTI PANJANG 2026
           </h2>
-          <span
-            style={{
-              fontSize: '0.72rem',
-              fontWeight: 800,
-              color: 'var(--text-muted)',
-              textTransform: 'uppercase',
-            }}
-          >
-            {filteredBridges.length} DARI {bridges.length} BRIDGES
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <button
+              type="button"
+              onClick={() => setIsLegendOpen(true)}
+              style={{
+                backgroundColor: 'var(--accent-yellow)',
+                border: '2px solid var(--border-color)',
+                borderRadius: 'var(--border-radius-sm)',
+                padding: '0.2rem 0.55rem',
+                fontSize: '0.7rem',
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.3rem',
+                boxShadow: '1.5px 1.5px 0px var(--border-color)',
+              }}
+            >
+              <Palette size={13} strokeWidth={2.5} />
+              <span>PANDUAN WARNA</span>
+            </button>
+            <span
+              style={{
+                fontSize: '0.72rem',
+                fontWeight: 800,
+                color: 'var(--text-muted)',
+                textTransform: 'uppercase',
+              }}
+            >
+              {filteredBridges.length} DARI {bridges.length} BRIDGES
+            </span>
+          </div>
         </div>
 
         <FilterTabs
@@ -247,9 +288,6 @@ export function BridgesView({
           counts={tabCounts}
         />
       </div>
-
-      {/* 5. Color Legend Guide */}
-      <LegendGuide />
 
       {/* 6. List of Bridge Opportunities */}
       {filteredBridges.length > 0 ? (
@@ -314,14 +352,18 @@ export function BridgesView({
                   color="var(--bg-primary)"
                   onClick={() => setMaxAlPerBridge(maxAlPerBridge + 1)}
                 >
-                  <SlidersHorizontal size={14} />
-                  BAGI +1 HARI AL LAGI
+                  +1 HARI AL LAGI
                 </BrutalistButton>
               )}
             </div>
           </div>
         </BrutalistCard>
       )}
+
+      <LegendModal
+        isOpen={isLegendOpen}
+        onClose={() => setIsLegendOpen(false)}
+      />
     </div>
   );
 }
