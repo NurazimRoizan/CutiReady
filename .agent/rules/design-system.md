@@ -296,6 +296,18 @@ export function BrutalistInput({
     </div>
   );
 }
+### 5. `BottomNavBar` (`src/components/BottomNavBar.tsx`)
+Sticky mobile-first bottom navigation bar clamped to `maxWidth: 560px` with tactile active indicators and badges.
+
+```tsx
+// 3 Primary Tabs: 'BRIDGES' | 'PLAN' | 'RULES'
+<BottomNavBar
+  currentTab={currentTab}
+  onChangeTab={setCurrentTab}
+  bridgesCount={bridges.length}
+  plannedCount={plannedBridgesCount}
+  observedCount={observedHolidaysCount}
+/>
 ```
 
 ---

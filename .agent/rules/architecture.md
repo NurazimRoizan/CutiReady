@@ -11,11 +11,14 @@ CutiReady/
 ├── public/                 # Static assets, favicons, illustrations
 ├── scripts/                # Verification utilities (scripts/check-tokens.js)
 ├── src/
-│   ├── components/         # Shared Neobrutalist primitives (BrutalistButton, etc.)
-│   ├── pages/              # Route views (Home, Planner, HolidayList, etc.)
-│   ├── data/               # Static dataset models (holidays, long weekends, etc.)
-│   ├── services/           # API adapters, storage, calculations
-│   ├── App.jsx             # Top-level client-side routing & shell
+│   ├── components/         # Shared Neobrutalist primitives (BrutalistButton, BottomNavBar, etc.)
+│   ├── pages/              # Core views (HomePage, BridgesView, MyPlanView, RulesView)
+│   ├── data/               # Static dataset models (holidays.ts)
+│   ├── engine/             # Calendar arithmetic & EA 1955 bridge engine (calendarEngine.ts)
+│   ├── store/              # Zustand global store with localStorage persistence (useLeaveStore.ts)
+│   ├── utils/              # RFC 5545 .ics generation & clipboard formatting (icsExport.ts)
+│   ├── types/              # Canonical TypeScript interfaces (index.ts)
+│   ├── App.tsx             # Shell orchestrating views, modals & service worker
 │   └── index.css           # CSS variables & Neobrutalist tokens
 └── .agent/
     ├── rules/              # Modular agent governance rules
@@ -23,9 +26,35 @@ CutiReady/
 ```
 
 ### File Naming Conventions:
-- **UI Components:** PascalCase (e.g., `BrutalistButton.jsx`, `HolidayCard.jsx`, `LeaveOptimizer.jsx`).
-- **Data & Config:** camelCase (e.g., `publicHolidays2026.js`, `leaveStrategies.js`).
-- **Services & Utils:** camelCase (e.g., `dateUtils.js`, `storage.js`).
+- **UI Components & Views:** PascalCase (e.g., `BrutalistButton.tsx`, `BottomNavBar.tsx`, `BridgesView.tsx`).
+- **Data & Config:** camelCase (e.g., `holidays.ts`, `calendarEngine.ts`).
+- **Services & Utils:** camelCase (e.g., `icsExport.ts`, `useLeaveStore.ts`).
+
+---
+
+## 2. 3-View Bottom Navigation Architecture
+
+To prevent mobile scrolling fatigue and maintain high cognitive clarity, CutiReady is structured into 3 distinct views orchestrated via `BottomNavBar`:
+
+1. **`BRIDGES` (`src/pages/BridgesView.tsx`):**
+   - Discovery & browsing mode.
+   - Hero section with quick Annual Leave quota buttons (`8`, `12`, `14`, `16`, `20` days).
+   - Quarter filter tabs (`ALL`, `HIGH_ROI`, `ZERO_AL`, `Q1`, `Q2`, `Q3`, `Q4`).
+   - Discovered long weekend cards with "+ Add to Plan" action.
+2. **`PLAN` (`src/pages/MyPlanView.tsx`):**
+   - Execution & decision mode (Vacation Dossier).
+   - Summary metric chips (Total Days Off, AL Invested, Arbitrage Multiplier).
+   - Master export actions (unified `.ics` download for all planned breaks, pre-formatted clipboard summary for managers/HR).
+   - Empty state CTA to redirect users to the Bridges view when no leave is planned.
+3. **`RULES` (`src/pages/RulesView.tsx`):**
+   - Configuration mode.
+   - Working state selector & automatic rest-day mappings (`SAT_SUN` vs `FRI_SAT`).
+   - Statutory presets under Employment Act 1955 (11 Days statutory minimum, 15 Days corporate standard, All gazetted).
+   - Saturday *Cuti Ganti* replacement toggle.
+   - Granular holiday checklist with category filters (Compulsory, Federal, State).
+
+> [!NOTE]
+> The bottom navigation bar is fixed at the bottom (`maxWidth: 560px`). All page views wrapped in `.neobrutalist-container` must maintain `paddingBottom: 5.5rem` to avoid content occlusion.
 
 ---
 
