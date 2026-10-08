@@ -210,7 +210,7 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
             onClick={onClose}
             style={{ width: '100%' }}
           >
-            FAHAM, JOM TAPAU CUTI! 🌴
+            FAHAM, JOM TAPAU CUTI!
           </BrutalistButton>
         </div>
       </div>

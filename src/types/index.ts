@@ -114,4 +114,5 @@ export interface UserPreferences {
   observedHolidayIds: string[];
   allowSaturdayReplacements: boolean;
   plannedLeaveDates: string[]; // User's locked-in AL choices
+  hidePastHolidays?: boolean;
 }

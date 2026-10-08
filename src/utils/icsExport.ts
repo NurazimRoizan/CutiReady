@@ -31,7 +31,7 @@ export function generateBridgeICS(bridge: BridgeOpportunity): void {
     `DTSTAMP:${nowIso}`,
     `DTSTART;VALUE=DATE:${start}`,
     `DTEND;VALUE=DATE:${endFormatted}`,
-    `SUMMARY:🌴 Cuti: ${bridge.title}`,
+    `SUMMARY:Cuti: ${bridge.title}`,
     `DESCRIPTION:Total ${bridge.totalDaysOff} days off by applying ${bridge.alDaysRequired} days AL.\\n${alDescription}`,
     'STATUS:CONFIRMED',
     'END:VEVENT',
@@ -72,7 +72,7 @@ export function generateFullPlanICS(bridges: BridgeOpportunity[], stateName: str
       `DTSTAMP:${nowIso}`,
       `DTSTART;VALUE=DATE:${start}`,
       `DTEND;VALUE=DATE:${endFormatted}`,
-      `SUMMARY:🌴 Cuti: ${bridge.title}`,
+      `SUMMARY:Cuti: ${bridge.title}`,
       `DESCRIPTION:${bridge.totalDaysOff} days off (${bridge.alDaysRequired} AL days applied).\\n${alDescription}`,
       'STATUS:CONFIRMED',
       'END:VEVENT',
@@ -110,7 +110,7 @@ export function copyLeaveTextToClipboard(bridge: BridgeOpportunity): Promise<voi
       : 'Tak payah tolak AL (Cuti Umum / Free Break)';
 
   const text = [
-    `🌴 Permohonan Cuti / Leave Request: ${bridge.title}`,
+    `🗓️ Permohonan Cuti / Leave Request: ${bridge.title}`,
     `🗓️ Tarikh Cuti: ${bridge.startDate} hingga ${bridge.endDate} (${bridge.totalDaysOff} hari rehat berterusan)`,
     `📝 Hari AL Nak Apply (${bridge.alDaysRequired} hari): ${alText}`,
     `💬 Nota: Handover kerja settle, approved please boss? Jangan kacau time ni ya 🏖️`,

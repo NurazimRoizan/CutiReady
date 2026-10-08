@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef } from 'react';
+import { format } from 'date-fns';
 import { useLeaveStore } from '../store/useLeaveStore';
 import { HeroSection } from '../components/HeroSection';
 import { FilterTabs } from '../components/FilterTabs';
@@ -30,6 +31,8 @@ export function BridgesView({
     setMaxAlPerBridge,
     observedHolidayIds,
     weekendType,
+    hidePastHolidays,
+    toggleHidePastHolidays,
   } = useLeaveStore();
 
   const [activeTab, setActiveTab] = useState<FilterTabType>('ALL');
@@ -37,31 +40,47 @@ export function BridgesView({
 
   const remainingAl = Math.max(0, annualLeaveBalance - plannedLeaveDates.length);
 
+  const todayStr = useMemo(() => format(new Date(), 'yyyy-MM-dd'), []);
+
+  // Count past bridges (ended before today)
+  const pastBridgesCount = useMemo(() => {
+    return bridges.filter((b) => b.endDate < todayStr).length;
+  }, [bridges, todayStr]);
+
+  // Base list of bridges filtered by hidePastHolidays
+  const baseBridges = useMemo(() => {
+    if (hidePastHolidays) {
+      const upcoming = bridges.filter((b) => b.endDate >= todayStr);
+      return upcoming.length > 0 ? upcoming : bridges;
+    }
+    return bridges;
+  }, [bridges, hidePastHolidays, todayStr]);
+
   const handleScrollToBridges = () => {
     bridgesListRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Compute tab counts
+  // Compute tab counts based on baseBridges
   const tabCounts = useMemo(() => {
     const counts: Record<FilterTabType, number> = {
-      ALL: bridges.length,
-      HIGH_ROI: bridges.filter((b) => b.roiMultiplier >= 3).length,
-      ZERO_AL: bridges.filter((b) => b.alDaysRequired === 0).length,
-      Q1: bridges.filter((b) => b.quarter === 'Q1').length,
-      Q2: bridges.filter((b) => b.quarter === 'Q2').length,
-      Q3: bridges.filter((b) => b.quarter === 'Q3').length,
-      Q4: bridges.filter((b) => b.quarter === 'Q4').length,
+      ALL: baseBridges.length,
+      HIGH_ROI: baseBridges.filter((b) => b.roiMultiplier >= 3).length,
+      ZERO_AL: baseBridges.filter((b) => b.alDaysRequired === 0).length,
+      Q1: baseBridges.filter((b) => b.quarter === 'Q1').length,
+      Q2: baseBridges.filter((b) => b.quarter === 'Q2').length,
+      Q3: baseBridges.filter((b) => b.quarter === 'Q3').length,
+      Q4: baseBridges.filter((b) => b.quarter === 'Q4').length,
     };
     return counts;
-  }, [bridges]);
+  }, [baseBridges]);
 
   // Filter bridges according to active tab
   const filteredBridges = useMemo(() => {
-    if (activeTab === 'ALL') return bridges;
-    if (activeTab === 'HIGH_ROI') return bridges.filter((b) => b.roiMultiplier >= 3);
-    if (activeTab === 'ZERO_AL') return bridges.filter((b) => b.alDaysRequired === 0);
-    return bridges.filter((b) => b.quarter === activeTab);
-  }, [bridges, activeTab]);
+    if (activeTab === 'ALL') return baseBridges;
+    if (activeTab === 'HIGH_ROI') return baseBridges.filter((b) => b.roiMultiplier >= 3);
+    if (activeTab === 'ZERO_AL') return baseBridges.filter((b) => b.alDaysRequired === 0);
+    return baseBridges.filter((b) => b.quarter === activeTab);
+  }, [baseBridges, activeTab]);
 
   return (
     <div>
@@ -100,6 +119,19 @@ export function BridgesView({
         <BrutalistBadge color="var(--weekend-bg)">
           {weekendType === 'SAT_SUN' ? 'WEEKEND SABTU–AHAD' : 'WEEKEND JUMAAT–SABTU'}
         </BrutalistBadge>
+
+        {pastBridgesCount > 0 && (
+          <BrutalistBadge
+            color={hidePastHolidays ? 'var(--accent-cyan)' : 'var(--accent-orange)'}
+            style={{ cursor: 'pointer' }}
+            onClick={toggleHidePastHolidays}
+            title="Klik untuk ubah paparan cuti lepas"
+          >
+            {hidePastHolidays
+              ? `⏳ CUTI AKAN DATANG (${pastBridgesCount} LEPAS DISEMBUNYI)`
+              : `👁️ TUNJUK SEMUA (TERMASUK ${pastBridgesCount} LEPAS)`}
+          </BrutalistBadge>
+        )}
 
         {plannedLeaveDates.length > 0 && (
           <BrutalistBadge
@@ -247,7 +279,19 @@ export function BridgesView({
               Filter ni takde cuti panjang dengan had maksimum{' '}
               <strong>{maxAlPerBridge} hari AL</strong>. Cuba naikkan slider had AL atau klik tab SEMUA!
             </p>
-            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+            {hidePastHolidays && pastBridgesCount > 0 && (
+              <p
+                style={{
+                  fontSize: '0.78rem',
+                  fontWeight: 600,
+                  color: 'var(--text-muted)',
+                  marginBottom: '1rem',
+                }}
+              >
+                ({pastBridgesCount} cuti bagi tarikh yang telah berlalu disembunyikan. Korang boleh buka semula bila-bila masa.)
+              </p>
+            )}
+            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
               <BrutalistButton
                 size="sm"
                 color="var(--accent-yellow)"
@@ -255,10 +299,19 @@ export function BridgesView({
               >
                 TENGOK SEMUA CUTI
               </BrutalistButton>
-              {maxAlPerBridge < 5 && (
+              {hidePastHolidays && pastBridgesCount > 0 && (
                 <BrutalistButton
                   size="sm"
                   color="var(--accent-cyan)"
+                  onClick={toggleHidePastHolidays}
+                >
+                  TUNJUK CUTI LEPAS ({pastBridgesCount})
+                </BrutalistButton>
+              )}
+              {maxAlPerBridge < 5 && (
+                <BrutalistButton
+                  size="sm"
+                  color="var(--bg-primary)"
                   onClick={() => setMaxAlPerBridge(maxAlPerBridge + 1)}
                 >
                   <SlidersHorizontal size={14} />

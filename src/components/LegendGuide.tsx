@@ -334,7 +334,7 @@ export function LegendGuide() {
                     marginTop: '2px',
                   }}
                 >
-                  🌴 Yellow Header
+                  🟨 Banner Kuning
                 </div>
                 <div>
                   <div style={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase' }}>

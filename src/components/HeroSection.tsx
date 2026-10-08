@@ -14,13 +14,6 @@ export function HeroSection({
 }: HeroSectionProps) {
   const { annualLeaveBalance, setAlBalance } = useLeaveStore();
 
-  const alPresets = [8, 12, 14, 16, 20];
-
-  const handleAlSelect = (val: number) => {
-    setAlBalance(val);
-    onScrollToPlanner();
-  };
-
   return (
     <section style={{ textAlign: 'center', position: 'relative', marginBottom: '2.5rem' }}>
       {/* Main Massive Hero Header */}
@@ -122,7 +115,7 @@ export function HeroSection({
         </span>
       </div>
 
-      {/* Quick Interactive Leave Config Box */}
+      {/* Dynamic Remaining Leave Config Box */}
       <div
         style={{
           marginTop: '2rem',
@@ -138,15 +131,15 @@ export function HeroSection({
       >
         <div
           style={{
-            fontSize: '0.85rem',
+            fontSize: '0.88rem',
             fontWeight: 900,
             textTransform: 'uppercase',
-            marginBottom: '0.5rem',
+            marginBottom: '0.35rem',
             letterSpacing: '0.5px',
             color: 'var(--text-color)',
           }}
         >
-          BERAPA HARI BALANCE AL COMPANY BAGI?
+          BERAPA BAKI HARI AL KORANG SEKARANG?
         </div>
 
         <p
@@ -154,34 +147,132 @@ export function HeroSection({
             fontSize: '0.75rem',
             fontWeight: 600,
             color: 'var(--text-muted)',
-            margin: '0 0 0.85rem 0',
+            margin: '0 0 1rem 0',
           }}
         >
-          Pilih kuota AL korang untuk auto-kira kombo cuti panjang paling ngam:
+          Masukkan baki cuti tahunan yang tinggal untuk kira kombo cuti yang sempat dinikmati:
         </p>
 
+        {/* Stepper + Direct Input */}
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.5rem',
+            marginBottom: '1rem',
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => setAlBalance(Math.max(0, annualLeaveBalance - 1))}
+            style={{
+              backgroundColor: 'var(--bg-primary)',
+              border: 'var(--border-width) solid var(--border-color)',
+              borderRadius: 'var(--border-radius-sm)',
+              width: '42px',
+              height: '42px',
+              fontSize: '1.3rem',
+              fontWeight: 900,
+              cursor: 'pointer',
+              boxShadow: '2px 2px 0px var(--border-color)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            -
+          </button>
+
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              backgroundColor: 'var(--bg-primary)',
+              border: 'var(--border-width) solid var(--border-color)',
+              borderRadius: 'var(--border-radius-sm)',
+              padding: '0.2rem 0.65rem',
+              boxShadow: '2px 2px 0px var(--border-color)',
+            }}
+          >
+            <input
+              type="number"
+              min={0}
+              max={60}
+              value={annualLeaveBalance}
+              onChange={(e) => {
+                const val = parseInt(e.target.value, 10);
+                setAlBalance(isNaN(val) ? 0 : Math.max(0, Math.min(60, val)));
+              }}
+              style={{
+                width: '54px',
+                textAlign: 'center',
+                fontSize: '1.4rem',
+                fontWeight: 900,
+                backgroundColor: 'transparent',
+                border: 'none',
+                color: 'var(--text-color)',
+                outline: 'none',
+              }}
+            />
+            <span
+              style={{
+                fontSize: '0.85rem',
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                color: 'var(--text-color)',
+              }}
+            >
+              HARI
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setAlBalance(annualLeaveBalance + 1)}
+            style={{
+              backgroundColor: 'var(--bg-primary)',
+              border: 'var(--border-width) solid var(--border-color)',
+              borderRadius: 'var(--border-radius-sm)',
+              width: '42px',
+              height: '42px',
+              fontSize: '1.3rem',
+              fontWeight: 900,
+              cursor: 'pointer',
+              boxShadow: '2px 2px 0px var(--border-color)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            +
+          </button>
+        </div>
+
+        {/* Quick Click Chips */}
         <div
           style={{
             display: 'flex',
-            gap: '0.4rem',
+            gap: '0.35rem',
             justifyContent: 'center',
             flexWrap: 'wrap',
           }}
         >
-          {alPresets.map((val) => {
+          {[2, 4, 5, 8, 10, 14, 20].map((val) => {
             const isSelected = annualLeaveBalance === val;
             return (
               <button
                 key={val}
                 type="button"
-                onClick={() => handleAlSelect(val)}
+                onClick={() => setAlBalance(val)}
                 style={{
                   backgroundColor: isSelected ? 'var(--accent-yellow)' : 'var(--bg-primary)',
                   color: 'var(--text-color)',
                   border: '2px solid var(--border-color)',
                   borderRadius: 'var(--border-radius-sm)',
-                  padding: '0.5rem 0.75rem',
-                  fontSize: '0.82rem',
+                  padding: '0.35rem 0.55rem',
+                  fontSize: '0.75rem',
                   fontWeight: 900,
                   textTransform: 'uppercase',
                   cursor: 'pointer',
@@ -192,7 +283,7 @@ export function HeroSection({
                   userSelect: 'none',
                 }}
               >
-                {val} HARI
+                {val}H
               </button>
             );
           })}

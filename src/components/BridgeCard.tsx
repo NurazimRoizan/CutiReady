@@ -7,7 +7,7 @@ import { BrutalistButton } from './BrutalistButton';
 import { DayStripTile } from './DayStripTile';
 import { generateBridgeICS, copyLeaveTextToClipboard } from '../utils/icsExport';
 import { useLeaveStore } from '../store/useLeaveStore';
-import { CalendarPlus, Copy, Check, BookmarkCheck, BookmarkPlus, Zap } from 'lucide-react';
+import { Zap } from 'lucide-react';
 
 interface BridgeCardProps {
   bridge: BridgeOpportunity;
@@ -135,24 +135,6 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
       <div style={{ marginBottom: '0.85rem' }}>
         <div
           style={{
-            fontSize: '0.68rem',
-            fontWeight: 800,
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
-            color: 'var(--text-muted)',
-            marginBottom: '0.35rem',
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-        >
-          <span>Visual Hari Ke Hari:</span>
-          {bridge.alDaysRequired > 0 && (
-            <span>Tekan tile pink untuk toggle AL</span>
-          )}
-        </div>
-
-        <div
-          style={{
             display: 'flex',
             gap: '0.35rem',
             overflowX: 'auto',
@@ -198,22 +180,13 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
                 : 'var(--accent-yellow)'
             }
           >
-            {isFullyPlanned ? (
-              <>
-                <BookmarkCheck size={14} strokeWidth={2.5} />
-                <span>DAH LOCK ({bridge.alDaysRequired}H)</span>
-              </>
-            ) : isPartiallyPlanned ? (
-              <>
-                <BookmarkPlus size={14} strokeWidth={2.5} />
-                <span>+ SAMBUNG LOCK</span>
-              </>
-            ) : (
-              <>
-                <BookmarkPlus size={14} strokeWidth={2.5} />
-                <span>+ LOCK CUTI</span>
-              </>
-            )}
+            <span>
+              {isFullyPlanned
+                ? `DAH LOCK (${bridge.alDaysRequired}H)`
+                : isPartiallyPlanned
+                ? '+ SAMBUNG LOCK'
+                : '+ LOCK CUTI'}
+            </span>
           </BrutalistButton>
         )}
 
@@ -222,7 +195,6 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
           onClick={() => generateBridgeICS(bridge)}
           color="var(--bg-primary)"
         >
-          <CalendarPlus size={14} strokeWidth={2.5} />
           <span>EXPORT .ICS</span>
         </BrutalistButton>
 
@@ -231,17 +203,7 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
           onClick={handleCopy}
           color={copied ? 'var(--accent-green)' : 'var(--bg-secondary)'}
         >
-          {copied ? (
-            <>
-              <Check size={14} strokeWidth={3} />
-              <span>COPIED!</span>
-            </>
-          ) : (
-            <>
-              <Copy size={14} strokeWidth={2.5} />
-              <span>COPY AYAT BOSS</span>
-            </>
-          )}
+          <span>{copied ? 'COPIED!' : 'COPY AYAT BOSS'}</span>
         </BrutalistButton>
       </div>
     </BrutalistCard>

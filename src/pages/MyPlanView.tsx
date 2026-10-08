@@ -83,7 +83,7 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
               margin: 0,
             }}
           >
-            Dossier Cuti Saya 🌴
+            Dossier Cuti Saya
           </h2>
         </div>
 

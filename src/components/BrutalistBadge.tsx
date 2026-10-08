@@ -7,6 +7,7 @@ export interface BrutalistBadgeProps {
   className?: string;
   size?: 'sm' | 'md';
   onClick?: () => void;
+  title?: string;
 }
 
 export function BrutalistBadge({
@@ -16,6 +17,7 @@ export function BrutalistBadge({
   className = '',
   size = 'md',
   onClick,
+  title,
 }: BrutalistBadgeProps) {
   const isSmall = size === 'sm';
 
@@ -23,6 +25,7 @@ export function BrutalistBadge({
     <span
       className={className}
       onClick={onClick}
+      title={title}
       style={{
         display: 'inline-flex',
         alignItems: 'center',

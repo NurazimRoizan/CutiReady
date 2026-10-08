@@ -21,6 +21,9 @@ interface LeaveStore extends UserPreferences {
   togglePlannedLeaveDate: (date: string) => void;
   togglePlannedBridgeDates: (dates: string[]) => void;
   clearAllPlannedLeave: () => void;
+  hidePastHolidays: boolean;
+  toggleHidePastHolidays: () => void;
+  setHidePastHolidays: (hide: boolean) => void;
   resetToDefaults: () => void;
 }
 
@@ -36,6 +39,12 @@ export const useLeaveStore = create<LeaveStore>()(
       plannedLeaveDates: [],
       observedHolidayIds: DEFAULT_HOLIDAYS_2026.map((h) => h.id),
       activePreset: 'ALL',
+      hidePastHolidays: true,
+
+      toggleHidePastHolidays: () =>
+        set((state) => ({ hidePastHolidays: !state.hidePastHolidays })),
+
+      setHidePastHolidays: (hidePastHolidays) => set({ hidePastHolidays }),
 
       setState: (state) => {
         set({
@@ -146,6 +155,7 @@ export const useLeaveStore = create<LeaveStore>()(
           plannedLeaveDates: [],
           observedHolidayIds: DEFAULT_HOLIDAYS_2026.map((h) => h.id),
           activePreset: 'ALL',
+          hidePastHolidays: true,
         });
       },
     }),
