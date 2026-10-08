@@ -64,21 +64,21 @@ export function RulesView() {
   const presets = [
     {
       id: 'MINIMUM_11' as const,
-      label: 'EA 1955 (11D)',
+      label: 'EA 1955 (11H)',
       icon: Sparkles,
-      desc: 'Legal minimum: 5 compulsory + 6 chosen',
+      desc: 'Minima akta: 5 wajib + 6 pilihan majikan',
     },
     {
       id: 'CORPORATE_15' as const,
-      label: 'Corp (15D)',
+      label: 'Korp (15H)',
       icon: Building,
-      desc: 'Standard private sector package',
+      desc: 'Standard biasa syarikat swasta Malaysia',
     },
     {
       id: 'ALL' as const,
-      label: 'All Gazetted',
+      label: 'Semua Gazet',
       icon: Globe,
-      desc: 'All federal & state public holidays',
+      desc: 'Boss belanja semua cuti persekutuan & negeri!',
     },
   ];
 
@@ -104,17 +104,17 @@ export function RulesView() {
               margin: 0,
             }}
           >
-            Company Rules & Holidays
+            Polisi Syarikat & Cuti Gazet
           </h2>
         </div>
 
         <BrutalistBadge color="var(--accent-yellow)">
-          {observedCount} OBSERVED
+          {observedCount} CUTI AKTIF
         </BrutalistBadge>
       </div>
 
       {/* 2. State & Weekend Mapping Card */}
-      <BrutalistCard headerColor="var(--accent-cyan)" title="1. WORK STATE & REST DAYS">
+      <BrutalistCard headerColor="var(--accent-cyan)" title="1. NEGERI KERJA & HARI REST DAY">
         <p
           style={{
             fontSize: '0.8rem',
@@ -123,7 +123,7 @@ export function RulesView() {
             margin: '0 0 0.65rem 0',
           }}
         >
-          Public holidays and official rest days automatically adjust based on your state.
+          Cuti umum dan hari weekend auto-tukar ikut negeri tempat kerja korang. Takyah pening kira manual!
         </p>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '0.5rem', alignItems: 'center' }}>
@@ -180,13 +180,13 @@ export function RulesView() {
               textTransform: 'uppercase',
             }}
           >
-            {weekendType === 'SAT_SUN' ? 'SAT–SUN WEEKEND' : 'FRI–SAT WEEKEND'}
+            {weekendType === 'SAT_SUN' ? 'WEEKEND SABTU–AHAD' : 'WEEKEND JUMAAT–SABTU'}
           </div>
         </div>
       </BrutalistCard>
 
       {/* 3. Statutory EA 1955 Presets */}
-      <BrutalistCard headerColor="var(--accent-yellow)" title="2. STATUTORY HOLIDAY PRESET">
+      <BrutalistCard headerColor="var(--accent-yellow)" title="2. PRESET CUTI SYARIKAT">
         <p
           style={{
             fontSize: '0.8rem',
@@ -195,7 +195,7 @@ export function RulesView() {
             margin: '0 0 0.65rem 0',
           }}
         >
-          Under <strong>Employment Act 1955 (Section 60D)</strong>, private employers are legally mandated to grant 11 public holidays. Select your tier:
+          Ikut <strong>Akta Kerja 1955 (Seksyen 60D)</strong>, majikan wajib beri sekurang-kurangnya 11 hari cuti am berbayar. Pilih pakej syarikat korang:
         </p>
 
         <div
@@ -254,10 +254,10 @@ export function RulesView() {
         >
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase' }}>
-              Observe Saturday Cuti Ganti
+              Cuti Ganti Hari Sabtu (Cuti Ganti)
             </div>
             <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-              Replace Saturday holiday with next Monday off
+              Kalau cuti jatuh Sabtu, automatik ganti Isnin (jangan rugi cuti!)
             </div>
           </div>
 
@@ -277,13 +277,13 @@ export function RulesView() {
               boxShadow: '1px 1px 0px var(--border-color)',
             }}
           >
-            {allowSaturdayReplacements ? 'ENABLED' : 'DISABLED'}
+            {allowSaturdayReplacements ? 'ON LAH' : 'TAKDE'}
           </button>
         </div>
       </BrutalistCard>
 
       {/* 4. Leave Quota & Calculation Settings */}
-      <BrutalistCard headerColor="var(--accent-pink)" title="3. ANNUAL LEAVE BALANCE & THRESHOLD">
+      <BrutalistCard headerColor="var(--accent-pink)" title="3. KUOTA AL & HAD SEKALI CUTI">
         <div
           style={{
             display: 'grid',
@@ -303,7 +303,7 @@ export function RulesView() {
                 marginBottom: '0.35rem',
               }}
             >
-              Total AL Quota:
+              Jumlah AL Setahun:
             </label>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
               <button
@@ -333,7 +333,7 @@ export function RulesView() {
                   padding: '0.3rem',
                 }}
               >
-                {annualLeaveBalance} DAYS
+                {annualLeaveBalance} HARI
               </div>
               <button
                 type="button"
@@ -363,7 +363,7 @@ export function RulesView() {
                   textTransform: 'uppercase',
                 }}
               >
-                Max AL / Break:
+                Had AL / Cuti:
               </label>
               <span
                 style={{
@@ -375,7 +375,7 @@ export function RulesView() {
                   padding: '0.05rem 0.35rem',
                 }}
               >
-                {maxAlPerBridge} {maxAlPerBridge === 1 ? 'DAY' : 'DAYS'}
+                {maxAlPerBridge} {maxAlPerBridge === 1 ? 'HARI' : 'HARI'}
               </span>
             </div>
             <input
@@ -414,7 +414,7 @@ export function RulesView() {
               margin: 0,
             }}
           >
-            Observed Holidays Checklist ({observedCount} / {applicableHolidays.length})
+            Senarai Semak Cuti Umum ({observedCount} / {applicableHolidays.length})
           </h3>
         </div>
 
@@ -430,10 +430,10 @@ export function RulesView() {
         >
           {(
             [
-              { id: 'ALL', label: `All (${applicableHolidays.length})` },
-              { id: 'COMPULSORY', label: `EA Mandated (${compulsoryHolidays.length})` },
-              { id: 'FEDERAL', label: `Federal (${federalHolidays.length})` },
-              { id: 'STATE', label: `State (${stateHolidays.length})` },
+              { id: 'ALL', label: `Semua (${applicableHolidays.length})` },
+              { id: 'COMPULSORY', label: `Wajib Akta (${compulsoryHolidays.length})` },
+              { id: 'FEDERAL', label: `Persekutuan (${federalHolidays.length})` },
+              { id: 'STATE', label: `Negeri (${stateHolidays.length})` },
             ] as const
           ).map((tab) => (
             <button

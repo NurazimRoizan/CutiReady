@@ -64,7 +64,7 @@ export function Header({ onOpenHelp }: HeaderProps) {
           <select
             value={state}
             onChange={(e) => setState(e.target.value as MalaysianState)}
-            title="Select working state / territory"
+            title="Pilih negeri tempat kerja"
             style={{
               backgroundColor: 'var(--bg-secondary)',
               border: '2px solid var(--border-color)',
@@ -106,7 +106,7 @@ export function Header({ onOpenHelp }: HeaderProps) {
 
         <button
           onClick={resetToDefaults}
-          title="Reset preferences to default"
+          title="Reset semua ke default"
           style={{
             backgroundColor: 'var(--bg-secondary)',
             border: '2px solid var(--border-color)',
@@ -126,7 +126,7 @@ export function Header({ onOpenHelp }: HeaderProps) {
         {onOpenHelp && (
           <button
             onClick={onOpenHelp}
-            title="How leave arbitrage works"
+            title="Cara guna & hack cuti"
             style={{
               backgroundColor: 'var(--accent-yellow)',
               border: '2px solid var(--border-color)',

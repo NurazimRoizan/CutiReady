@@ -107,13 +107,14 @@ export function copyLeaveTextToClipboard(bridge: BridgeOpportunity): Promise<voi
   const alText =
     bridge.alDaysRequired > 0
       ? bridge.annualLeaveDates.join(', ')
-      : 'None (Natural Long Weekend)';
+      : 'Tak payah tolak AL (Cuti Umum / Free Break)';
 
   const text = [
-    `🌴 Annual Leave Request: ${bridge.title}`,
-    `🗓️ Dates: ${bridge.startDate} to ${bridge.endDate} (${bridge.totalDaysOff} consecutive days off)`,
-    `📝 Annual Leave to Apply (${bridge.alDaysRequired} day${bridge.alDaysRequired === 1 ? '' : 's'}): ${alText}`,
-    `Generated with CutiReady (cutiready.my)`,
+    `🌴 Permohonan Cuti / Leave Request: ${bridge.title}`,
+    `🗓️ Tarikh Cuti: ${bridge.startDate} hingga ${bridge.endDate} (${bridge.totalDaysOff} hari rehat berterusan)`,
+    `📝 Hari AL Nak Apply (${bridge.alDaysRequired} hari): ${alText}`,
+    `💬 Nota: Handover kerja settle, approved please boss? Jangan kacau time ni ya 🏖️`,
+    `Dihasilkan via CutiReady (cutiready.my)`,
   ].join('\n');
 
   return navigator.clipboard.writeText(text);
@@ -127,17 +128,18 @@ export function copyFullPlanToClipboard(bridges: BridgeOpportunity[], stateName:
   const totalOff = bridges.reduce((acc, b) => acc + b.totalDaysOff, 0);
 
   const lines = [
-    `🇲🇾 2026 ANNUAL LEAVE & HOLIDAY PLAN (${stateName})`,
-    `Total Long Weekends Planned: ${bridges.length}`,
-    `Total Consecutive Days Off: ${totalOff} days`,
-    `Total Annual Leave (AL) Days Required: ${totalAl} days`,
+    `🇲🇾 JADUAL CUTI TAHUNAN & LONG WEEKEND 2026 (${stateName})`,
+    `Jumlah Cuti Panjang: ${bridges.length} sesi`,
+    `Jumlah Hari Rehat Berterusan: ${totalOff} hari`,
+    `Jumlah Hari AL Digunakan: ${totalAl} hari`,
+    `Status Handover: Sedia awal-awal, kerja tetap jalan!`,
     `--------------------------------------------------`,
     ...bridges.map((b, i) => {
-      const alStr = b.alDaysRequired > 0 ? `Apply AL on: ${b.annualLeaveDates.join(', ')}` : '0 AL needed (Public Holiday)';
-      return `${i + 1}. ${b.title}\n   📅 ${b.startDate} → ${b.endDate} (${b.totalDaysOff} days off)\n   🏖️ ${alStr}`;
+      const alStr = b.alDaysRequired > 0 ? `Apply AL: ${b.annualLeaveDates.join(', ')}` : '0 AL diperlukan (Cuti Umum)';
+      return `${i + 1}. ${b.title}\n   📅 ${b.startDate} → ${b.endDate} (${b.totalDaysOff} hari off)\n   🏖️ ${alStr}`;
     }),
     `--------------------------------------------------`,
-    `Optimized via CutiReady (cutiready.my)`,
+    `Dioptimumkan ikut Akta Kerja 1955 via CutiReady (cutiready.my)`,
   ];
 
   return navigator.clipboard.writeText(lines.join('\n'));

@@ -26,7 +26,7 @@ export function BottomNavBar({
     },
     {
       id: 'PLAN' as AppTab,
-      label: 'My Plan',
+      label: 'My Cuti',
       icon: CalendarCheck,
       badge: `${plannedCount}`,
       badgeColor: plannedCount > 0 ? 'var(--accent-pink)' : 'var(--weekend-bg)',
@@ -51,7 +51,6 @@ export function BottomNavBar({
         maxWidth: '560px',
         backgroundColor: 'var(--bg-secondary)',
         borderTop: 'var(--border-width) solid var(--border-color)',
-        boxShadow: '0px -4px 0px rgba(0, 0, 0, 0.08)',
         zIndex: 50,
         padding: '0.45rem 0.5rem calc(0.45rem + env(safe-area-inset-bottom, 0px)) 0.5rem',
         boxSizing: 'border-box',

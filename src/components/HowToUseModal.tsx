@@ -12,35 +12,35 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
   const steps = [
     {
       step: '01',
-      title: 'Pick State & Rest Days',
+      title: 'Pilih Negeri Tempat Kerja',
       emoji: '📍',
-      pill: 'Rest Day Rules',
+      pill: 'Rules Weekend',
       description:
-        'Different Malaysian states observe different weekends (KL/Selangor = Sat–Sun; Kedah/Kelantan/Terengganu = Fri–Sat). Rest days and state-specific gazetted holidays adjust dynamically.',
+        'Negeri lain, hari cuti & weekend lain bro (KL/Selangor = Sabtu–Ahad; Kedah/Kelantan/Terengganu = Jumaat–Sabtu). Sistem auto-adjust cuti gazet ikut negeri korang!',
     },
     {
       step: '02',
-      title: 'Match Your Company Policy',
+      title: 'Match Polisi Syarikat',
       emoji: '🏢',
-      pill: 'EA 1955 Sec 60D',
+      pill: 'EA 1955 Seksyen 60D',
       description:
-        'Select whether your employer follows Statutory Minimum (11 days under Employment Act 1955), Corporate Standard (15 days), or All Gazetted Holidays. Toggle Saturday Cuti Ganti if observed.',
+        'Company korang ikut Minima Akta (11 hari), Standard Korporat (15 hari), atau jenis boss pemurah (semua cuti gazet)? Boleh toggle Cuti Ganti hari Sabtu juga!',
     },
     {
       step: '03',
-      title: 'Discover & Lock In Bridges',
+      title: 'Spot Bridge & Lock In Cepat',
       emoji: '🎯',
-      pill: 'Up to 4.5x ROI',
+      pill: 'ROI Sampai 5x!',
       description:
-        'Browse mathematically discovered leave windows. Look for natural 0 AL breaks or Mega Bridges (≥4.0x ROI). Tap "+ Add to Plan" to lock dates into your annual leave quota.',
+        'Tengok kombo cuti yang auto-generate. Cari yang 0 AL (free cuti terus) atau Mega Bridge ROI padu. Tekan "+ Lock Cuti" sebelum colleague lain sapu slot!',
     },
     {
       step: '04',
-      title: 'Export to Calendar or Slack/HR',
+      title: 'Export & WhatsApp Boss',
       emoji: '📅',
-      pill: '1-Click Export',
+      pill: '1-Click Settle',
       description:
-        'Head over to the "My Plan" tab to download unified RFC 5545 .ics calendar files or copy pre-formatted WhatsApp/Slack leave requests for your manager.',
+        'Pergi tab "My Cuti" untuk download .ics masuk Google/Apple Calendar, atau copy terus ayat WhatsApp/Slack mesra-boss untuk mohon cuti!',
     },
   ];
 
@@ -63,6 +63,7 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
       onClick={onClose}
     >
       <div
+        className="neo-modal-content"
         style={{
           backgroundColor: 'var(--bg-secondary)',
           border: 'var(--border-width) solid var(--border-color)',
@@ -100,7 +101,7 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
                 color: 'var(--text-color)',
               }}
             >
-              How Leave Arbitrage Works
+              Cara Hack Cuti Macam Pro
             </h2>
           </div>
 
@@ -209,7 +210,7 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
             onClick={onClose}
             style={{ width: '100%' }}
           >
-            GOT IT — LET'S PLAN LEAVE!
+            FAHAM, JOM TAPAU CUTI! 🌴
           </BrutalistButton>
         </div>
       </div>

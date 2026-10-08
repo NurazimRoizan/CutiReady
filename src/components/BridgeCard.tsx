@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { format, parseISO } from 'date-fns';
 import { BridgeOpportunity } from '../types';
 import { BrutalistCard } from './BrutalistCard';
@@ -13,9 +13,10 @@ interface BridgeCardProps {
   bridge: BridgeOpportunity;
 }
 
-export function BridgeCard({ bridge }: BridgeCardProps) {
-  const { plannedLeaveDates, togglePlannedBridgeDates, togglePlannedLeaveDate } =
-    useLeaveStore();
+function BridgeCardComponent({ bridge }: BridgeCardProps) {
+  const plannedLeaveDates = useLeaveStore((s) => s.plannedLeaveDates);
+  const togglePlannedBridgeDates = useLeaveStore((s) => s.togglePlannedBridgeDates);
+  const togglePlannedLeaveDate = useLeaveStore((s) => s.togglePlannedLeaveDate);
 
   const [copied, setCopied] = useState(false);
 
@@ -52,9 +53,9 @@ export function BridgeCard({ bridge }: BridgeCardProps) {
   const headerColor = 'var(--accent-yellow)';
   let headerBadgeText = 'STANDARD';
   if (bridge.alDaysRequired === 0) {
-    headerBadgeText = '⚡ FREE (0 AL)';
+    headerBadgeText = '⚡ FREE CUTI (0 AL)';
   } else if (bridge.roiMultiplier >= 4) {
-    headerBadgeText = `🔥 MEGA (${bridge.roiMultiplier}x ROI)`;
+    headerBadgeText = `🔥 PADU GILA (${bridge.roiMultiplier}x ROI)`;
   }
 
   return (
@@ -100,18 +101,18 @@ export function BridgeCard({ bridge }: BridgeCardProps) {
               textTransform: 'uppercase',
             }}
           >
-            {bridge.totalDaysOff} Contiguous Days Away from Office
+            {bridge.totalDaysOff} Hari Lepak Tanpa Masuk Kerja
           </span>
         </div>
 
         <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
           <BrutalistBadge color="var(--bg-primary)">
-            {bridge.totalDaysOff} DAYS OFF
+            {bridge.totalDaysOff} HARI OFF
           </BrutalistBadge>
 
           {bridge.alDaysRequired === 0 ? (
             <BrutalistBadge color="var(--accent-cyan)">
-              ⚡ 0 AL • FREE BREAK
+              ⚡ 0 AL • FREE CUTI
             </BrutalistBadge>
           ) : bridge.roiMultiplier >= 4 ? (
             <>
@@ -119,12 +120,12 @@ export function BridgeCard({ bridge }: BridgeCardProps) {
                 🔥 {bridge.roiMultiplier}x ROI
               </BrutalistBadge>
               <BrutalistBadge color="var(--accent-pink)">
-                SPEND {bridge.alDaysRequired} AL
+                BURN {bridge.alDaysRequired} AL JE
               </BrutalistBadge>
             </>
           ) : (
             <BrutalistBadge color="var(--accent-pink)">
-              SPEND {bridge.alDaysRequired} AL ({bridge.roiMultiplier}x)
+              BURN {bridge.alDaysRequired} AL ({bridge.roiMultiplier}x)
             </BrutalistBadge>
           )}
         </div>
@@ -144,9 +145,9 @@ export function BridgeCard({ bridge }: BridgeCardProps) {
             justifyContent: 'space-between',
           }}
         >
-          <span>Day-by-Day Visual Strip:</span>
+          <span>Visual Hari Ke Hari:</span>
           {bridge.alDaysRequired > 0 && (
-            <span>Tap amber tiles to toggle AL</span>
+            <span>Tekan tile pink untuk toggle AL</span>
           )}
         </div>
 
@@ -200,12 +201,17 @@ export function BridgeCard({ bridge }: BridgeCardProps) {
             {isFullyPlanned ? (
               <>
                 <BookmarkCheck size={14} strokeWidth={2.5} />
-                <span>PLANNED ({bridge.alDaysRequired}d)</span>
+                <span>DAH LOCK ({bridge.alDaysRequired}H)</span>
+              </>
+            ) : isPartiallyPlanned ? (
+              <>
+                <BookmarkPlus size={14} strokeWidth={2.5} />
+                <span>+ SAMBUNG LOCK</span>
               </>
             ) : (
               <>
                 <BookmarkPlus size={14} strokeWidth={2.5} />
-                <span>+ PLAN LEAVE</span>
+                <span>+ LOCK CUTI</span>
               </>
             )}
           </BrutalistButton>
@@ -233,7 +239,7 @@ export function BridgeCard({ bridge }: BridgeCardProps) {
           ) : (
             <>
               <Copy size={14} strokeWidth={2.5} />
-              <span>COPY DATES</span>
+              <span>COPY AYAT BOSS</span>
             </>
           )}
         </BrutalistButton>
@@ -241,3 +247,6 @@ export function BridgeCard({ bridge }: BridgeCardProps) {
     </BrutalistCard>
   );
 }
+
+export const BridgeCard = memo(BridgeCardComponent);
+

@@ -35,8 +35,8 @@ export function HeroSection({
           color: 'var(--text-color)',
         }}
       >
-        The Leave Hack<br />
-        For Malaysian<br />
+        The Ultimate Leave Hack<br />
+        Untuk Pekerja Malaysia<br />
         <span
           style={{
             backgroundColor: 'var(--accent-cyan)',
@@ -47,7 +47,7 @@ export function HeroSection({
             boxShadow: '3px 3px 0px var(--border-color)',
           }}
         >
-          Workers & Teams
+          Kerja Kuat, Cuti Lagi Kuat!
         </span>
       </h1>
 
@@ -62,7 +62,7 @@ export function HeroSection({
           color: 'var(--text-color)',
         }}
       >
-        Turn <strong>14 days of Annual Leave</strong> into <strong>40+ contiguous days off</strong>. Zero-hallucination deterministic calendar arithmetic that combines your company-observed public holidays, rest days, and <em>Cuti Ganti</em> rollovers into optimal long weekends.
+        Burn sikit <strong>Annual Leave (AL)</strong>, tapau <strong>40+ hari cuti panjang</strong>! Formula matematik 100% tepat ikut Akta Kerja 1955, public holiday, dan <em>Cuti Ganti</em>. Boss senyum, HR approve, anda healing!
       </p>
 
       {/* Stacked Full-Width Dual Action Hero Buttons */}
@@ -77,7 +77,7 @@ export function HeroSection({
             boxShadow: 'var(--shadow-offset) var(--shadow-offset) 0px var(--border-color)',
           }}
         >
-          JUMP INTO 2026 BRIDGES ↓
+          JOM TENGOK BRIDGES 2026 ↓
         </BrutalistButton>
 
         <BrutalistButton
@@ -90,7 +90,7 @@ export function HeroSection({
             boxShadow: 'var(--shadow-offset) var(--shadow-offset) 0px var(--border-color)',
           }}
         >
-          {isHowToUseOpen ? 'HIDE ONBOARDING GUIDE ↑' : 'HOW LEAVE ARBITRAGE WORKS ↗'}
+          {isHowToUseOpen ? 'TUTUP GUIDE ONBOARDING ↑' : 'CARA HACK CUTI NI MACAM MANA? ↗'}
         </BrutalistButton>
       </div>
 
@@ -106,7 +106,7 @@ export function HeroSection({
         }}
       >
         <span style={{ fontSize: '0.82rem', fontWeight: 700, opacity: 0.75, color: 'var(--text-color)' }}>
-          Employment Act 1955 (Section 60D) Compliant
+          100% Patuh Akta Kerja 1955 (Seksyen 60D)
         </span>
         <span
           style={{
@@ -118,11 +118,11 @@ export function HeroSection({
           }}
           onClick={onToggleHowToUse}
         >
-          (How it works)
+          (Tengok cara guna)
         </span>
       </div>
 
-      {/* Quick Interactive Leave Config Box (Wallo's Join Box Heritage) */}
+      {/* Quick Interactive Leave Config Box */}
       <div
         style={{
           marginTop: '2rem',
@@ -146,7 +146,7 @@ export function HeroSection({
             color: 'var(--text-color)',
           }}
         >
-          HOW MANY ANNUAL LEAVE DAYS DO YOU GET?
+          BERAPA HARI BALANCE AL COMPANY BAGI?
         </div>
 
         <p
@@ -157,7 +157,7 @@ export function HeroSection({
             margin: '0 0 0.85rem 0',
           }}
         >
-          Tap your leave quota to calculate tailored Malaysian break opportunities:
+          Pilih kuota AL korang untuk auto-kira kombo cuti panjang paling ngam:
         </p>
 
         <div
@@ -192,7 +192,7 @@ export function HeroSection({
                   userSelect: 'none',
                 }}
               >
-                {val} DAYS
+                {val} HARI
               </button>
             );
           })}

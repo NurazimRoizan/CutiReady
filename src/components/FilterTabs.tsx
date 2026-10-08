@@ -8,9 +8,9 @@ interface FilterTabsProps {
 
 export function FilterTabs({ activeTab, onChangeTab, counts }: FilterTabsProps) {
   const tabs: { id: FilterTabType; label: string }[] = [
-    { id: 'ALL', label: 'ALL' },
-    { id: 'HIGH_ROI', label: 'HIGH ROI' },
-    { id: 'ZERO_AL', label: '0 AL' },
+    { id: 'ALL', label: 'SEMUA' },
+    { id: 'HIGH_ROI', label: 'ROI PADU' },
+    { id: 'ZERO_AL', label: 'FREE (0 AL)' },
     { id: 'Q1', label: 'Q1' },
     { id: 'Q2', label: 'Q2' },
     { id: 'Q3', label: 'Q3' },

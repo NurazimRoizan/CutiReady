@@ -13,7 +13,7 @@ export function LegendGuide() {
       title={
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
           <Palette size={16} strokeWidth={2.5} />
-          <span>COLOR GUIDE & LEGEND</span>
+          <span>PANDUAN WARNA & LEGEND</span>
         </div>
       }
       headerAction={
@@ -35,7 +35,7 @@ export function LegendGuide() {
             boxShadow: '1px 1px 0px var(--border-color)',
           }}
         >
-          <span>{isOpen ? 'COLLAPSE' : 'EXPAND'}</span>
+          <span>{isOpen ? 'TUTUP' : 'BUKA'}</span>
           {isOpen ? <ChevronUp size={13} strokeWidth={3} /> : <ChevronDown size={13} strokeWidth={3} />}
         </button>
       }
@@ -61,16 +61,16 @@ export function LegendGuide() {
               color: 'var(--text-muted)',
             }}
           >
-            QUICK REFERENCE:
+            RUJUKAN PANTAS:
           </span>
           <BrutalistBadge size="sm" color="var(--ph-bg)">
-            🟢 Public Holiday
+            🟢 Cuti Umum (PH)
           </BrutalistBadge>
           <BrutalistBadge size="sm" color="var(--accent-cyan)">
             🔵 Cuti Ganti
           </BrutalistBadge>
           <BrutalistBadge size="sm" color="var(--accent-pink)">
-            🌸 Take AL (Pink)
+            🌸 Ambil AL (Pink)
           </BrutalistBadge>
           <BrutalistBadge size="sm" color="var(--weekend-bg)">
             ⚪ Weekend
@@ -95,7 +95,7 @@ export function LegendGuide() {
           }}
         >
           <HelpCircle size={12} />
-          <span>{isOpen ? 'Hide Details' : 'Full Color Breakdown'}</span>
+          <span>{isOpen ? 'Tutup Detail' : 'Tengok Info Penuh'}</span>
         </button>
       </div>
 
@@ -126,7 +126,7 @@ export function LegendGuide() {
                 cursor: 'pointer',
               }}
             >
-              🗓️ 1. Day Strip Colors
+              🗓️ 1. Warna Strip Kalendar
             </button>
             <button
               type="button"
@@ -144,7 +144,7 @@ export function LegendGuide() {
                 cursor: 'pointer',
               }}
             >
-              🃏 2. Card Banners & Badges
+              🃏 2. Banner & Badge Kad
             </button>
           </div>
 

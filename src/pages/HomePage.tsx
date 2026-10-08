@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useLeaveStore } from '../store/useLeaveStore';
 import { buildNormalizedCalendar, findBridgeOpportunities } from '../engine/calendarEngine';
 import { Header } from '../components/Header';
@@ -25,6 +25,13 @@ export function HomePage({ onOpenHowToUse }: HomePageProps) {
   } = useLeaveStore();
 
   const [currentTab, setCurrentTab] = useState<AppTab>('BRIDGES');
+
+  // Fix: Reset window scroll to top whenever switching tabs so user doesn't land at the bottom
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [currentTab]);
 
   // Deterministically compute normalized calendar and bridge opportunities
   const calendar = useMemo(() => {
@@ -66,24 +73,26 @@ export function HomePage({ onOpenHowToUse }: HomePageProps) {
       {/* 1. Header (Navbar with State Selector, Reset & Help Buttons) */}
       <Header onOpenHelp={onOpenHowToUse} />
 
-      {/* 2. Active Tab Content View */}
-      {currentTab === 'BRIDGES' && (
-        <BridgesView
-          bridges={allBridges}
-          onOpenHowToUse={onOpenHowToUse}
-          onGoToPlan={() => setCurrentTab('PLAN')}
-          onGoToRules={() => setCurrentTab('RULES')}
-        />
-      )}
+      {/* 2. Active Tab Content View wrapped with snappy Neobrutalist entrance animation */}
+      <main key={currentTab} className="neo-tab-pane">
+        {currentTab === 'BRIDGES' && (
+          <BridgesView
+            bridges={allBridges}
+            onOpenHowToUse={onOpenHowToUse}
+            onGoToPlan={() => setCurrentTab('PLAN')}
+            onGoToRules={() => setCurrentTab('RULES')}
+          />
+        )}
 
-      {currentTab === 'PLAN' && (
-        <MyPlanView
-          bridges={allBridges}
-          onGoToBridges={() => setCurrentTab('BRIDGES')}
-        />
-      )}
+        {currentTab === 'PLAN' && (
+          <MyPlanView
+            bridges={allBridges}
+            onGoToBridges={() => setCurrentTab('BRIDGES')}
+          />
+        )}
 
-      {currentTab === 'RULES' && <RulesView />}
+        {currentTab === 'RULES' && <RulesView />}
+      </main>
 
       {/* 3. Global Footer Disclaimer */}
       <footer
@@ -108,31 +117,31 @@ export function HomePage({ onOpenHowToUse }: HomePageProps) {
           }}
         >
           <Sparkles size={14} color="var(--text-color)" />
-          <span>CUTIREADY MALAYSIA • OFFLINE-READY PWA</span>
+          <span>CUTIREADY MALAYSIA • REHAT RESPONSIBLY • JANGAN SAMPAI BURN AL</span>
         </div>
         <p
           style={{
-            fontSize: '0.7rem',
+            fontSize: '0.72rem',
             fontWeight: 600,
             color: 'var(--text-muted)',
             margin: '0 0 0.5rem 0',
             lineHeight: 1.4,
           }}
         >
-          Calculations are 100% deterministic based on Malaysian Employment Act 1955 (Section 60D) and gazetted holiday calendars.
+          100% matematik ikut Akta Kerja 1955 (Seksyen 60D). Boss senyum, HR approved, anda healing dengan tenang!
         </p>
         <div
           style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.3rem',
-            fontSize: '0.65rem',
+            fontSize: '0.68rem',
             fontWeight: 700,
             color: 'var(--text-muted)',
           }}
         >
           <Info size={12} />
-          <span>Tap any day tile to toggle individual AL bookings</span>
+          <span>Tekan mana-mana tile hari untuk toggle cuti pilihan anda</span>
         </div>
       </footer>
 

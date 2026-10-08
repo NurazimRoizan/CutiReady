@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { format, parseISO } from 'date-fns';
 import { CalendarDay } from '../types';
 
@@ -7,7 +8,7 @@ export interface DayStripTileProps {
   onTogglePlanned?: () => void;
 }
 
-export function DayStripTile({
+function DayStripTileComponent({
   day,
   isPlanned = false,
   onTogglePlanned,
@@ -18,7 +19,7 @@ export function DayStripTile({
 
   let bgColor = 'var(--workday-bg)';
   let textColor = 'var(--workday-text)';
-  let typeLabel = 'WORKDAY';
+  let typeLabel = 'KERJA';
   let isDashed = false;
 
   if (day.type === 'WEEKEND') {
@@ -28,7 +29,7 @@ export function DayStripTile({
   } else if (day.type === 'PUBLIC_HOLIDAY') {
     bgColor = 'var(--ph-bg)';
     textColor = 'var(--ph-text)';
-    typeLabel = day.holidayName ? `PH: ${day.holidayName.split(' ')[0]}` : 'HOLIDAY';
+    typeLabel = day.holidayName ? `PH: ${day.holidayName.split(' ')[0]}` : 'CUTI PH';
   } else if (day.type === 'REPLACEMENT_HOLIDAY') {
     bgColor = 'var(--accent-cyan)';
     textColor = 'var(--text-color)';
@@ -37,7 +38,7 @@ export function DayStripTile({
     // This workday is part of the bridge, so it's a recommended / planned AL day!
     bgColor = 'var(--accent-pink)';
     textColor = 'var(--text-color)';
-    typeLabel = isPlanned ? '✓ PLANNED' : 'TAKE AL';
+    typeLabel = isPlanned ? '✓ DAH LOCK' : 'AMBIL AL';
     isDashed = !isPlanned;
   }
 
@@ -115,3 +116,6 @@ export function DayStripTile({
     </div>
   );
 }
+
+export const DayStripTile = memo(DayStripTileComponent);
+

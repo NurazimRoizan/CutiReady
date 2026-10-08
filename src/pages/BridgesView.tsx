@@ -86,7 +86,7 @@ export function BridgesView({
         <BrutalistBadge
           color={remainingAl > 3 ? 'var(--accent-cyan)' : 'var(--accent-pink)'}
         >
-          {remainingAl} / {annualLeaveBalance} AL REMAINING
+          {remainingAl} / {annualLeaveBalance} AL BALANCE (JANGAN BURN!)
         </BrutalistBadge>
 
         <BrutalistBadge
@@ -94,11 +94,11 @@ export function BridgesView({
           style={{ cursor: 'pointer' }}
           onClick={onGoToRules}
         >
-          {observedHolidayIds.length} HOLIDAYS OBSERVED ⚙️
+          {observedHolidayIds.length} CUTI OBSERVED ⚙️
         </BrutalistBadge>
 
         <BrutalistBadge color="var(--weekend-bg)">
-          {weekendType === 'SAT_SUN' ? 'SAT–SUN WEEKEND' : 'FRI–SAT WEEKEND'}
+          {weekendType === 'SAT_SUN' ? 'WEEKEND SABTU–AHAD' : 'WEEKEND JUMAAT–SABTU'}
         </BrutalistBadge>
 
         {plannedLeaveDates.length > 0 && (
@@ -108,7 +108,7 @@ export function BridgesView({
             onClick={onGoToPlan}
           >
             <CalendarCheck size={12} />
-            {plannedLeaveDates.length} AL PLANNED →
+            {plannedLeaveDates.length} HARI DAH LOCK →
           </BrutalistBadge>
         )}
       </div>
@@ -145,7 +145,7 @@ export function BridgesView({
                 letterSpacing: '0.4px',
               }}
             >
-              Max AL Days Per Break:
+              Had AL Sekali Cuti:
             </span>
             <span
               style={{
@@ -157,7 +157,7 @@ export function BridgesView({
                 padding: '0.05rem 0.4rem',
               }}
             >
-              {maxAlPerBridge} {maxAlPerBridge === 1 ? 'DAY' : 'DAYS'}
+              {maxAlPerBridge} {maxAlPerBridge === 1 ? 'HARI' : 'HARI'}
             </span>
           </div>
           <input
@@ -195,7 +195,7 @@ export function BridgesView({
               margin: 0,
             }}
           >
-            DISCOVERED LONG WEEKENDS
+            SENARAI CUTI PANJANG 2026
           </h2>
           <span
             style={{
@@ -205,7 +205,7 @@ export function BridgesView({
               textTransform: 'uppercase',
             }}
           >
-            {filteredBridges.length} OF {bridges.length} BRIDGES
+            {filteredBridges.length} DARI {bridges.length} BRIDGES
           </span>
         </div>
 
@@ -229,7 +229,7 @@ export function BridgesView({
       ) : (
         <BrutalistCard
           headerColor="var(--accent-orange)"
-          title="NO BRIDGES FOUND FOR THIS FILTER"
+          title="TAK JUMPA CUTI UNTUK FILTER NI LAH!"
         >
           <div style={{ textAlign: 'center', padding: '1rem 0.5rem' }}>
             <Sun
@@ -244,8 +244,8 @@ export function BridgesView({
                 lineHeight: 1.4,
               }}
             >
-              No long weekends match the currently selected filter with a max limit of{' '}
-              <strong>{maxAlPerBridge} AL days</strong>. Try increasing the AL slider or switching to the ALL tab.
+              Filter ni takde cuti panjang dengan had maksimum{' '}
+              <strong>{maxAlPerBridge} hari AL</strong>. Cuba naikkan slider had AL atau klik tab SEMUA!
             </p>
             <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
               <BrutalistButton
@@ -253,7 +253,7 @@ export function BridgesView({
                 color="var(--accent-yellow)"
                 onClick={() => setActiveTab('ALL')}
               >
-                VIEW ALL BRIDGES
+                TENGOK SEMUA CUTI
               </BrutalistButton>
               {maxAlPerBridge < 5 && (
                 <BrutalistButton
@@ -262,7 +262,7 @@ export function BridgesView({
                   onClick={() => setMaxAlPerBridge(maxAlPerBridge + 1)}
                 >
                   <SlidersHorizontal size={14} />
-                  ALLOW +1 AL DAY
+                  BAGI +1 HARI AL LAGI
                 </BrutalistButton>
               )}
             </div>
