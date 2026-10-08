@@ -104,7 +104,7 @@ export function ControlBar({ onOpenHolidayDrawer }: ControlBarProps) {
                   backgroundColor: isSelected
                     ? 'var(--accent-yellow)'
                     : 'var(--bg-primary)',
-                  color: 'var(--text-color)',
+                  color: isSelected ? 'var(--accent-yellow-text)' : 'var(--text-color)',
                   border: '2px solid var(--border-color)',
                   borderRadius: 'var(--border-radius-sm)',
                   padding: '0.5rem 0.2rem',

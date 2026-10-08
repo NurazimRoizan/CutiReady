@@ -34,7 +34,11 @@ export function BrutalistBadge({
         justifyContent: 'center',
         gap: '0.35rem',
         backgroundColor: color,
-        color: textColor || 'var(--text-color)',
+        color:
+          textColor ||
+          (color === 'var(--accent-yellow)' || color === 'var(--accent-purple)'
+            ? 'var(--accent-yellow-text)'
+            : 'var(--text-color)'),
         border: '2px solid var(--border-color)',
         borderRadius: 'var(--border-radius-pill)',
         padding: isSmall ? '0.15rem 0.45rem' : '0.25rem 0.65rem',

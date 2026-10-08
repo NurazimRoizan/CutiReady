@@ -108,7 +108,7 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-            <HelpCircle size={20} strokeWidth={2.5} color="var(--border-color)" />
+            <HelpCircle size={20} strokeWidth={2.5} color="var(--accent-yellow-text)" />
             <h2
               style={{
                 fontSize: '1rem',
@@ -116,7 +116,7 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
                 margin: 0,
-                color: 'var(--text-color)',
+                color: 'var(--accent-yellow-text)',
               }}
             >
               Cara Hack Cuti Macam Pro

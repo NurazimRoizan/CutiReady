@@ -31,19 +31,19 @@ export function LegendModal({ isOpen, onClose }: LegendModalProps) {
 
   const calendarColors = [
     {
-      badge: <BrutalistBadge size="sm" color="var(--ph-bg)" textColor="var(--ph-text)">🌿 Cuti Umum (PH)</BrutalistBadge>,
+      badge: <BrutalistBadge size="sm" color="var(--ph-bg)" textColor="var(--ph-text)">⚜️ Cuti Umum (PH)</BrutalistBadge>,
       title: 'Gazetted Public Holiday',
-      desc: 'Cuti am rasmi kerajaan / gazet negeri (Tropical Mint). Gaji jalan, 0 AL ditolak.',
+      desc: 'Cuti am rasmi kerajaan / gazet negeri (Golden Turmeric / Batik Mas). Gaji jalan, 0 AL ditolak.',
     },
     {
-      badge: <BrutalistBadge size="sm" color="var(--replacement-bg)" textColor="var(--replacement-text)">🌊 Cuti Ganti</BrutalistBadge>,
+      badge: <BrutalistBadge size="sm" color="var(--replacement-bg)" textColor="var(--replacement-text)">🌙 Cuti Ganti</BrutalistBadge>,
       title: 'Replacement Holiday',
-      desc: 'Bila PH jatuh hari weekend / rehat, automatik diganti ke hari bekerja seterusnya (Ocean Cyan).',
+      desc: 'Bila PH jatuh hari weekend / rehat, automatik diganti ke hari bekerja seterusnya (Dusk Lilac).',
     },
     {
-      badge: <BrutalistBadge size="sm" color="var(--al-bg)" textColor="var(--al-text)">🌸 Ambil AL</BrutalistBadge>,
+      badge: <BrutalistBadge size="sm" color="var(--al-bg)" textColor="var(--al-text)">🌺 Ambil AL</BrutalistBadge>,
       title: 'Recommended Annual Leave',
-      desc: 'Hari kerja strategik diapit cuti & weekend (Sunset Coral). Apply AL hari ni untuk unlock cuti panjang!',
+      desc: 'Hari kerja strategik diapit cuti & weekend (Hibiscus Blossom). Apply AL hari ni untuk unlock cuti panjang!',
     },
     {
       badge: <BrutalistBadge size="sm" color="var(--weekend-bg)" textColor="var(--weekend-text)">⚪ Weekend</BrutalistBadge>,
@@ -55,19 +55,19 @@ export function LegendModal({ isOpen, onClose }: LegendModalProps) {
   const cardBadges = [
     {
       badge: <BrutalistBadge size="sm" color="var(--accent-cyan)">⚡ 0 AL • Free Cuti</BrutalistBadge>,
-      desc: 'Long weekend semulajadi tanpa tolak walau sehari pun baki AL korang (Ocean Cyan)!',
+      desc: 'Long weekend semulajadi tanpa tolak walau sehari pun baki AL korang (Dusk Lilac)!',
     },
     {
       badge: <BrutalistBadge size="sm" color="var(--accent-yellow)">🔥 Mega ROI (≥4x)</BrutalistBadge>,
-      desc: 'Paling untung! Apply 1–2 hari AL dapat lepak 5–9 hari cuti bersambung (Sunshine Yellow).',
+      desc: 'Paling untung! Apply 1–2 hari AL dapat lepak 5–9 hari cuti bersambung (Bunga Raya Hibiscus).',
     },
     {
       badge: <BrutalistBadge size="sm" color="var(--accent-pink)">🌸 Burn [X] AL</BrutalistBadge>,
-      desc: 'Bilangan hari cuti tahunan yang perlu diapply untuk jayakan bridge ni.',
+      desc: 'Bilangan hari cuti tahunan yang perlu diapply untuk jayakan bridge ni (Warm Sand).',
     },
     {
       badge: <BrutalistBadge size="sm" color="var(--accent-green)">✓ Dah Lock</BrutalistBadge>,
-      desc: 'Cuti yang korang dah simpan ke dalam dossier peribadi (My Cuti).',
+      desc: 'Cuti yang korang dah simpan ke dalam dossier peribadi (Pandan Emerald).',
     },
   ];
 
@@ -117,7 +117,7 @@ export function LegendModal({ isOpen, onClose }: LegendModalProps) {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-            <Palette size={18} strokeWidth={2.5} color="var(--border-color)" />
+            <Palette size={18} strokeWidth={2.5} color="var(--accent-yellow-text)" />
             <h2
               style={{
                 fontSize: '0.95rem',
@@ -125,7 +125,7 @@ export function LegendModal({ isOpen, onClose }: LegendModalProps) {
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
                 margin: 0,
-                color: 'var(--text-color)',
+                color: 'var(--accent-yellow-text)',
               }}
             >
               Panduan Warna & Simbol

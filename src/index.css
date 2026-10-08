@@ -6,37 +6,37 @@
 
 :root {
   /* Surfaces & Canvas */
-  --bg-primary: #fef9e7;      /* Warm Butter: Light, sunny, inviting tropical canvas */
+  --bg-primary: #fdfbf7;      /* Rice Paper / Coconut Sand: Clean, warm, organic Southeast Asian canvas */
   --bg-secondary: #ffffff;    /* Pure crisp white: Cards, modals */
-  --neutral-dark: #1e293b;    /* Deep slate surfaces */
+  --neutral-dark: #1e1b4b;    /* Royal Songket Indigo: Deep cultural anchor */
 
-  /* High-Octane Tropical Accents (Vacation Dopamine) */
-  --accent-yellow: #fde047;   /* Electric Sunshine Yellow: Primary CTA, active tabs, hero badge */
-  --accent-yellow-text: #000000; /* Solid black high-contrast text on sunshine yellow */
-  --accent-pink: #f9a8d4;     /* Sunset Coral / Flamingo Pink: Secondary actions, AL highlights */
-  --accent-cyan: #67e8f9;     /* Island Sky / Ocean Cyan: Replacement holiday, info chips */
-  --accent-green: #86efac;    /* Tropical Mint: Free Public Holidays, high ROI badges */
-  --accent-orange: #fed7aa;   /* Warm Sand / Amber: Warning / alert tags */
-  --accent-purple: #d8b4fe;   /* Island Lavender: Celebration & special chips */
+  /* High-Octane Nusantara Accents */
+  --accent-yellow: #e11d48;   /* Bunga Raya Hibiscus: Primary CTA, active tabs, hero highlight */
+  --accent-yellow-text: #ffffff; /* Crisp white high-contrast text on Bunga Raya Hibiscus */
+  --accent-pink: #fed7aa;     /* Warm Sand / Terracotta Tint: Secondary actions, subtle tags */
+  --accent-cyan: #c084fc;     /* Dusk Lilac / Songket Violet: Info chips, 0 AL Free Cuti */
+  --accent-green: #34d399;    /* Pandan Emerald: Confirmed / Dah Lock badges, high ROI */
+  --accent-orange: #f97316;   /* Spiced Paprika / Sunset Tangerine: Alert & bridge state tags */
+  --accent-purple: #312e81;   /* Royal Songket Indigo: Deep heritage accent */
 
   /* Day Strip Semantic Tokens */
   --weekend-bg: #e2e8f0;      /* Clean slate pill for weekends */
   --weekend-text: #000000;    /* Solid black text on weekends */
-  --ph-bg: #86efac;           /* Tropical Mint pill for Public Holidays (Free / Healing) */
+  --ph-bg: #fbbf24;           /* Golden Turmeric / Batik Mas pill for Public Holidays (Royal Gazetted) */
   --ph-text: #000000;         /* Solid black text on Public Holidays */
-  --replacement-bg: #67e8f9;  /* Ocean Cyan pill for Replacement Holidays (Cuti Ganti) */
+  --replacement-bg: #c084fc;  /* Dusk Lilac pill for Replacement Holidays (Cuti Ganti) */
   --replacement-text: #000000;/* Solid black text on Replacement Holidays */
-  --al-bg: #f9a8d4;           /* Sunset Coral pill for recommended Annual Leave (AL) */
+  --al-bg: #fda4af;           /* Hibiscus Blossom pill for recommended Annual Leave (Ambil AL) */
   --al-text: #000000;         /* Solid black text on Annual Leave */
-  --workday-bg: #f1f5f9;      /* Subtle clean pill for regular workdays */
+  --workday-bg: #f5f5f4;      /* Clean warm stone pill for regular workdays */
   --workday-text: #000000;    /* Solid black text on regular workdays */
 
   /* Text & Borders (Solid Black High-Contrast Ink) */
   --text-color: #000000;      /* Pure solid black typography */
-  --text-muted: #555555;      /* Crisp dark charcoal secondary labels */
+  --text-muted: #52525b;      /* Zinc charcoal secondary labels */
   --border-color: #000000;    /* Solid black chunky borders & directional 4px drop shadows */
-  --border-subtle: #e2e8f0;   /* Light gray card dividers */
-  --danger-bg: #fee2e2;       /* Alert / error tinted background */
+  --border-subtle: #e4e4e7;   /* Clean card dividers */
+  --danger-bg: #ffe4e6;       /* Soft hibiscus danger/alert background */
 
   /* Neobrutalist Geometry */
   --border-width: 3px;        /* Standard 3px chunky border */

@@ -85,6 +85,7 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
         <div
           style={{
             backgroundColor: 'var(--accent-yellow)',
+            color: 'var(--accent-yellow-text)',
             borderBottom: 'var(--border-width) solid var(--border-color)',
             padding: '0.85rem 1rem',
             display: 'flex',

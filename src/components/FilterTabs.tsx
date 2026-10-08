@@ -67,6 +67,7 @@ export function FilterTabs({ activeTab, onChangeTab, counts }: FilterTabsProps) 
               style={{
                 fontSize: '0.65rem',
                 backgroundColor: isActive ? 'var(--bg-secondary)' : 'var(--bg-primary)',
+                color: 'var(--text-color)',
                 border: '1px solid var(--border-color)',
                 borderRadius: 'var(--border-radius-pill)',
                 padding: '0.05rem 0.35rem',
