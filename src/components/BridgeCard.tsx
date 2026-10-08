@@ -157,15 +157,17 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
         </div>
       </div>
 
-      {/* 3. Action Buttons Row */}
+      {/* 3. Action Buttons Row (Always 2 rows of text per button to prevent overflow) */}
       <div
         style={{
           display: 'grid',
           gridTemplateColumns:
-            bridge.alDaysRequired > 0 ? '1.4fr 1fr 1fr' : '1fr 1fr',
-          gap: '0.4rem',
+            bridge.alDaysRequired > 0 ? 'repeat(3, minmax(0, 1fr))' : 'repeat(2, minmax(0, 1fr))',
+          gap: '0.35rem',
           paddingTop: '0.65rem',
           borderTop: '1px solid var(--border-subtle)',
+          width: '100%',
+          boxSizing: 'border-box',
         }}
       >
         {bridge.alDaysRequired > 0 && (
@@ -179,15 +181,30 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
                 ? 'var(--accent-orange)'
                 : 'var(--accent-yellow)'
             }
-            style={{ padding: '0.4rem 0.25rem', fontSize: '0.74rem', whiteSpace: 'nowrap' }}
+            style={{
+              padding: '0.35rem 0.15rem',
+              width: '100%',
+              minWidth: 0,
+              boxSizing: 'border-box',
+            }}
           >
-            <span>
-              {isFullyPlanned
-                ? `DAH LOCK (${bridge.alDaysRequired}H)`
-                : isPartiallyPlanned
-                ? '+ SAMBUNG LOCK'
-                : '+ LOCK CUTI'}
-            </span>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                lineHeight: 1.15,
+                textAlign: 'center',
+              }}
+            >
+              <span style={{ fontSize: '0.74rem', fontWeight: 900 }}>
+                {isFullyPlanned ? 'DAH LOCK' : isPartiallyPlanned ? '+ SAMBUNG' : '+ LOCK'}
+              </span>
+              <span style={{ fontSize: '0.66rem', fontWeight: 800 }}>
+                {isFullyPlanned ? `(${bridge.alDaysRequired}H AL)` : 'CUTI'}
+              </span>
+            </div>
           </BrutalistButton>
         )}
 
@@ -195,18 +212,56 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
           size="sm"
           onClick={() => generateBridgeICS(bridge)}
           color="var(--bg-primary)"
-          style={{ padding: '0.4rem 0.25rem', fontSize: '0.74rem', whiteSpace: 'nowrap' }}
+          style={{
+            padding: '0.35rem 0.15rem',
+            width: '100%',
+            minWidth: 0,
+            boxSizing: 'border-box',
+          }}
         >
-          <span>EXPORT .ICS</span>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              lineHeight: 1.15,
+              textAlign: 'center',
+            }}
+          >
+            <span style={{ fontSize: '0.74rem', fontWeight: 900 }}>EXPORT</span>
+            <span style={{ fontSize: '0.66rem', fontWeight: 800 }}>.ICS</span>
+          </div>
         </BrutalistButton>
 
         <BrutalistButton
           size="sm"
           onClick={handleCopy}
           color={copied ? 'var(--accent-green)' : 'var(--bg-secondary)'}
-          style={{ padding: '0.4rem 0.25rem', fontSize: '0.74rem', whiteSpace: 'nowrap' }}
+          style={{
+            padding: '0.35rem 0.15rem',
+            width: '100%',
+            minWidth: 0,
+            boxSizing: 'border-box',
+          }}
         >
-          <span>{copied ? 'COPIED!' : 'COPY AYAT BOSS'}</span>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              lineHeight: 1.15,
+              textAlign: 'center',
+            }}
+          >
+            <span style={{ fontSize: '0.74rem', fontWeight: 900 }}>
+              {copied ? 'DAH' : 'COPY'}
+            </span>
+            <span style={{ fontSize: '0.66rem', fontWeight: 800 }}>
+              {copied ? 'COPIED!' : 'AYAT'}
+            </span>
+          </div>
         </BrutalistButton>
       </div>
     </BrutalistCard>

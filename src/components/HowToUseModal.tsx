@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { BrutalistButton } from './BrutalistButton';
 import { X, HelpCircle } from 'lucide-react';
 
@@ -14,7 +15,14 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
       if (e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -54,7 +62,7 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
     },
   ];
 
-  return (
+  return createPortal(
     <div
       style={{
         position: 'fixed',
@@ -63,7 +71,7 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
         right: 0,
         bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.65)',
-        zIndex: 100,
+        zIndex: 9999,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -224,6 +232,7 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
           </BrutalistButton>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

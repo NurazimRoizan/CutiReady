@@ -6,10 +6,9 @@ import { FilterTabs } from '../components/FilterTabs';
 import { BridgeCard } from '../components/BridgeCard';
 import { BrutalistCard } from '../components/BrutalistCard';
 import { BrutalistButton } from '../components/BrutalistButton';
-import { BrutalistBadge } from '../components/BrutalistBadge';
 import { LegendModal } from '../components/LegendModal';
 import { FilterTabType, BridgeOpportunity } from '../types';
-import { Sun, CalendarCheck, Palette } from 'lucide-react';
+import { Sun, Palette } from 'lucide-react';
 
 interface BridgesViewProps {
   bridges: BridgeOpportunity[];
@@ -92,68 +91,172 @@ export function BridgesView({
         isHowToUseOpen={false}
       />
 
-      {/* 2. Status Badges & Quick Tuning Bar */}
+      {/* 2. Structured Leave Status & Controls Bar */}
       <div
         ref={bridgesListRef}
         style={{
+          backgroundColor: 'var(--bg-secondary)',
+          border: 'var(--border-width) solid var(--border-color)',
+          borderRadius: 'var(--border-radius)',
+          boxShadow: 'var(--shadow-offset) var(--shadow-offset) 0px var(--border-color)',
+          padding: '0.65rem 0.75rem',
+          marginBottom: '0.85rem',
           display: 'flex',
-          flexWrap: 'wrap',
-          gap: '0.4rem',
-          alignItems: 'center',
-          marginBottom: '0.75rem',
+          flexDirection: 'column',
+          gap: '0.5rem',
+          boxSizing: 'border-box',
+          width: '100%',
         }}
       >
-        <BrutalistBadge
-          color={remainingAl > 3 ? 'var(--accent-cyan)' : 'var(--accent-pink)'}
-        >
-          {remainingAl} / {annualLeaveBalance} AL BALANCE (JANGAN BURN!)
-        </BrutalistBadge>
-
-        <BrutalistBadge
-          color="var(--accent-yellow)"
-          style={{ cursor: 'pointer' }}
-          onClick={onGoToRules}
-        >
-          {observedHolidayIds.length} CUTI OBSERVED ⚙️
-        </BrutalistBadge>
-
-        <BrutalistBadge color="var(--weekend-bg)">
-          {weekendType === 'SAT_SUN' ? 'WEEKEND SABTU–AHAD' : 'WEEKEND JUMAAT–SABTU'}
-        </BrutalistBadge>
-
-        {pastBridgesCount > 0 && (
-          <BrutalistBadge
-            color={hidePastHolidays ? 'var(--accent-cyan)' : 'var(--accent-orange)'}
-            style={{ cursor: 'pointer' }}
-            onClick={toggleHidePastHolidays}
-            title="Klik untuk ubah paparan cuti lepas"
+        {/* Top: 2 High-Contrast Metric Cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.45rem' }}>
+          {/* Metric 1: AL Balance */}
+          <div
+            style={{
+              backgroundColor: remainingAl > 3 ? 'var(--accent-cyan)' : 'var(--accent-pink)',
+              border: '2px solid var(--border-color)',
+              borderRadius: 'var(--border-radius-sm)',
+              padding: '0.45rem 0.55rem',
+              boxShadow: '1.5px 1.5px 0px var(--border-color)',
+            }}
           >
-            {hidePastHolidays
-              ? `⏳ CUTI AKAN DATANG (${pastBridgesCount} LEPAS DISEMBUNYI)`
-              : `👁️ TUNJUK SEMUA (TERMASUK ${pastBridgesCount} LEPAS)`}
-          </BrutalistBadge>
-        )}
+            <div
+              style={{
+                fontSize: '0.62rem',
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                letterSpacing: '0.4px',
+                color: 'var(--text-color)',
+              }}
+            >
+              BAKI AL SEMASA
+            </div>
+            <div
+              style={{
+                fontSize: '1.1rem',
+                fontWeight: 900,
+                lineHeight: 1.1,
+                marginTop: '0.15rem',
+                color: 'var(--text-color)',
+              }}
+            >
+              {remainingAl} / {annualLeaveBalance}{' '}
+              <span style={{ fontSize: '0.72rem', fontWeight: 800 }}>HARI</span>
+            </div>
+          </div>
 
-        {plannedLeaveDates.length > 0 && (
-          <BrutalistBadge
-            color="var(--accent-pink)"
-            style={{ cursor: 'pointer' }}
-            onClick={onGoToPlan}
+          {/* Metric 2: Locked Cuti (or Observed Rules) */}
+          <div
+            onClick={plannedLeaveDates.length > 0 ? onGoToPlan : onGoToRules}
+            style={{
+              backgroundColor: plannedLeaveDates.length > 0 ? 'var(--accent-yellow)' : 'var(--bg-primary)',
+              border: '2px solid var(--border-color)',
+              borderRadius: 'var(--border-radius-sm)',
+              padding: '0.45rem 0.55rem',
+              boxShadow: '1.5px 1.5px 0px var(--border-color)',
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}
           >
-            <CalendarCheck size={12} />
-            {plannedLeaveDates.length} HARI DAH LOCK →
-          </BrutalistBadge>
-        )}
+            <div
+              style={{
+                fontSize: '0.62rem',
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                letterSpacing: '0.4px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                color: 'var(--text-color)',
+              }}
+            >
+              <span>{plannedLeaveDates.length > 0 ? 'PLAN SAYA' : 'CUTI OBSERVED'}</span>
+              <span>{plannedLeaveDates.length > 0 ? '→' : '⚙️'}</span>
+            </div>
+            <div
+              style={{
+                fontSize: '1.1rem',
+                fontWeight: 900,
+                lineHeight: 1.1,
+                marginTop: '0.15rem',
+                color: 'var(--text-color)',
+              }}
+            >
+              {plannedLeaveDates.length > 0
+                ? `${plannedLeaveDates.length} HARI LOCK`
+                : `${observedHolidayIds.length} CUTI AKTIF`}
+            </div>
+          </div>
+        </div>
 
-        <BrutalistBadge
-          color="var(--accent-yellow)"
-          style={{ cursor: 'pointer' }}
-          onClick={() => setIsLegendOpen(true)}
-          title="Buka panduan maksud warna dan simbol"
+        {/* Bottom: Context Chips & Past Holiday Toggle */}
+        <div
+          style={{
+            display: 'flex',
+            gap: '0.4rem',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+          }}
         >
-          <Palette size={12} strokeWidth={2.5} />
-          PANDUAN WARNA
-        </BrutalistBadge>
+          {/* Work Weekend context chip */}
+          <button
+            type="button"
+            onClick={onGoToRules}
+            title="Klik untuk konfigurasi cuti & negeri"
+            style={{
+              flex: '1 1 auto',
+              backgroundColor: 'var(--bg-primary)',
+              border: '1.5px solid var(--border-color)',
+              borderRadius: 'var(--border-radius-sm)',
+              padding: '0.3rem 0.45rem',
+              fontSize: '0.68rem',
+              fontWeight: 900,
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.3rem',
+              color: 'var(--text-color)',
+              boxShadow: '1px 1px 0px var(--border-color)',
+            }}
+          >
+            <span>⚙️ {weekendType === 'SAT_SUN' ? 'SAB–AHAD' : 'JUM–SAB'}</span>
+            <span style={{ color: 'var(--text-muted)' }}>•</span>
+            <span>{observedHolidayIds.length} GAZET</span>
+          </button>
+
+          {/* Past Holidays Toggle - Clean, NO horizontal overflow */}
+          {pastBridgesCount > 0 && (
+            <button
+              type="button"
+              onClick={toggleHidePastHolidays}
+              title="Klik untuk buka / sembunyi cuti lepas"
+              style={{
+                flex: '1 1 auto',
+                backgroundColor: hidePastHolidays ? 'var(--accent-cyan)' : 'var(--accent-orange)',
+                border: '1.5px solid var(--border-color)',
+                borderRadius: 'var(--border-radius-sm)',
+                padding: '0.3rem 0.5rem',
+                fontSize: '0.68rem',
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.25rem',
+                boxShadow: '1px 1px 0px var(--border-color)',
+                color: 'var(--text-color)',
+              }}
+            >
+              <span>{hidePastHolidays ? `⏳ AKAN DATANG (${pastBridgesCount} LEPAS)` : `👁️ TUNJUK SEMUA`}</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* 3. Inline Max AL Slider Pill */}
