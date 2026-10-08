@@ -4,6 +4,7 @@ export interface BrutalistButtonProps {
   children: ReactNode;
   onClick?: (e: MouseEvent<HTMLElement>) => void;
   color?: string;
+  textColor?: string;
   href?: string;
   disabled?: boolean;
   style?: CSSProperties;
@@ -17,6 +18,7 @@ export function BrutalistButton({
   children,
   onClick,
   color = 'var(--accent-yellow)',
+  textColor,
   href,
   disabled = false,
   style = {},
@@ -39,13 +41,19 @@ export function BrutalistButton({
     lg: '1.1rem',
   };
 
+  const computedTextColor =
+    textColor ||
+    (color === 'var(--accent-yellow)' || color === 'var(--accent-green)' || color === 'var(--al-bg)'
+      ? 'var(--accent-yellow-text)'
+      : 'var(--text-color)');
+
   const baseStyle: React.CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
     gap: '0.45rem',
     backgroundColor: color,
-    color: 'var(--text-color)',
+    color: computedTextColor,
     border: 'var(--border-width) solid var(--border-color)',
     borderRadius: 'var(--border-radius)',
     padding: paddingBySize[size],

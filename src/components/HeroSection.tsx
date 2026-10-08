@@ -33,6 +33,7 @@ export function HeroSection({
         <span
           style={{
             backgroundColor: 'var(--accent-yellow)',
+            color: 'var(--accent-yellow-text)',
             padding: '0.1rem 0.5rem',
             border: 'var(--border-width) solid var(--border-color)',
             display: 'inline-block',
@@ -268,7 +269,7 @@ export function HeroSection({
                 onClick={() => setAlBalance(val)}
                 style={{
                   backgroundColor: isSelected ? 'var(--accent-yellow)' : 'var(--bg-primary)',
-                  color: 'var(--text-color)',
+                  color: isSelected ? 'var(--accent-yellow-text)' : 'var(--text-color)',
                   border: '2px solid var(--border-color)',
                   borderRadius: 'var(--border-radius-sm)',
                   padding: '0.35rem 0.55rem',

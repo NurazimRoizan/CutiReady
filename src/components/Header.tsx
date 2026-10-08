@@ -140,7 +140,7 @@ export function Header({ onOpenHelp }: HeaderProps) {
               flexShrink: 0,
             }}
           >
-            <HelpCircle size={14} color="var(--border-color)" />
+            <HelpCircle size={14} color="var(--accent-yellow-text)" />
           </button>
         )}
       </div>

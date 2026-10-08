@@ -115,7 +115,7 @@ export function BottomNavBar({
               <Icon
                 size={18}
                 strokeWidth={isActive ? 3 : 2.2}
-                color="var(--text-color)"
+                color={isActive ? 'var(--accent-yellow-text)' : 'var(--text-color)'}
               />
 
               <span
@@ -124,7 +124,7 @@ export function BottomNavBar({
                   fontWeight: 900,
                   textTransform: 'uppercase',
                   letterSpacing: '0.4px',
-                  color: 'var(--text-color)',
+                  color: isActive ? 'var(--accent-yellow-text)' : 'var(--text-color)',
                   lineHeight: 1,
                 }}
               >

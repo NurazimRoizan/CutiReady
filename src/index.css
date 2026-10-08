@@ -8,25 +8,26 @@
   /* Surfaces & Canvas */
   --bg-primary: #ffd6af;      /* Soft Apricot: Warm pastel canvas */
   --bg-secondary: #ffffff;    /* Pure crisp white: Cards, modals */
-  --neutral-dark: #daa49a;    /* Powder Blush: Warm dusty rose surfaces */
+  --neutral-dark: #564256;    /* Vintage Grape: Deep espresso surfaces */
 
-  /* High-Octane Accents (Wisteria & Camel Palette) */
-  --accent-yellow: #bea7e5;   /* Wisteria: Primary CTA, active tabs, hero highlight */
+  /* High-Octane Accents */
+  --accent-yellow: #564256;   /* Vintage Grape: Primary CTA, active tabs, hero highlight */
+  --accent-yellow-text: #ffffff; /* Crisp white text on Vintage Grape */
   --accent-pink: #c49e85;     /* Camel: Secondary actions, subtle tags */
   --accent-cyan: #ffd6af;     /* Soft Apricot: Tertiary accents, chips */
-  --accent-green: #bea7e5;    /* Wisteria: Confirmed / locked state */
-  --accent-orange: #c49e85;   /* Camel: Highlight / alert tags */
-  --accent-purple: #daa49a;   /* Powder Blush: Warm blush accent badge */
+  --accent-green: #564256;    /* Vintage Grape: Confirmed / locked state */
+  --accent-orange: #fc814a;   /* Coral Glow: Alert, public holiday & high-ROI tags */
+  --accent-purple: #564256;   /* Vintage Grape: Deep dark accent */
 
   /* Day Strip Semantic Tokens */
   --weekend-bg: #f8f4f9;      /* Ghost White pill for weekends */
   --weekend-text: #000000;    /* Solid black text on weekends */
-  --ph-bg: #daa49a;           /* Powder Blush pill for Public Holidays */
+  --ph-bg: #fc814a;           /* Coral Glow pill for Public Holidays */
   --ph-text: #000000;         /* Solid black text on Public Holidays */
   --replacement-bg: #c49e85;  /* Camel pill for Replacement Holidays (Cuti Ganti) */
   --replacement-text: #ffffff;/* Crisp white text on Replacement Holidays */
-  --al-bg: #bea7e5;           /* Wisteria pill for recommended Annual Leave (AL) */
-  --al-text: #000000;         /* Solid black text on Wisteria */
+  --al-bg: #564256;           /* Vintage Grape pill for recommended Annual Leave (AL) */
+  --al-text: #ffffff;         /* Crisp white text on Vintage Grape */
   --workday-bg: #f8f4f9;      /* Ghost White pill for regular workdays */
   --workday-text: #000000;    /* Solid black text on regular workdays */
 

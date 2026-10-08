@@ -46,7 +46,7 @@ export function FilterTabs({ activeTab, onChangeTab, counts }: FilterTabsProps) 
               backgroundColor: isActive
                 ? 'var(--accent-yellow)'
                 : 'var(--bg-secondary)',
-              color: 'var(--text-color)',
+              color: isActive ? 'var(--accent-yellow-text)' : 'var(--text-color)',
               border: '2px solid var(--border-color)',
               borderRadius: 'var(--border-radius-pill)',
               padding: '0.35rem 0.65rem',

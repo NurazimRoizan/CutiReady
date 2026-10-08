@@ -4,6 +4,7 @@ export interface BrutalistCardProps {
   title?: ReactNode;
   subtitle?: ReactNode;
   headerColor?: string;
+  headerTextColor?: string;
   headerAction?: ReactNode;
   children: ReactNode;
   style?: CSSProperties;
@@ -15,12 +16,19 @@ export function BrutalistCard({
   title,
   subtitle,
   headerColor = 'var(--accent-yellow)',
+  headerTextColor,
   headerAction,
   children,
   style = {},
   className = '',
   noPadding = false,
 }: BrutalistCardProps) {
+  const computedHeaderTextColor =
+    headerTextColor ||
+    (headerColor === 'var(--accent-yellow)' || headerColor === 'var(--accent-purple)'
+      ? 'var(--accent-yellow-text)'
+      : 'var(--text-color)');
+
   return (
     <div
       className={className}
@@ -44,6 +52,7 @@ export function BrutalistCard({
             justifyContent: 'space-between',
             alignItems: 'center',
             gap: '0.5rem',
+            color: computedHeaderTextColor,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0 }}>
@@ -56,6 +65,7 @@ export function BrutalistCard({
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
                   lineHeight: 1.2,
+                  color: computedHeaderTextColor,
                 }}
               >
                 {title}
@@ -69,6 +79,7 @@ export function BrutalistCard({
                   textTransform: 'uppercase',
                   opacity: 0.85,
                   letterSpacing: '0.3px',
+                  color: computedHeaderTextColor,
                 }}
               >
                 {subtitle}
