@@ -25,7 +25,7 @@ Every agent modifying or writing UI code in `CutiReady` MUST abide by these rule
 Place this `:root` definition in `src/index.css` (or main stylesheet):
 
 ```css
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap');
 
 :root {
   /* Surfaces & Canvas */
@@ -314,7 +314,7 @@ Sticky mobile-first bottom navigation bar clamped to `maxWidth: 560px` with tact
 
 ## 4. Typography Standards
 
-- **Font Family:** `Space Grotesk`, sans-serif.
+- **Font Family:** `Plus Jakarta Sans`, sans-serif.
 - **Headings (H1–H4):** `fontWeight: 900` or `700`, `textTransform: 'uppercase'`, negative letter-spacing (`-0.5px` to `-1px`).
 - **Body Text:** `fontWeight: 500`–`600`, line height `1.5`.
 - **Labels & Buttons:** Strictly uppercase (`textTransform: 'uppercase'`).
