@@ -29,37 +29,37 @@ Place this `:root` definition in `src/index.css` (or main stylesheet):
 
 :root {
   /* Surfaces & Canvas */
-  --bg-primary: #ffd6af;      /* Soft Apricot: Warm pastel canvas */
+  --bg-primary: #fef9e7;      /* Warm Butter: Light, sunny, inviting tropical canvas */
   --bg-secondary: #ffffff;    /* Pure crisp white: Cards, modals */
-  --neutral-dark: #564256;    /* Vintage Grape: Deep espresso surfaces */
+  --neutral-dark: #1e293b;    /* Deep slate surfaces */
 
-  /* High-Octane Accents */
-  --accent-yellow: #564256;   /* Vintage Grape: Primary CTA, active tabs, hero highlight */
-  --accent-yellow-text: #ffffff; /* Crisp white text on Vintage Grape */
-  --accent-pink: #c49e85;     /* Camel: Secondary actions, subtle tags */
-  --accent-cyan: #ffd6af;     /* Soft Apricot: Tertiary accents, chips */
-  --accent-green: #564256;    /* Vintage Grape: Confirmed / locked state */
-  --accent-orange: #fc814a;   /* Coral Glow: Alert, public holiday & high-ROI tags */
-  --accent-purple: #564256;   /* Vintage Grape: Deep dark accent */
+  /* High-Octane Tropical Accents (Vacation Dopamine) */
+  --accent-yellow: #fde047;   /* Electric Sunshine Yellow: Primary CTA, active tabs, hero badge */
+  --accent-yellow-text: #000000; /* Solid black high-contrast text on sunshine yellow */
+  --accent-pink: #f9a8d4;     /* Sunset Coral / Flamingo Pink: Secondary actions, AL highlights */
+  --accent-cyan: #67e8f9;     /* Island Sky / Ocean Cyan: Replacement holiday, info chips */
+  --accent-green: #86efac;    /* Tropical Mint: Free Public Holidays, high ROI badges */
+  --accent-orange: #fed7aa;   /* Warm Sand / Amber: Warning / alert tags */
+  --accent-purple: #d8b4fe;   /* Island Lavender: Celebration & special chips */
 
   /* Day Strip Semantic Tokens */
-  --weekend-bg: #f8f4f9;      /* Ghost White pill for weekends */
+  --weekend-bg: #e2e8f0;      /* Clean slate pill for weekends */
   --weekend-text: #000000;    /* Solid black text on weekends */
-  --ph-bg: #fc814a;           /* Coral Glow pill for Public Holidays */
+  --ph-bg: #86efac;           /* Tropical Mint pill for Public Holidays (Free / Healing) */
   --ph-text: #000000;         /* Solid black text on Public Holidays */
-  --replacement-bg: #c49e85;  /* Camel pill for Replacement Holidays (Cuti Ganti) */
-  --replacement-text: #ffffff;/* Crisp white text on Replacement Holidays */
-  --al-bg: #564256;           /* Vintage Grape pill for recommended Annual Leave (AL) */
-  --al-text: #ffffff;         /* Crisp white text on Vintage Grape */
-  --workday-bg: #f8f4f9;      /* Ghost White pill for regular workdays */
+  --replacement-bg: #67e8f9;  /* Ocean Cyan pill for Replacement Holidays (Cuti Ganti) */
+  --replacement-text: #000000;/* Solid black text on Replacement Holidays */
+  --al-bg: #f9a8d4;           /* Sunset Coral pill for recommended Annual Leave (AL) */
+  --al-text: #000000;         /* Solid black text on Annual Leave */
+  --workday-bg: #f1f5f9;      /* Subtle clean pill for regular workdays */
   --workday-text: #000000;    /* Solid black text on regular workdays */
   
   /* Text & Borders (Solid Black High-Contrast Ink) */
   --text-color: #000000;      /* Pure solid black typography */
   --text-muted: #555555;      /* Crisp dark charcoal secondary labels */
   --border-color: #000000;    /* Solid black chunky borders & directional 4px drop shadows */
-  --border-subtle: #d1b8a5;   /* Warm card dividers */
-  --danger-bg: #fde8e8;       /* Soft tinted danger background */
+  --border-subtle: #e2e8f0;   /* Light gray card dividers */
+  --danger-bg: #fee2e2;       /* Alert / error tinted background */
 
   /* Neobrutalist Geometry */
   --border-width: 3px;        /* Standard 3px chunky border */
