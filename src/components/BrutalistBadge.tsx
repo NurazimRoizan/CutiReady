@@ -3,6 +3,7 @@ import type { ReactNode, CSSProperties } from 'react';
 export interface BrutalistBadgeProps {
   children: ReactNode;
   color?: string;
+  textColor?: string;
   style?: CSSProperties;
   className?: string;
   size?: 'sm' | 'md';
@@ -13,6 +14,7 @@ export interface BrutalistBadgeProps {
 export function BrutalistBadge({
   children,
   color = 'var(--accent-cyan)',
+  textColor,
   style = {},
   className = '',
   size = 'md',
@@ -32,7 +34,7 @@ export function BrutalistBadge({
         justifyContent: 'center',
         gap: '0.35rem',
         backgroundColor: color,
-        color: 'var(--text-color)',
+        color: textColor || 'var(--text-color)',
         border: '2px solid var(--border-color)',
         borderRadius: 'var(--border-radius-pill)',
         padding: isSmall ? '0.15rem 0.45rem' : '0.25rem 0.65rem',

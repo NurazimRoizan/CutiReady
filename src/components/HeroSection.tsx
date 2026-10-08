@@ -32,7 +32,7 @@ export function HeroSection({
         Untuk Pekerja Malaysia<br />
         <span
           style={{
-            backgroundColor: 'var(--accent-cyan)',
+            backgroundColor: 'var(--accent-yellow)',
             padding: '0.1rem 0.5rem',
             border: 'var(--border-width) solid var(--border-color)',
             display: 'inline-block',

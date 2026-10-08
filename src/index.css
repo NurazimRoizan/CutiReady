@@ -6,36 +6,36 @@
 
 :root {
   /* Surfaces & Canvas */
-  --bg-primary: #fef3c7;      /* Warm soft pastel cream (main canvas) */
-  --bg-secondary: #ffffff;    /* Pure white (cards, modals) */
-  --neutral-dark: #222222;    /* Deep charcoal surfaces */
+  --bg-primary: #e8e8e8;      /* Alabaster Grey (main canvas) */
+  --bg-secondary: #ffffff;    /* Pure crisp white (cards, modals) */
+  --neutral-dark: #564256;    /* Vintage Grape surfaces */
 
-  /* High-Octane Accents (Wallo Heritage) */
-  --accent-yellow: #fde047;   /* Primary CTA, hero badges, high-contrast labels */
-  --accent-pink: #f9a8d4;     /* Secondary actions, alerts, special badges */
-  --accent-cyan: #67e8f9;     /* Tertiary accents, info chips, tags */
-  --accent-green: #86efac;    /* Success / high ROI / optimal leave badges */
-  --accent-orange: #fed7aa;   /* Amber / warning / alert tags */
-  --accent-purple: #d8b4fe;   /* Alternate celebration / highlight badge */
+  /* High-Octane Accents (New Signature Palette) */
+  --accent-yellow: #fc814a;   /* Coral Glow: Primary CTA, hero badges, high-contrast labels */
+  --accent-pink: #96939b;     /* Rosy Granite: Secondary actions, subtle tags */
+  --accent-cyan: #bfbfbf;     /* Silver: Tertiary accents, info chips, tags */
+  --accent-green: #bfbfbf;    /* Silver: Neutral confirmed / locked state */
+  --accent-orange: #fc814a;   /* Coral Glow: Highlight / alert tags */
+  --accent-purple: #564256;   /* Vintage Grape: Dark celebration / contrast badge */
 
-  /* Day Strip Semantic Tokens */
-  --weekend-bg: #e2e8f0;      /* Slate gray pill for weekends */
-  --weekend-text: #1e293b;
-  --ph-bg: #a7f3d0;           /* Emerald green pill for Public Holidays */
-  --ph-text: #064e3b;
-  --replacement-bg: var(--accent-cyan);  /* Accent Cyan pill for Replacement Holidays (Cuti Ganti) */
-  --replacement-text: var(--text-color);
-  --al-bg: var(--accent-pink);           /* Accent Pink pill for recommended Annual Leave (AL) */
-  --al-text: var(--text-color);
-  --workday-bg: #f3f4f6;      /* Subtle gray pill for regular workdays */
-  --workday-text: #374151;
+  /* Day Strip Semantic Tokens (Option A Strict Palette) */
+  --weekend-bg: #bfbfbf;      /* Silver pill for weekends */
+  --weekend-text: #564256;    /* Vintage Grape text on weekends */
+  --ph-bg: #564256;           /* Vintage Grape pill for Public Holidays */
+  --ph-text: #ffffff;         /* Crisp white text on Public Holidays */
+  --replacement-bg: #96939b;  /* Rosy Granite pill for Replacement Holidays (Cuti Ganti) */
+  --replacement-text: #ffffff;/* Crisp white text on Replacement Holidays */
+  --al-bg: #fc814a;           /* Coral Glow pill for recommended Annual Leave (AL) */
+  --al-text: #564256;         /* Vintage Grape text on Coral Glow */
+  --workday-bg: #e8e8e8;      /* Alabaster Grey pill for regular workdays */
+  --workday-text: #564256;    /* Vintage Grape text on regular workdays */
 
-  /* Text & Borders */
-  --text-color: #000000;      /* High-contrast pure black text */
-  --text-muted: #555555;      /* Muted secondary labels & timestamps */
-  --border-color: #000000;    /* Solid black borders & shadows */
-  --border-subtle: #e5e7eb;   /* Light gray card dividers */
-  --danger-bg: #fee2e2;       /* Alert / error card tinted background */
+  /* Text & Borders (Option B: Vintage Grape Line Art) */
+  --text-color: #564256;      /* Vintage Grape high-contrast typography */
+  --text-muted: #78737f;      /* Soft Rosy Slate secondary labels & timestamps */
+  --border-color: #564256;    /* Vintage Grape chunky borders & directional 4px drop shadows */
+  --border-subtle: #bfbfbf;   /* Silver card dividers */
+  --danger-bg: #fde8e8;       /* Soft tinted danger background */
 
   /* Neobrutalist Geometry */
   --border-width: 3px;        /* Standard 3px chunky border */

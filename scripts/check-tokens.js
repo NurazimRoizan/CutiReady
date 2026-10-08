@@ -20,6 +20,7 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 const ALLOWED_DEFINITIONS = [
   'src/index.css',
   'src/App.css',
+  'vite.config.ts',
 ];
 
 const IGNORED_PATHS = [

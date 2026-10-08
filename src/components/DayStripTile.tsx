@@ -31,13 +31,13 @@ function DayStripTileComponent({
     textColor = 'var(--ph-text)';
     typeLabel = day.holidayName ? `PH: ${day.holidayName.split(' ')[0]}` : 'CUTI PH';
   } else if (day.type === 'REPLACEMENT_HOLIDAY') {
-    bgColor = 'var(--accent-cyan)';
-    textColor = 'var(--text-color)';
+    bgColor = 'var(--replacement-bg)';
+    textColor = 'var(--replacement-text)';
     typeLabel = 'CUTI GANTI';
   } else if (day.type === 'WORKDAY') {
     // This workday is part of the bridge, so it's a recommended / planned AL day!
-    bgColor = 'var(--accent-pink)';
-    textColor = 'var(--text-color)';
+    bgColor = 'var(--al-bg)';
+    textColor = 'var(--al-text)';
     typeLabel = isPlanned ? '✓ DAH LOCK' : 'AMBIL AL';
     isDashed = !isPlanned;
   }
