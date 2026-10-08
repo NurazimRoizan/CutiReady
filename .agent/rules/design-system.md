@@ -29,35 +29,35 @@ Place this `:root` definition in `src/index.css` (or main stylesheet):
 
 :root {
   /* Surfaces & Canvas */
-  --bg-primary: #e8e8e8;      /* Alabaster Grey (main canvas) */
-  --bg-secondary: #ffffff;    /* Pure crisp white (cards, modals) */
-  --neutral-dark: #564256;    /* Vintage Grape surfaces */
+  --bg-primary: #ffd6af;      /* Soft Apricot: Warm pastel canvas */
+  --bg-secondary: #ffffff;    /* Pure crisp white: Cards, modals */
+  --neutral-dark: #6b4b3e;    /* Mauve Bark: Deep espresso surfaces */
 
-  /* High-Octane Accents (Coral & Grape Palette) */
-  --accent-yellow: #fc814a;   /* Coral Glow: Primary CTA, hero badges, high-contrast labels */
-  --accent-pink: #96939b;     /* Rosy Granite: Secondary actions, subtle tags */
-  --accent-cyan: #bfbfbf;     /* Silver: Tertiary accents, info chips, tags */
-  --accent-green: #bfbfbf;    /* Silver: Neutral confirmed / locked state */
-  --accent-orange: #fc814a;   /* Coral Glow: Highlight / alert tags */
-  --accent-purple: #564256;   /* Vintage Grape: Dark celebration / contrast badge */
+  /* High-Octane Accents (Wisteria & Camel Palette) */
+  --accent-yellow: #bea7e5;   /* Wisteria: Primary CTA, active tabs, hero highlight */
+  --accent-pink: #c49e85;     /* Camel: Secondary actions, subtle tags */
+  --accent-cyan: #ffd6af;     /* Soft Apricot: Tertiary accents, chips */
+  --accent-green: #bea7e5;    /* Wisteria: Confirmed / locked state */
+  --accent-orange: #c49e85;   /* Camel: Highlight / alert tags */
+  --accent-purple: #6b4b3e;   /* Mauve Bark: Dark contrast badge */
 
-  /* Day Strip Semantic Tokens (Option A Strict Palette) */
-  --weekend-bg: #bfbfbf;      /* Silver pill for weekends */
-  --weekend-text: #564256;    /* Vintage Grape text on weekends */
-  --ph-bg: #564256;           /* Vintage Grape pill for Public Holidays */
+  /* Day Strip Semantic Tokens */
+  --weekend-bg: #f8f4f9;      /* Ghost White pill for weekends */
+  --weekend-text: #6b4b3e;    /* Mauve Bark text on weekends */
+  --ph-bg: #6b4b3e;           /* Mauve Bark pill for Public Holidays */
   --ph-text: #ffffff;         /* Crisp white text on Public Holidays */
-  --replacement-bg: #96939b;  /* Rosy Granite pill for Replacement Holidays (Cuti Ganti) */
+  --replacement-bg: #c49e85;  /* Camel pill for Replacement Holidays (Cuti Ganti) */
   --replacement-text: #ffffff;/* Crisp white text on Replacement Holidays */
-  --al-bg: #fc814a;           /* Coral Glow pill for recommended Annual Leave (AL) */
-  --al-text: #564256;         /* Vintage Grape text on Coral Glow */
-  --workday-bg: #e8e8e8;      /* Alabaster Grey pill for regular workdays */
-  --workday-text: #564256;    /* Vintage Grape text on regular workdays */
+  --al-bg: #bea7e5;           /* Wisteria pill for recommended Annual Leave (AL) */
+  --al-text: #6b4b3e;         /* Mauve Bark text on Wisteria */
+  --workday-bg: #f8f4f9;      /* Ghost White pill for regular workdays */
+  --workday-text: #6b4b3e;    /* Mauve Bark text on regular workdays */
   
-  /* Text & Borders (Option B: Vintage Grape Line Art) */
-  --text-color: #564256;      /* Vintage Grape high-contrast typography */
-  --text-muted: #78737f;      /* Soft Rosy Slate secondary labels & timestamps */
-  --border-color: #564256;    /* Vintage Grape chunky borders & directional 4px drop shadows */
-  --border-subtle: #bfbfbf;   /* Silver card dividers */
+  /* Text & Borders (Mauve Bark Line Art) */
+  --text-color: #6b4b3e;      /* Mauve Bark high-contrast typography */
+  --text-muted: #8d6f61;      /* Warm Bark secondary labels & timestamps */
+  --border-color: #6b4b3e;    /* Mauve Bark chunky borders & directional 4px drop shadows */
+  --border-subtle: #c49e85;   /* Camel card dividers */
   --danger-bg: #fde8e8;       /* Soft tinted danger background */
 
   /* Neobrutalist Geometry */
