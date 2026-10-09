@@ -481,7 +481,12 @@ export function BridgesView({
                   {observedHolidayIds.length} Cuti Aktif Digunakan
                 </div>
               </div>
-              <div
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsHolidayDrawerOpen(true);
+                }}
                 style={{
                   backgroundColor: 'var(--bg-secondary)',
                   border: '1.5px solid var(--border-color)',
@@ -493,10 +498,11 @@ export function BridgesView({
                   boxShadow: '1px 1px 0px var(--border-color)',
                   color: 'var(--text-color)',
                   flexShrink: 0,
+                  cursor: 'pointer',
                 }}
               >
                 PILIH CUTI
-              </div>
+              </button>
             </div>
 
             {/* Field 4: Expandable Advanced Settings Accordion */}

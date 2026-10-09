@@ -110,7 +110,8 @@ export function GroupedHolidayCard({
             gap: '0.15rem',
             cursor: 'pointer',
             minWidth: 0,
-            paddingRight: '0.25rem',
+            width: '100%',
+            overflow: 'hidden',
           }}
         >
           {/* Row 1: Holiday Title */}
@@ -118,17 +119,29 @@ export function GroupedHolidayCard({
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '0.4rem',
-              fontSize: '0.98rem',
+              gap: '0.35rem',
+              fontSize: '0.92rem',
               fontWeight: 900,
               textTransform: 'uppercase',
               letterSpacing: '-0.2px',
               lineHeight: 1.2,
               color: 'var(--text-color)',
+              minWidth: 0,
+              width: '100%',
+              overflow: 'hidden',
             }}
           >
-            <Calendar size={15} strokeWidth={2.5} style={{ flexShrink: 0 }} />
-            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <Calendar size={14} strokeWidth={2.5} style={{ flexShrink: 0 }} />
+            <span
+              style={{
+                minWidth: 0,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                display: 'block',
+                flex: 1,
+              }}
+            >
               {holiday.title}
             </span>
           </div>
@@ -142,6 +155,9 @@ export function GroupedHolidayCard({
               letterSpacing: '0.2px',
               lineHeight: 1.15,
               color: 'var(--text-color)',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
             }}
           >
             {holiday.holidayDatesFormatted}
@@ -157,6 +173,9 @@ export function GroupedHolidayCard({
               lineHeight: 1.15,
               color: 'var(--text-color)',
               opacity: 0.85,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
             }}
           >
             {holiday.holidayDaysFormatted} • {holiday.quarter}
@@ -164,7 +183,7 @@ export function GroupedHolidayCard({
         </div>
       }
       headerAction={
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexShrink: 0, marginLeft: '0.35rem' }}>
           {activePlannedStrategy && (
             <BrutalistBadge color="var(--bg-primary)">
               LOCK

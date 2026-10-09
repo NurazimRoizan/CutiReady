@@ -57,21 +57,46 @@ export function BrutalistCard({
             color: computedHeaderTextColor,
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0 }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              minWidth: 0,
+              flex: 1,
+              overflow: 'hidden',
+            }}
+          >
             {title && (
-              <h3
-                style={{
-                  margin: 0,
-                  fontSize: '0.95rem',
-                  fontWeight: 900,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
-                  lineHeight: 1.2,
-                  color: computedHeaderTextColor,
-                }}
-              >
-                {title}
-              </h3>
+              typeof title === 'string' ? (
+                <h3
+                  style={{
+                    margin: 0,
+                    fontSize: '0.95rem',
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    lineHeight: 1.2,
+                    color: computedHeaderTextColor,
+                    minWidth: 0,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {title}
+                </h3>
+              ) : (
+                <div
+                  style={{
+                    minWidth: 0,
+                    flex: 1,
+                    overflow: 'hidden',
+                  }}
+                >
+                  {title}
+                </div>
+              )
             )}
             {subtitle && (
               <span
@@ -82,13 +107,18 @@ export function BrutalistCard({
                   opacity: 0.85,
                   letterSpacing: '0.3px',
                   color: computedHeaderTextColor,
+                  flexShrink: 0,
                 }}
               >
                 {subtitle}
               </span>
             )}
           </div>
-          {headerAction && <div>{headerAction}</div>}
+          {headerAction && (
+            <div style={{ flexShrink: 0, marginLeft: '0.5rem', display: 'flex', alignItems: 'center' }}>
+              {headerAction}
+            </div>
+          )}
         </div>
       )}
       <div style={{ padding: noPadding ? 0 : '1rem' }}>{children}</div>

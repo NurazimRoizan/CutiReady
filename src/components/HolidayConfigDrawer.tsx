@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useLeaveStore } from '../store/useLeaveStore';
 import { DEFAULT_HOLIDAYS_2026 } from '../data/holidays';
 import { BrutalistButton } from './BrutalistButton';
@@ -25,6 +26,22 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
 
   const [categoryFilter, setCategoryFilter] = useState<'ALL' | 'COMPULSORY' | 'FEDERAL' | 'STATE'>('ALL');
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   // Filter holidays applicable to this state
@@ -49,7 +66,7 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
       ? federalHolidays
       : stateHolidays;
 
-  return (
+  return createPortal(
     <div
       style={{
         position: 'fixed',
@@ -63,10 +80,12 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
         justifyContent: 'center',
         alignItems: 'center',
         padding: '1rem',
+        boxSizing: 'border-box',
       }}
       onClick={onClose}
     >
       <div
+        className="neo-modal-content"
         onClick={(e) => e.stopPropagation()}
         style={{
           width: '100%',
@@ -390,6 +409,7 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
           </BrutalistButton>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
