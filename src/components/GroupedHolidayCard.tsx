@@ -262,7 +262,7 @@ export function GroupedHolidayCard({
                   textTransform: 'uppercase',
                 }}
               >
-                ({holiday.bestRoi}x ROI)
+                ({holiday.bestRoi >= 10 ? 'FREE CUTI' : `${holiday.bestRoi}x ROI`})
               </span>
             </div>
 
@@ -335,7 +335,7 @@ export function GroupedHolidayCard({
               userSelect: 'none',
             }}
           >
-            <span>PILIH STRATEGI CUTI</span>
+            <span>PILIH CARA CUTI</span>
             <ChevronDown size={14} strokeWidth={3} />
           </div>
         </div>
@@ -355,7 +355,7 @@ export function GroupedHolidayCard({
                   marginBottom: '0.35rem',
                 }}
               >
-                PILIH CARA CUTI (STRATEGI):
+                CARA HACK CUTI NI:
               </div>
               <div
                 style={{
@@ -607,7 +607,7 @@ export function GroupedHolidayCard({
                 }}
               >
                 <span style={{ fontSize: '0.74rem', fontWeight: 900 }}>
-                  {copied ? 'DISALIN!' : 'SALIN'}
+                  {copied ? 'DAH COPY!' : 'COPY'}
                 </span>
                 <span style={{ fontSize: '0.66rem', fontWeight: 800 }}>TEKS</span>
               </div>

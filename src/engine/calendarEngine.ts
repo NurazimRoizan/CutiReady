@@ -111,10 +111,27 @@ export function findBridgeOpportunities(
   const n = calendar.length;
 
   for (let start = 0; start < n; start++) {
-    // A bridge can either start on a holiday/weekend or on a workday right before a break
-    // If it starts on a workday, it shouldn't be preceded by another workday in this evaluation
-    if (calendar[start].type === 'WORKDAY' && start > 0 && calendar[start - 1].type === 'WORKDAY') {
+    // 1. If start is a non-workday, it MUST be the beginning of a break block (preceded by workday or year start)
+    if (calendar[start].type !== 'WORKDAY' && start > 0 && calendar[start - 1].type !== 'WORKDAY') {
       continue;
+    }
+
+    // 2. If start is a workday:
+    // It must NOT immediately follow a break block (a break continuing from that block should start at the block's start)
+    if (calendar[start].type === 'WORKDAY' && start > 0 && calendar[start - 1].type !== 'WORKDAY') {
+      continue;
+    }
+
+    // 3. If start is a workday, verify that within maxAlPerBridge days there is a non-workday (connects to a break)
+    if (calendar[start].type === 'WORKDAY') {
+      let foundNonWorkday = false;
+      for (let lookahead = 1; lookahead <= maxAlPerBridge && start + lookahead < n; lookahead++) {
+        if (calendar[start + lookahead].type !== 'WORKDAY') {
+          foundNonWorkday = true;
+          break;
+        }
+      }
+      if (!foundNonWorkday) continue;
     }
 
     const currentAlDates: string[] = [];
@@ -262,7 +279,7 @@ export function groupBridgesByHoliday(
     }
   }
 
-  // 2. Map each bridge to its matching cluster
+  // 2. Map each bridge to its matching cluster(s)
   const clusterMap = new Map<string, BridgeOpportunity[]>();
   clusters.forEach((c) => clusterMap.set(c.id, []));
 
@@ -273,11 +290,13 @@ export function groupBridgesByHoliday(
         .map((d) => d.date)
     );
 
-    // Find the cluster that contains any of these holiday dates
-    const matched = clusters.find((c) => c.holidayDates.some((d) => bridgePhDates.has(d)));
-    if (matched) {
-      clusterMap.get(matched.id)?.push(bridge);
-    }
+    // Map bridge to all clusters containing its public/replacement holidays
+    const matchedClusters = clusters.filter((c) =>
+      c.holidayDates.some((d) => bridgePhDates.has(d))
+    );
+    matchedClusters.forEach((c) => {
+      clusterMap.get(c.id)?.push(bridge);
+    });
   });
 
   // 3. For each cluster with at least 1 bridge opportunity, build the GroupedHoliday with classified strategies
@@ -303,7 +322,7 @@ export function groupBridgesByHoliday(
         type = 'ZERO_AL';
         label = `0 AL (${bridge.totalDaysOff}H)`;
         shortTag = `${bridge.totalDaysOff}H OFF`;
-        description = `Cuti Semulajadi tanpa tolak baki AL (${bridge.totalDaysOff} hari rehat)`;
+        description = `Cuti free naturally! Tak usik baki AL langsung (${bridge.totalDaysOff} hari lepak santai)`;
       } else {
         const alDates = bridge.annualLeaveDates;
         const allBefore = alDates.length > 0 && alDates.every((d) => d < firstPhDate);
@@ -317,22 +336,22 @@ export function groupBridgesByHoliday(
           type = 'BEFORE';
           label = `SEBELUM (${bridge.alDaysRequired} AL)`;
           shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
-          description = `Ambil ${bridge.alDaysRequired} hari AL sebelum cuti (${bridge.totalDaysOff} hari rehat)`;
+          description = `Kaut ${bridge.alDaysRequired} hari AL sebelum cuti, dapat ${bridge.totalDaysOff} hari rehat kaw-kaw!`;
         } else if (allAfter) {
           type = 'AFTER';
           label = `SELEPAS (${bridge.alDaysRequired} AL)`;
           shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
-          description = `Ambil ${bridge.alDaysRequired} hari AL selepas cuti (${bridge.totalDaysOff} hari rehat)`;
+          description = `Kaut ${bridge.alDaysRequired} hari AL lepas cuti, sambung sampai ${bridge.totalDaysOff} hari rehat!`;
         } else if (isCombo) {
           type = 'COMBO';
           label = `COMBO (${bridge.alDaysRequired} AL)`;
           shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
-          description = `Sambung cuti sebelum & selepas untuk ${bridge.totalDaysOff} hari rehat berturut-turut!`;
+          description = `Kombo padu sebelum & lepas! Tapau ${bridge.totalDaysOff} hari rehat direct tanpa henti!`;
         } else {
           type = 'MIDWEEK';
           label = `JAMBATAN (${bridge.alDaysRequired} AL)`;
           shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
-          description = `Jambatan cuti tengah minggu (${bridge.totalDaysOff} hari rehat)`;
+          description = `Jambatan tengah minggu ngam-ngam, auto enjoy ${bridge.totalDaysOff} hari cuti!`;
         }
       }
 
@@ -348,40 +367,49 @@ export function groupBridgesByHoliday(
     });
 
     // Smart curation: Deduplicate redundant variations within each category
-    // (e.g. keep only the best/most meaningful BEFORE, AFTER, COMBO options instead of 10+ permutations)
+    // Preserve both low-commitment (1 AL) and max-yield (longest break) options
     const curatedStrategies: HolidayStrategy[] = [];
 
-    // 1. Zero AL option (if any, keep the one with most days off)
+    // 1. Zero AL option (if any, keep highest days off)
     const zeroAlList = strategies.filter((s) => s.type === 'ZERO_AL');
     if (zeroAlList.length > 0) {
-      curatedStrategies.push(zeroAlList[0]);
+      const bestZero = zeroAlList.reduce((max, s) =>
+        s.bridge.totalDaysOff > max.bridge.totalDaysOff ? s : max
+      );
+      curatedStrategies.push(bestZero);
     }
 
-    // 2. Before options (keep at most 2: lowest AL and highest days off)
+    // 2. Before options: keep lowest AL and highest days off
     const beforeList = strategies.filter((s) => s.type === 'BEFORE');
     if (beforeList.length > 0) {
-      curatedStrategies.push(beforeList[0]);
+      const lowestAlBefore = beforeList.reduce((min, s) =>
+        s.bridge.alDaysRequired < min.bridge.alDaysRequired ? s : min
+      );
       const maxDaysBefore = beforeList.reduce((max, s) =>
         s.bridge.totalDaysOff > max.bridge.totalDaysOff ? s : max
       );
-      if (maxDaysBefore.id !== beforeList[0].id) {
+      curatedStrategies.push(lowestAlBefore);
+      if (maxDaysBefore.id !== lowestAlBefore.id) {
         curatedStrategies.push(maxDaysBefore);
       }
     }
 
-    // 3. After options (keep at most 2: lowest AL and highest days off)
+    // 3. After options: keep lowest AL and highest days off
     const afterList = strategies.filter((s) => s.type === 'AFTER');
     if (afterList.length > 0) {
-      curatedStrategies.push(afterList[0]);
+      const lowestAlAfter = afterList.reduce((min, s) =>
+        s.bridge.alDaysRequired < min.bridge.alDaysRequired ? s : min
+      );
       const maxDaysAfter = afterList.reduce((max, s) =>
         s.bridge.totalDaysOff > max.bridge.totalDaysOff ? s : max
       );
-      if (maxDaysAfter.id !== afterList[0].id) {
+      curatedStrategies.push(lowestAlAfter);
+      if (maxDaysAfter.id !== lowestAlAfter.id) {
         curatedStrategies.push(maxDaysAfter);
       }
     }
 
-    // 4. Combo option (keep the single best combo: max total days off)
+    // 4. Combo option: keep best combo
     const comboList = strategies.filter((s) => s.type === 'COMBO');
     if (comboList.length > 0) {
       const bestCombo = comboList.reduce((best, s) => {
@@ -393,15 +421,18 @@ export function groupBridgesByHoliday(
       curatedStrategies.push(bestCombo);
     }
 
-    // 5. Midweek option (if no before/after/combo, or if standalone)
+    // 5. Midweek option
     const midweekList = strategies.filter((s) => s.type === 'MIDWEEK');
-    if (curatedStrategies.length === 0 && midweekList.length > 0) {
-      curatedStrategies.push(midweekList[0]);
-      const maxMidweek = midweekList.reduce((max, s) =>
+    if (midweekList.length > 0) {
+      const lowestMid = midweekList.reduce((min, s) =>
+        s.bridge.alDaysRequired < min.bridge.alDaysRequired ? s : min
+      );
+      const maxMid = midweekList.reduce((max, s) =>
         s.bridge.totalDaysOff > max.bridge.totalDaysOff ? s : max
       );
-      if (maxMidweek.id !== midweekList[0].id) {
-        curatedStrategies.push(maxMidweek);
+      curatedStrategies.push(lowestMid);
+      if (maxMid.id !== lowestMid.id) {
+        curatedStrategies.push(maxMid);
       }
     }
 

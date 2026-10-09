@@ -129,7 +129,7 @@ export function HomePage({ onOpenHowToUse }: HomePageProps) {
             lineHeight: 1.4,
           }}
         >
-          100% matematik ikut Akta Kerja 1955 (Seksyen 60D). Boss senyum, HR approved, anda healing dengan tenang!
+          100% matematik ikut Akta Kerja 1955 (Seksyen 60D). Boss senyum, HR approved, korang healing dengan tenang!
         </p>
         <div
           style={{
@@ -142,7 +142,7 @@ export function HomePage({ onOpenHowToUse }: HomePageProps) {
           }}
         >
           <Info size={12} />
-          <span>Tekan mana-mana tile hari untuk toggle cuti pilihan anda</span>
+          <span>Tap mana-mana tile hari untuk toggle cuti pilihan korang</span>
         </div>
       </footer>
 

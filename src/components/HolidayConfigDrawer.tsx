@@ -68,33 +68,33 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
 
   const presetInfo = {
     MINIMUM_11: {
-      title: 'EA 1955 (Minima 11 Hari Wajib)',
-      desc: 'Seksyen 60D Akta Kerja mewajibkan sekurang-kurangnya 11 hari cuti am berbayar (5 cuti wajib undang-undang + 6 cuti pilihan majikan). Ini hak minima bagi setiap pekerja swasta.',
-      tag: 'Minima Akta 1955',
+      title: 'EA 1955 (Minima 11 Hari Ikut Akta)',
+      desc: 'Ikut Seksyen 60D Akta Kerja, boss wajib bagi minima 11 hari cuti berbayar (5 wajib undang-undang + 6 company pick). Hak asas korang ni, jangan bagi boss claim tak tahu!',
+      tag: 'Minima Law 1955',
       bg: 'var(--bg-primary)',
     },
     CORPORATE_15: {
-      title: 'Standard Korporat (15 Hari)',
-      desc: 'Standard syarikat swasta & MNC Malaysia: Merangkumi 5 cuti wajib EA + perayaan utama persekutuan (Tahun Baru, Raya Puasa 2H, CNY 2H, Deepavali, Krismas, Wesak, dsb). Paling umum untuk pejabat swasta.',
-      tag: 'Standard Pejabat Swasta / MNC',
+      title: 'Standard Corporate (15 Hari)',
+      desc: 'Standard biasa private sector & MNC: 5 cuti wajib EA campur cuti perayaan besar (Tahun Baru, Raya 2H, CNY 2H, Deepavali, Krismas, Wesak, dll). Paling ngam untuk geng opis swasta!',
+      tag: 'Standard Opis Swasta',
       bg: 'var(--accent-cyan)',
     },
     ALL: {
-      title: `Semua Gazet Rasmi (${applicableHolidays.length} Hari)`,
-      desc: `Boss belanja semua! Mengambil kira kesemua cuti umum persekutuan dan cuti negeri yang diwartakan kerajaan bagi ${state.replace(/_/g, ' ')}.`,
-      tag: 'Pakej Paling Pemurah',
+      title: `Semua Gazet Sapu Habis (${applicableHolidays.length} Hari)`,
+      desc: `Boss belanja semua! Mengambil kira kesemua cuti umum persekutuan dan cuti negeri rasmi bagi ${state.replace(/_/g, ' ')}. Rezeki terpijak, layan je cuti kaw-kaw!`,
+      tag: 'Boss Belanja Semua',
       bg: 'var(--accent-yellow)',
     },
     CUSTOM: {
-      title: `Polisi Tersuai (${observedCount} Hari)`,
-      desc: 'Korang telah mengubahsuai senarai cuti mengikut kalendar atau polisi syarikat sendiri dari senarai checklist di bawah.',
-      tag: 'Checklist Manual',
+      title: `Custom Setting Sendiri (${observedCount} Hari)`,
+      desc: 'Korang dah godek-godek checklist cuti ikut kalendar atau polisi syarikat sendiri dari senarai kat bawah ni.',
+      tag: 'Checklist Sendiri',
       bg: 'var(--bg-primary)',
     },
   }[activePreset] || {
     title: 'Polisi Cuti Syarikat',
-    desc: 'Pilih preset cuti atau tanda cuti secara manual dari checklist di bawah.',
-    tag: 'Tetapan Cuti',
+    desc: 'Pilih preset cuti atau tanda cuti ikut memo HR syarikat korang kat bawah ni.',
+    tag: 'Setting Cuti',
     bg: 'var(--bg-primary)',
   };
 

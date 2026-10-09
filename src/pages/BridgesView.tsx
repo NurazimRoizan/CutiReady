@@ -476,7 +476,7 @@ export function BridgesView({
                     marginTop: '0.1rem',
                   }}
                 >
-                  {observedHolidayIds.length} Cuti Aktif Digunakan
+                  {observedHolidayIds.length} Cuti Aktif Dalam List
                 </div>
               </div>
               <button
@@ -499,7 +499,7 @@ export function BridgesView({
                   cursor: 'pointer',
                 }}
               >
-                PILIH CUTI
+                GODEK CUTI
               </button>
             </div>
 
@@ -535,7 +535,7 @@ export function BridgesView({
                       letterSpacing: '0.3px',
                     }}
                   >
-                    Tetapan Lanjutan (Advanced)
+                    Setting Lanjutan (Advanced)
                   </span>
                 </div>
                 {isAdvancedOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
@@ -656,7 +656,7 @@ export function BridgesView({
                           fontWeight: 600,
                         }}
                       >
-                        Ganti cuti Isnin jika cuti am jatuh Sabtu
+                        Ganti Isnin kalau cuti am jatuh Sabtu (tak rugi cuti!)
                       </div>
                     </div>
                     <button
@@ -676,7 +676,7 @@ export function BridgesView({
                         boxShadow: '1px 1px 0px var(--border-color)',
                       }}
                     >
-                      {allowSaturdayReplacements ? 'YA' : 'TIDAK'}
+                      {allowSaturdayReplacements ? 'ON' : 'OFF'}
                     </button>
                   </div>
 
@@ -713,7 +713,7 @@ export function BridgesView({
                             fontWeight: 600,
                           }}
                         >
-                          {hidePastHolidays ? 'Cuti lepas disembunyikan' : 'Memaparkan semua cuti lepas'}
+                          {hidePastHolidays ? 'Cuti lepas dah kena hide' : 'Tunjuk semua cuti lepas'}
                         </div>
                       </div>
                       <div style={{ display: 'flex', gap: '0.3rem' }}>
@@ -736,7 +736,7 @@ export function BridgesView({
                               : 'none',
                           }}
                         >
-                          SEMBUNYI
+                          HIDE
                         </button>
                         <button
                           type="button"
@@ -757,7 +757,7 @@ export function BridgesView({
                               : 'none',
                           }}
                         >
-                          PAPAR
+                          SHOW
                         </button>
                       </div>
                     </div>
@@ -789,13 +789,13 @@ export function BridgesView({
                           textDecoration: 'underline',
                         }}
                       >
-                        Buka tab Holiday penuh →
+                        Pergi Tab Setting & Cuti Penuh →
                       </button>
                     )}
                     <button
                       type="button"
                       onClick={() => {
-                        if (window.confirm('Reset semua tetapan kepada tetapan asal?')) {
+                        if (window.confirm('Betul ke nak reset semua setting balik asal bossku?')) {
                           resetToDefaults();
                         }
                       }}
@@ -908,7 +908,7 @@ export function BridgesView({
           headerColor="var(--accent-orange)"
           title={
             hidePastHolidays && pastHolidaysCount > 0
-              ? 'CUTI LEPAS TELAH DISEMBUNYIKAN'
+              ? 'CUTI LEPAS DAH KENA HIDE!'
               : 'TAK JUMPA CUTI UNTUK FILTER NI LAH!'
           }
         >
@@ -926,7 +926,7 @@ export function BridgesView({
               }}
             >
               {hidePastHolidays && pastHolidaysCount > 0
-                ? `Semua ${pastHolidaysCount} cuti bagi tarikh yang telah berlalu sedang disembunyikan. Korang boleh paparkan semula cuti lepas pada bila-bila masa.`
+                ? `Semua ${pastHolidaysCount} cuti lepas dah kena hide. Korang boleh buka balik bila-bila masa kat butang bawah ni!`
                 : `Filter ni takde cuti panjang dengan had maksimum ${maxAlPerBridge} hari AL. Cuba naikkan slider had AL atau klik tab SEMUA!`}
             </p>
             <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -936,7 +936,7 @@ export function BridgesView({
                   color="var(--accent-cyan)"
                   onClick={() => setHidePastHolidays(false)}
                 >
-                  PAPAR CUTI LEPAS ({pastHolidaysCount})
+                  TUNJUK BALIK CUTI LEPAS ({pastHolidaysCount})
                 </BrutalistButton>
               )}
               <BrutalistButton

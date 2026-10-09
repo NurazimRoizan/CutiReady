@@ -56,7 +56,7 @@ export function Header({ onOpenHelp }: HeaderProps) {
         <button
           type="button"
           onClick={() => {
-            if (window.confirm('Reset semua tetapan kepada tetapan asal?')) {
+            if (window.confirm('Betul ke nak reset semua setting balik asal bossku?')) {
               resetToDefaults();
             }
           }}

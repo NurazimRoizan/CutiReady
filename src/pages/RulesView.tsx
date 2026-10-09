@@ -225,10 +225,10 @@ export function RulesView() {
               }}
             >
               <span>
-                {activePreset === 'MINIMUM_11' && 'Pakej EA 1955 (Minima 11 Hari Wajib)'}
-                {activePreset === 'CORPORATE_15' && 'Pakej Korporat (Standard 15 Hari Swasta)'}
-                {activePreset === 'ALL' && `Pakej Semua Gazet (${applicableHolidays.length} Hari Cuti)`}
-                {activePreset === 'CUSTOM' && `Polisi Cuti Tersuai (${observedCount} Hari)`}
+                {activePreset === 'MINIMUM_11' && 'Pakej EA 1955 (Minima 11 Hari Ikut Akta)'}
+                {activePreset === 'CORPORATE_15' && 'Pakej Corporate (Standard 15 Hari Swasta)'}
+                {activePreset === 'ALL' && `Pakej Semua Gazet Sapu Habis (${applicableHolidays.length} Hari Cuti)`}
+                {activePreset === 'CUSTOM' && `Custom Setting Sendiri (${observedCount} Hari)`}
               </span>
               <span
                 style={{
@@ -241,21 +241,21 @@ export function RulesView() {
                   color: 'var(--text-color)',
                 }}
               >
-                {activePreset === 'MINIMUM_11' && 'Minima Akta 1955'}
+                {activePreset === 'MINIMUM_11' && 'Minima Law 1955'}
                 {activePreset === 'CORPORATE_15' && 'Standard Swasta / MNC'}
-                {activePreset === 'ALL' && 'Paling Pemurah'}
-                {activePreset === 'CUSTOM' && 'Checklist Manual'}
+                {activePreset === 'ALL' && 'Boss Belanja Semua'}
+                {activePreset === 'CUSTOM' && 'Checklist Sendiri'}
               </span>
             </div>
             <div style={{ fontSize: '0.73rem', fontWeight: 600, lineHeight: 1.4, color: 'var(--text-color)' }}>
               {activePreset === 'MINIMUM_11' &&
-                'Seksyen 60D Akta Kerja mewajibkan sekurang-kurangnya 11 hari cuti am berbayar (5 cuti wajib undang-undang + 6 cuti pilihan majikan). Hak minima pekerja swasta.'}
+                'Ikut Seksyen 60D Akta Kerja, boss wajib bagi minima 11 hari cuti berbayar (5 wajib undang-undang + 6 company pick). Hak asas korang ni, jangan bagi boss claim tak tahu!'}
               {activePreset === 'CORPORATE_15' &&
-                'Standard syarikat swasta & MNC Malaysia: Merangkumi 5 cuti wajib EA + perayaan utama persekutuan (Tahun Baru, Raya Puasa 2H, CNY 2H, Deepavali, Krismas, Wesak, dsb). Paling umum untuk pejabat swasta.'}
+                'Standard biasa private sector & MNC: 5 cuti wajib EA campur cuti perayaan besar (Tahun Baru, Raya 2H, CNY 2H, Deepavali, Krismas, Wesak, dll). Paling ngam untuk geng opis swasta!'}
               {activePreset === 'ALL' &&
-                `Boss belanja semua! Merangkumi kesemua cuti umum persekutuan dan cuti negeri rasmi bagi ${state.replace(/_/g, ' ')}.`}
+                `Boss belanja semua! Mengambil kira kesemua cuti umum persekutuan dan cuti negeri rasmi bagi ${state.replace(/_/g, ' ')}. Rezeki terpijak, layan je cuti kaw-kaw!`}
               {activePreset === 'CUSTOM' &&
-                'Korang telah ubahsuai cuti mengikut kalendar rasmi syarikat sendiri dari senarai checklist di bawah.'}
+                'Korang dah godek-godek checklist cuti ikut kalendar atau polisi syarikat sendiri dari senarai kat bawah ni.'}
             </div>
           </div>
         </div>
