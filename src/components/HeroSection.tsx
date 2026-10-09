@@ -68,7 +68,7 @@ export function HeroSection({
             boxShadow: 'var(--shadow-offset) var(--shadow-offset) 0px var(--border-color)',
           }}
         >
-          JOM TENGOK BRIDGES 2026 ↓
+          JOM TENGOK COMBO CUTI 2026 ↓
         </BrutalistButton>
 
         <BrutalistButton

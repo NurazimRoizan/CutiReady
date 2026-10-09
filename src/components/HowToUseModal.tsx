@@ -46,11 +46,11 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
     },
     {
       step: '03',
-      title: 'Spot Bridge & Lock In Cepat',
+      title: 'Spot Combo & Lock In Cepat',
       emoji: '🎯',
       pill: 'ROI Sampai 5x!',
       description:
-        'Tengok kombo cuti yang auto-generate. Cari yang 0 AL (free cuti terus) atau Mega Bridge ROI padu.\n\nTekan "+ Lock Cuti" sebelum colleague lain sapu slot!',
+        'Tengok combo cuti yang auto-generate. Cari yang 0 AL (free cuti terus) atau Mega Combo ROI padu.\n\nTekan "+ Lock Cuti" sebelum colleague lain sapu slot!',
     },
     {
       step: '04',

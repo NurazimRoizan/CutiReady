@@ -19,7 +19,7 @@ export function BottomNavBar({
   const tabs = [
     {
       id: 'BRIDGES' as AppTab,
-      label: 'Bridges',
+      label: 'Combo Cuti',
       icon: Zap,
       badge: bridgesCount > 0 ? `${bridgesCount}` : undefined,
       badgeColor: 'var(--accent-cyan)',

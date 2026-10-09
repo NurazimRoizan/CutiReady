@@ -26,12 +26,12 @@ export function HowToUseSection({ onClose }: HowToUseSectionProps) {
     },
     {
       step: '03',
-      title: 'Discover & Lock In Bridges',
+      title: 'Discover & Lock In Combo Cuti',
       emoji: '🎯',
       pill: 'Up to 4.5x ROI',
       bgColor: 'var(--bg-secondary)',
       description:
-        'Browse mathematically discovered leave windows. Look for natural 0 AL breaks or Mega Bridges (≥4.0x ROI). Tap "+ Plan Leave" to lock dates into your annual leave quota.',
+        'Browse mathematically discovered leave windows. Look for natural 0 AL breaks or Mega Combos (≥4.0x ROI). Tap "+ Plan Leave" to lock dates into your annual leave quota.',
     },
     {
       step: '04',
@@ -146,7 +146,7 @@ export function HowToUseSection({ onClose }: HowToUseSectionProps) {
           onClick={onClose}
           style={{ width: '100%' }}
         >
-          GOT IT — SHOW ME THE BRIDGES ↑
+          GOT IT — SHOW ME COMBO CUTI ↑
         </BrutalistButton>
       </div>
     </section>

@@ -63,7 +63,7 @@ export function LegendModal({ isOpen, onClose }: LegendModalProps) {
     },
     {
       badge: <BrutalistBadge size="sm" color="var(--accent-pink)">🌸 Burn [X] AL</BrutalistBadge>,
-      desc: 'Bilangan hari cuti tahunan yang perlu diapply untuk jayakan bridge ni (Slate Plum).',
+      desc: 'Bilangan hari cuti tahunan yang perlu diapply untuk jayakan combo cuti ni (Slate Plum).',
     },
     {
       badge: <BrutalistBadge size="sm" color="var(--accent-green)">✓ Dah Lock</BrutalistBadge>,

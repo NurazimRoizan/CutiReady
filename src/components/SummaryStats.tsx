@@ -21,7 +21,7 @@ export function SummaryStats({ bridges, plannedLeaveDates }: SummaryStatsProps) 
 
   const stats = [
     {
-      label: 'TOTAL BRIDGES',
+      label: 'TOTAL COMBO',
       value: totalBridges,
       subtext: 'Peluang Cuti',
       color: 'var(--accent-yellow)',

@@ -477,7 +477,7 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
         >
           <BrutalistButton onClick={onClose} style={{ width: '100%' }}>
             <Sparkles size={16} strokeWidth={2.5} />
-            <span>SAVE POLICY & UPDATE BRIDGES</span>
+            <span>SAVE POLICY & UPDATE COMBO</span>
           </BrutalistButton>
         </div>
       </div>

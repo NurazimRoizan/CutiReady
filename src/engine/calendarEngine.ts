@@ -346,12 +346,12 @@ export function groupBridgesByHoliday(
           type = 'COMBO';
           label = `COMBO (${bridge.alDaysRequired} AL)`;
           shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
-          description = `Kombo padu sebelum & lepas! Tapau ${bridge.totalDaysOff} hari rehat direct tanpa henti!`;
+          description = `Combo padu sebelum & lepas! Tapau ${bridge.totalDaysOff} hari rehat direct tanpa henti!`;
         } else {
           type = 'MIDWEEK';
-          label = `JAMBATAN (${bridge.alDaysRequired} AL)`;
+          label = `SAMBUNG (${bridge.alDaysRequired} AL)`;
           shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
-          description = `Jambatan tengah minggu ngam-ngam, auto enjoy ${bridge.totalDaysOff} hari cuti!`;
+          description = `Sambung tengah minggu ngam-ngam, auto enjoy ${bridge.totalDaysOff} hari cuti!`;
         }
       }
 
