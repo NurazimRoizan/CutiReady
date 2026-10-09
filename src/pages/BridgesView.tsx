@@ -48,7 +48,7 @@ export function BridgesView({
     allowSaturdayReplacements,
     toggleSaturdayReplacements,
     hidePastHolidays,
-    toggleHidePastHolidays,
+    setHidePastHolidays,
     resetToDefaults,
   } = useLeaveStore();
 
@@ -56,7 +56,6 @@ export function BridgesView({
   const [isLegendOpen, setIsLegendOpen] = useState(false);
   const [isHolidayDrawerOpen, setIsHolidayDrawerOpen] = useState(false);
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
-  const [expandAll, setExpandAll] = useState(false);
   const bridgesListRef = useRef<HTMLDivElement>(null);
 
   const stateOptions = useMemo(
@@ -89,8 +88,7 @@ export function BridgesView({
   // Base list of holiday events filtered by hidePastHolidays
   const baseHolidays = useMemo(() => {
     if (hidePastHolidays) {
-      const upcoming = groupedHolidays.filter((h) => h.endDate >= todayStr);
-      return upcoming.length > 0 ? upcoming : groupedHolidays;
+      return groupedHolidays.filter((h) => h.endDate >= todayStr);
     }
     return groupedHolidays;
   }, [groupedHolidays, hidePastHolidays, todayStr]);
@@ -715,28 +713,53 @@ export function BridgesView({
                             fontWeight: 600,
                           }}
                         >
-                          {hidePastHolidays ? 'Disembunyikan dari senarai' : 'Dipaparkan dalam senarai'}
+                          {hidePastHolidays ? 'Cuti lepas disembunyikan' : 'Memaparkan semua cuti lepas'}
                         </div>
                       </div>
-                      <button
-                        type="button"
-                        onClick={toggleHidePastHolidays}
-                        style={{
-                          backgroundColor: hidePastHolidays
-                            ? 'var(--accent-cyan)'
-                            : 'var(--bg-secondary)',
-                          border: '1.5px solid var(--border-color)',
-                          borderRadius: 'var(--border-radius-sm)',
-                          padding: '0.25rem 0.5rem',
-                          fontSize: '0.68rem',
-                          fontWeight: 900,
-                          cursor: 'pointer',
-                          color: 'var(--text-color)',
-                          boxShadow: '1px 1px 0px var(--border-color)',
-                        }}
-                      >
-                        {hidePastHolidays ? 'SEMBUNYI' : 'TUNJUK'}
-                      </button>
+                      <div style={{ display: 'flex', gap: '0.3rem' }}>
+                        <button
+                          type="button"
+                          onClick={() => setHidePastHolidays(true)}
+                          style={{
+                            backgroundColor: hidePastHolidays
+                              ? 'var(--accent-yellow)'
+                              : 'var(--bg-secondary)',
+                            border: '1.5px solid var(--border-color)',
+                            borderRadius: 'var(--border-radius-sm)',
+                            padding: '0.2rem 0.45rem',
+                            fontSize: '0.68rem',
+                            fontWeight: 900,
+                            cursor: 'pointer',
+                            color: 'var(--text-color)',
+                            boxShadow: hidePastHolidays
+                              ? '1px 1px 0px var(--border-color)'
+                              : 'none',
+                          }}
+                        >
+                          SEMBUNYI
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setHidePastHolidays(false)}
+                          style={{
+                            backgroundColor: !hidePastHolidays
+                              ? 'var(--accent-yellow)'
+                              : 'var(--bg-secondary)',
+                            border: '1.5px solid var(--border-color)',
+                            borderRadius: 'var(--border-radius-sm)',
+                            padding: '0.2rem 0.45rem',
+                            fontSize: '0.68rem',
+                            fontWeight: 900,
+                            cursor: 'pointer',
+                            color: 'var(--text-color)',
+                            boxShadow: !hidePastHolidays
+                              ? '1px 1px 0px var(--border-color)'
+                              : 'none',
+                          }}
+                        >
+                          PAPAR
+                        </button>
+                      </div>
                     </div>
                   )}
 
@@ -830,28 +853,6 @@ export function BridgesView({
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
             <button
               type="button"
-              onClick={() => setExpandAll((prev) => !prev)}
-              style={{
-                backgroundColor: 'var(--bg-primary)',
-                border: '2px solid var(--border-color)',
-                borderRadius: 'var(--border-radius-sm)',
-                padding: '0.2rem 0.55rem',
-                fontSize: '0.7rem',
-                fontWeight: 900,
-                textTransform: 'uppercase',
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.3rem',
-                boxShadow: '1.5px 1.5px 0px var(--border-color)',
-                color: 'var(--text-color)',
-              }}
-            >
-              {expandAll ? <ChevronUp size={13} strokeWidth={2.5} /> : <ChevronDown size={13} strokeWidth={2.5} />}
-              <span>{expandAll ? 'TUTUP SEMUA' : 'BUKA SEMUA'}</span>
-            </button>
-            <button
-              type="button"
               onClick={() => setIsLegendOpen(true)}
               style={{
                 backgroundColor: 'var(--accent-yellow)',
@@ -897,16 +898,19 @@ export function BridgesView({
         <div>
           {filteredHolidays.map((holiday: GroupedHoliday) => (
             <GroupedHolidayCard
-              key={`${holiday.id}-${expandAll}`}
+              key={holiday.id}
               holiday={holiday}
-              isInitiallyExpanded={expandAll}
             />
           ))}
         </div>
       ) : (
         <BrutalistCard
           headerColor="var(--accent-orange)"
-          title="TAK JUMPA CUTI UNTUK FILTER NI LAH!"
+          title={
+            hidePastHolidays && pastHolidaysCount > 0
+              ? 'CUTI LEPAS TELAH DISEMBUNYIKAN'
+              : 'TAK JUMPA CUTI UNTUK FILTER NI LAH!'
+          }
         >
           <div style={{ textAlign: 'center', padding: '1rem 0.5rem' }}>
             <Sun
@@ -921,22 +925,20 @@ export function BridgesView({
                 lineHeight: 1.4,
               }}
             >
-              Filter ni takde cuti panjang dengan had maksimum{' '}
-              <strong>{maxAlPerBridge} hari AL</strong>. Cuba naikkan slider had AL atau klik tab SEMUA!
+              {hidePastHolidays && pastHolidaysCount > 0
+                ? `Semua ${pastHolidaysCount} cuti bagi tarikh yang telah berlalu sedang disembunyikan. Korang boleh paparkan semula cuti lepas pada bila-bila masa.`
+                : `Filter ni takde cuti panjang dengan had maksimum ${maxAlPerBridge} hari AL. Cuba naikkan slider had AL atau klik tab SEMUA!`}
             </p>
-            {hidePastHolidays && pastHolidaysCount > 0 && (
-              <p
-                style={{
-                  fontSize: '0.78rem',
-                  fontWeight: 600,
-                  color: 'var(--text-muted)',
-                  marginBottom: '1rem',
-                }}
-              >
-                ({pastHolidaysCount} cuti bagi tarikh yang telah berlalu disembunyikan. Korang boleh buka semula bila-bila masa.)
-              </p>
-            )}
             <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              {hidePastHolidays && pastHolidaysCount > 0 && (
+                <BrutalistButton
+                  size="sm"
+                  color="var(--accent-cyan)"
+                  onClick={() => setHidePastHolidays(false)}
+                >
+                  PAPAR CUTI LEPAS ({pastHolidaysCount})
+                </BrutalistButton>
+              )}
               <BrutalistButton
                 size="sm"
                 color="var(--accent-yellow)"
@@ -944,15 +946,6 @@ export function BridgesView({
               >
                 TENGOK SEMUA CUTI
               </BrutalistButton>
-              {hidePastHolidays && pastHolidaysCount > 0 && (
-                <BrutalistButton
-                  size="sm"
-                  color="var(--accent-cyan)"
-                  onClick={toggleHidePastHolidays}
-                >
-                  TUNJUK CUTI LEPAS ({pastHolidaysCount})
-                </BrutalistButton>
-              )}
               {maxAlPerBridge < 5 && (
                 <BrutalistButton
                   size="sm"
