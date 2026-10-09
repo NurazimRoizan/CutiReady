@@ -1,5 +1,4 @@
 import { useLeaveStore } from '../store/useLeaveStore';
-import { MalaysianState, STATE_NAMES } from '../types';
 import { RefreshCw, HelpCircle } from 'lucide-react';
 
 interface HeaderProps {
@@ -7,13 +6,7 @@ interface HeaderProps {
 }
 
 export function Header({ onOpenHelp }: HeaderProps) {
-  const { state, setState, resetToDefaults } = useLeaveStore();
-
-  const stateOptions = (Object.keys(STATE_NAMES) as MalaysianState[]).map((key) => ({
-    value: key,
-    label: STATE_NAMES[key],
-    badge: key === 'KEDAH' || key === 'KELANTAN' || key === 'TERENGGANU' ? 'Fri-Sat' : 'Sat-Sun',
-  }));
+  const { resetToDefaults } = useLeaveStore();
 
   return (
     <header
@@ -22,15 +15,15 @@ export function Header({ onOpenHelp }: HeaderProps) {
         justifyContent: 'space-between',
         alignItems: 'center',
         gap: '0.5rem',
-        marginBottom: '1.25rem',
+        marginBottom: '1rem',
         width: '100%',
       }}
     >
-      {/* Brand on Left (Two stacked rows, no icon, no subtitle) */}
+      {/* Brand on Left */}
       <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <h1
           style={{
-            fontSize: '1.2rem',
+            fontSize: '1.25rem',
             fontWeight: 900,
             textTransform: 'uppercase',
             letterSpacing: '-0.5px',
@@ -44,7 +37,7 @@ export function Header({ onOpenHelp }: HeaderProps) {
         </h1>
         <h1
           style={{
-            fontSize: '1.2rem',
+            fontSize: '1.25rem',
             fontWeight: 900,
             textTransform: 'uppercase',
             letterSpacing: '-0.5px',
@@ -58,89 +51,59 @@ export function Header({ onOpenHelp }: HeaderProps) {
         </h1>
       </div>
 
-      {/* State Selector & Reset Button on Top Right */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexShrink: 0 }}>
-        <div style={{ position: 'relative' }}>
-          <select
-            value={state}
-            onChange={(e) => setState(e.target.value as MalaysianState)}
-            title="Pilih negeri tempat kerja"
-            style={{
-              backgroundColor: 'var(--bg-secondary)',
-              border: '2px solid var(--border-color)',
-              borderRadius: 'var(--border-radius-sm)',
-              padding: '0.4rem 1.6rem 0.4rem 0.6rem',
-              fontSize: '0.76rem',
-              fontWeight: 900,
-              color: 'var(--text-color)',
-              boxShadow: '2px 2px 0px var(--border-color)',
-              cursor: 'pointer',
-              outline: 'none',
-              appearance: 'none',
-              WebkitAppearance: 'none',
-              textTransform: 'uppercase',
-              maxWidth: '160px',
-            }}
-          >
-            {stateOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label} ({opt.badge})
-              </option>
-            ))}
-          </select>
-          <span
-            style={{
-              position: 'absolute',
-              right: '0.55rem',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              pointerEvents: 'none',
-              fontSize: '0.65rem',
-              fontWeight: 900,
-              color: 'var(--text-color)',
-            }}
-          >
-            ▼
-          </span>
-        </div>
-
+      {/* Action Buttons on Top Right */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}>
         <button
-          onClick={resetToDefaults}
+          type="button"
+          onClick={() => {
+            if (window.confirm('Reset semua tetapan kepada tetapan asal?')) {
+              resetToDefaults();
+            }
+          }}
           title="Reset semua ke default"
           style={{
             backgroundColor: 'var(--bg-secondary)',
             border: '2px solid var(--border-color)',
             borderRadius: 'var(--border-radius-sm)',
-            padding: '0.42rem',
+            padding: '0.38rem 0.55rem',
             cursor: 'pointer',
-            boxShadow: '2px 2px 0px var(--border-color)',
-            display: 'flex',
+            boxShadow: '1.5px 1.5px 0px var(--border-color)',
+            display: 'inline-flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
+            gap: '0.25rem',
+            fontSize: '0.68rem',
+            fontWeight: 900,
+            textTransform: 'uppercase',
+            color: 'var(--text-color)',
           }}
         >
-          <RefreshCw size={14} color="var(--border-color)" />
+          <RefreshCw size={12} color="var(--border-color)" />
+          <span>RESET</span>
         </button>
 
         {onOpenHelp && (
           <button
+            type="button"
             onClick={onOpenHelp}
-            title="Cara guna & hack cuti"
+            title="Cara guna & panduan cuti"
             style={{
               backgroundColor: 'var(--accent-yellow)',
               border: '2px solid var(--border-color)',
               borderRadius: 'var(--border-radius-sm)',
-              padding: '0.42rem',
+              padding: '0.38rem 0.55rem',
               cursor: 'pointer',
-              boxShadow: '2px 2px 0px var(--border-color)',
-              display: 'flex',
+              boxShadow: '1.5px 1.5px 0px var(--border-color)',
+              display: 'inline-flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
+              gap: '0.25rem',
+              fontSize: '0.68rem',
+              fontWeight: 900,
+              textTransform: 'uppercase',
+              color: 'var(--accent-yellow-text)',
             }}
           >
-            <HelpCircle size={14} color="var(--accent-yellow-text)" />
+            <HelpCircle size={13} />
+            <span>PANDUAN</span>
           </button>
         )}
       </div>

@@ -33,7 +33,7 @@ export function BottomNavBar({
     },
     {
       id: 'RULES' as AppTab,
-      label: 'Rules & PH',
+      label: 'Holiday',
       icon: Settings,
       badge: `${observedCount}`,
       badgeColor: 'var(--accent-yellow)',

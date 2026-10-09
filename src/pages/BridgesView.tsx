@@ -7,16 +7,24 @@ import { GroupedHolidayCard } from '../components/GroupedHolidayCard';
 import { BrutalistCard } from '../components/BrutalistCard';
 import { BrutalistButton } from '../components/BrutalistButton';
 import { LegendModal } from '../components/LegendModal';
-import { FilterTabType, BridgeOpportunity, CalendarDay, GroupedHoliday } from '../types';
+import { HolidayConfigDrawer } from '../components/HolidayConfigDrawer';
+import {
+  FilterTabType,
+  BridgeOpportunity,
+  CalendarDay,
+  GroupedHoliday,
+  MalaysianState,
+  STATE_NAMES,
+} from '../types';
 import { groupBridgesByHoliday } from '../engine/calendarEngine';
-import { Sun, Palette, ChevronDown, ChevronUp } from 'lucide-react';
+import { Sun, Palette, ChevronDown, ChevronUp, Sliders, RefreshCw } from 'lucide-react';
 
 interface BridgesViewProps {
   bridges: BridgeOpportunity[];
   calendar: CalendarDay[];
   onOpenHowToUse: () => void;
   onGoToPlan: () => void;
-  onGoToRules: () => void;
+  onGoToRules?: () => void;
 }
 
 export function BridgesView({
@@ -27,20 +35,42 @@ export function BridgesView({
   onGoToRules,
 }: BridgesViewProps) {
   const {
+    state,
+    setState,
     annualLeaveBalance,
+    setAlBalance,
     plannedLeaveDates,
     maxAlPerBridge,
     setMaxAlPerBridge,
     observedHolidayIds,
     weekendType,
+    setWeekendType,
+    allowSaturdayReplacements,
+    toggleSaturdayReplacements,
     hidePastHolidays,
     toggleHidePastHolidays,
+    resetToDefaults,
   } = useLeaveStore();
 
   const [activeTab, setActiveTab] = useState<FilterTabType>('ALL');
   const [isLegendOpen, setIsLegendOpen] = useState(false);
+  const [isHolidayDrawerOpen, setIsHolidayDrawerOpen] = useState(false);
+  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [expandAll, setExpandAll] = useState(false);
   const bridgesListRef = useRef<HTMLDivElement>(null);
+
+  const stateOptions = useMemo(
+    () =>
+      (Object.keys(STATE_NAMES) as MalaysianState[]).map((key) => ({
+        value: key,
+        label: STATE_NAMES[key],
+        badge:
+          key === 'KEDAH' || key === 'KELANTAN' || key === 'TERENGGANU'
+            ? 'Jum–Sab'
+            : 'Sab–Ahad',
+      })),
+    []
+  );
 
   const remainingAl = Math.max(0, annualLeaveBalance - plannedLeaveDates.length);
 
@@ -101,240 +131,671 @@ export function BridgesView({
         isHowToUseOpen={false}
       />
 
-      {/* 2. Structured Leave Status & Controls Bar */}
-      <div
-        ref={bridgesListRef}
-        style={{
-          backgroundColor: 'var(--bg-secondary)',
-          border: 'var(--border-width) solid var(--border-color)',
-          borderRadius: 'var(--border-radius)',
-          boxShadow: 'var(--shadow-offset) var(--shadow-offset) 0px var(--border-color)',
-          padding: '0.65rem 0.75rem',
-          marginBottom: '0.85rem',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '0.5rem',
-          boxSizing: 'border-box',
-          width: '100%',
-        }}
-      >
-        {/* Top: 2 High-Contrast Metric Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.45rem' }}>
-          {/* Metric 1: AL Balance */}
-          <div
-            style={{
-              backgroundColor: remainingAl > 3 ? 'var(--accent-cyan)' : 'var(--accent-pink)',
-              border: '2px solid var(--border-color)',
-              borderRadius: 'var(--border-radius-sm)',
-              padding: '0.45rem 0.55rem',
-              boxShadow: '1.5px 1.5px 0px var(--border-color)',
-            }}
-          >
-            <div
-              style={{
-                fontSize: '0.62rem',
-                fontWeight: 900,
-                textTransform: 'uppercase',
-                letterSpacing: '0.4px',
-                color: 'var(--text-color)',
-              }}
-            >
-              BAKI AL SEMASA
+      {/* 2. Unified Quick Setup & Controls Card */}
+      <div ref={bridgesListRef}>
+        <BrutalistCard
+          headerColor="var(--accent-yellow)"
+          title="QUICK SETUP"
+          headerAction={
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              {plannedLeaveDates.length > 0 && (
+                <button
+                  type="button"
+                  onClick={onGoToPlan}
+                  title="Lihat cuti yang telah dilock"
+                  style={{
+                    backgroundColor: 'var(--accent-pink)',
+                    color: 'var(--accent-pink-text)',
+                    border: '1.5px solid var(--border-color)',
+                    borderRadius: 'var(--border-radius-pill)',
+                    padding: '0.12rem 0.45rem',
+                    fontSize: '0.62rem',
+                    fontWeight: 900,
+                    cursor: 'pointer',
+                    boxShadow: '1px 1px 0px var(--border-color)',
+                  }}
+                >
+                  {plannedLeaveDates.length} LOCK →
+                </button>
+              )}
+              <div
+                style={{
+                  backgroundColor: 'var(--bg-secondary)',
+                  border: '1.5px solid var(--border-color)',
+                  borderRadius: 'var(--border-radius-pill)',
+                  padding: '0.15rem 0.55rem',
+                  fontSize: '0.65rem',
+                  fontWeight: 900,
+                  color: 'var(--text-color)',
+                  boxShadow: '1px 1px 0px var(--border-color)',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {remainingAl} / {annualLeaveBalance} AL
+              </div>
             </div>
-            <div
-              style={{
-                fontSize: '1.1rem',
-                fontWeight: 900,
-                lineHeight: 1.1,
-                marginTop: '0.15rem',
-                color: 'var(--text-color)',
-              }}
-            >
-              {remainingAl} / {annualLeaveBalance}{' '}
-              <span style={{ fontSize: '0.72rem', fontWeight: 800 }}>HARI</span>
+          }
+          style={{ marginBottom: '0.9rem' }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            {/* Field 1: Malaysian State Selector */}
+            <div>
+              <label
+                htmlFor="state-selector"
+                style={{
+                  display: 'block',
+                  fontSize: '0.7rem',
+                  fontWeight: 900,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.4px',
+                  marginBottom: '0.3rem',
+                  color: 'var(--text-color)',
+                }}
+              >
+                Negeri Tempat Kerja:
+              </label>
+              <div style={{ position: 'relative' }}>
+                <select
+                  id="state-selector"
+                  value={state}
+                  onChange={(e) => setState(e.target.value as MalaysianState)}
+                  style={{
+                    width: '100%',
+                    backgroundColor: 'var(--bg-primary)',
+                    border: '2px solid var(--border-color)',
+                    borderRadius: 'var(--border-radius-sm)',
+                    padding: '0.5rem 2rem 0.5rem 0.7rem',
+                    fontSize: '0.82rem',
+                    fontWeight: 900,
+                    color: 'var(--text-color)',
+                    boxShadow: '2px 2px 0px var(--border-color)',
+                    cursor: 'pointer',
+                    outline: 'none',
+                    appearance: 'none',
+                    WebkitAppearance: 'none',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {stateOptions.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label} ({opt.badge})
+                    </option>
+                  ))}
+                </select>
+                <span
+                  style={{
+                    position: 'absolute',
+                    right: '0.75rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    pointerEvents: 'none',
+                    fontSize: '0.65rem',
+                    fontWeight: 900,
+                    color: 'var(--text-color)',
+                  }}
+                >
+                  ▼
+                </span>
+              </div>
             </div>
-          </div>
 
-          {/* Metric 2: Locked Cuti (or Observed Rules) */}
-          <div
-            onClick={plannedLeaveDates.length > 0 ? onGoToPlan : onGoToRules}
-            style={{
-              backgroundColor: plannedLeaveDates.length > 0 ? 'var(--accent-yellow)' : 'var(--bg-primary)',
-              border: '2px solid var(--border-color)',
-              borderRadius: 'var(--border-radius-sm)',
-              padding: '0.45rem 0.55rem',
-              boxShadow: '1.5px 1.5px 0px var(--border-color)',
-              cursor: 'pointer',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-            }}
-          >
+            {/* Field 2: 2-Column Responsive Grid (AL Balance Stepper & Max AL Chips) */}
             <div
               style={{
-                fontSize: '0.62rem',
-                fontWeight: 900,
-                textTransform: 'uppercase',
-                letterSpacing: '0.4px',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
+                gap: '0.6rem',
+              }}
+            >
+              {/* AL Balance Stepper */}
+              <div
+                style={{
+                  backgroundColor: 'var(--bg-primary)',
+                  border: '2px solid var(--border-color)',
+                  borderRadius: 'var(--border-radius-sm)',
+                  padding: '0.5rem 0.65rem',
+                  boxShadow: '2px 2px 0px var(--border-color)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '0.35rem',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: '0.68rem',
+                      fontWeight: 900,
+                      textTransform: 'uppercase',
+                      color: 'var(--text-color)',
+                    }}
+                  >
+                    Baki Annual Leave
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '0.62rem',
+                      fontWeight: 800,
+                      padding: '0.1rem 0.35rem',
+                      borderRadius: 'var(--border-radius-pill)',
+                      backgroundColor: remainingAl > 3 ? 'var(--accent-cyan)' : 'var(--accent-pink)',
+                      color: remainingAl > 3 ? 'var(--accent-cyan-text)' : 'var(--accent-pink-text)',
+                      border: '1px solid var(--border-color)',
+                    }}
+                  >
+                    {remainingAl} TINGGAL
+                  </span>
+                </div>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '0.5rem',
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setAlBalance(Math.max(0, annualLeaveBalance - 1))}
+                    aria-label="Kurangkan cuti tahunan"
+                    style={{
+                      width: '32px',
+                      height: '32px',
+                      backgroundColor: 'var(--bg-secondary)',
+                      border: '2px solid var(--border-color)',
+                      borderRadius: 'var(--border-radius-sm)',
+                      fontWeight: 900,
+                      fontSize: '1.1rem',
+                      cursor: 'pointer',
+                      boxShadow: '1.5px 1.5px 0px var(--border-color)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'var(--text-color)',
+                    }}
+                  >
+                    −
+                  </button>
+                  <div
+                    style={{
+                      fontSize: '1.15rem',
+                      fontWeight: 900,
+                      color: 'var(--text-color)',
+                    }}
+                  >
+                    {annualLeaveBalance}{' '}
+                    <span style={{ fontSize: '0.72rem', fontWeight: 800 }}>HARI</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setAlBalance(annualLeaveBalance + 1)}
+                    aria-label="Tambah cuti tahunan"
+                    style={{
+                      width: '32px',
+                      height: '32px',
+                      backgroundColor: 'var(--bg-secondary)',
+                      border: '2px solid var(--border-color)',
+                      borderRadius: 'var(--border-radius-sm)',
+                      fontWeight: 900,
+                      fontSize: '1.1rem',
+                      cursor: 'pointer',
+                      boxShadow: '1.5px 1.5px 0px var(--border-color)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'var(--text-color)',
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Max AL per Bridge Chips */}
+              <div
+                style={{
+                  backgroundColor: 'var(--bg-primary)',
+                  border: '2px solid var(--border-color)',
+                  borderRadius: 'var(--border-radius-sm)',
+                  padding: '0.5rem 0.65rem',
+                  boxShadow: '2px 2px 0px var(--border-color)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '0.35rem',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: '0.68rem',
+                      fontWeight: 900,
+                      textTransform: 'uppercase',
+                      color: 'var(--text-color)',
+                    }}
+                  >
+                    Had AL Sekali Cuti
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '0.62rem',
+                      fontWeight: 800,
+                      color: 'var(--text-muted)',
+                    }}
+                  >
+                    MAKS {maxAlPerBridge} HARI
+                  </span>
+                </div>
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(5, 1fr)',
+                    gap: '0.25rem',
+                  }}
+                >
+                  {[1, 2, 3, 4, 5].map((lvl) => (
+                    <button
+                      key={lvl}
+                      type="button"
+                      onClick={() => setMaxAlPerBridge(lvl)}
+                      style={{
+                        backgroundColor:
+                          maxAlPerBridge === lvl ? 'var(--accent-yellow)' : 'var(--bg-secondary)',
+                        border: '1.5px solid var(--border-color)',
+                        borderRadius: 'var(--border-radius-sm)',
+                        padding: '0.35rem 0.2rem',
+                        fontSize: '0.75rem',
+                        fontWeight: 900,
+                        cursor: 'pointer',
+                        boxShadow:
+                          maxAlPerBridge === lvl ? '1.5px 1.5px 0px var(--border-color)' : 'none',
+                        color:
+                          maxAlPerBridge === lvl
+                            ? 'var(--accent-yellow-text)'
+                            : 'var(--text-color)',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {lvl}H
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Field 3: Holiday Policy Modal Trigger Button */}
+            <div
+              onClick={() => setIsHolidayDrawerOpen(true)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setIsHolidayDrawerOpen(true);
+                }
+              }}
+              style={{
+                backgroundColor: 'var(--accent-cyan)',
+                border: '2px solid var(--border-color)',
+                borderRadius: 'var(--border-radius-sm)',
+                padding: '0.55rem 0.75rem',
+                boxShadow: '2px 2px 0px var(--border-color)',
+                cursor: 'pointer',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                color: 'var(--text-color)',
+                gap: '0.5rem',
               }}
             >
-              <span>{plannedLeaveDates.length > 0 ? 'PLAN SAYA' : 'CUTI OBSERVED'}</span>
-              <span>{plannedLeaveDates.length > 0 ? '→' : '⚙️'}</span>
-            </div>
-            <div
-              style={{
-                fontSize: '1.1rem',
-                fontWeight: 900,
-                lineHeight: 1.1,
-                marginTop: '0.15rem',
-                color: 'var(--text-color)',
-              }}
-            >
-              {plannedLeaveDates.length > 0
-                ? `${plannedLeaveDates.length} HARI LOCK`
-                : `${observedHolidayIds.length} CUTI AKTIF`}
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom: Context Chips & Past Holiday Toggle */}
-        <div
-          style={{
-            display: 'flex',
-            gap: '0.4rem',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-          }}
-        >
-          {/* Work Weekend context chip */}
-          <button
-            type="button"
-            onClick={onGoToRules}
-            title="Klik untuk konfigurasi cuti & negeri"
-            style={{
-              flex: '1 1 auto',
-              backgroundColor: 'var(--bg-primary)',
-              border: '1.5px solid var(--border-color)',
-              borderRadius: 'var(--border-radius-sm)',
-              padding: '0.3rem 0.45rem',
-              fontSize: '0.68rem',
-              fontWeight: 900,
-              textTransform: 'uppercase',
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.3rem',
-              color: 'var(--text-color)',
-              boxShadow: '1px 1px 0px var(--border-color)',
-            }}
-          >
-            <span>⚙️ {weekendType === 'SAT_SUN' ? 'SAB–AHAD' : 'JUM–SAB'}</span>
-            <span style={{ color: 'var(--text-muted)' }}>•</span>
-            <span>{observedHolidayIds.length} GAZET</span>
-          </button>
-
-          {/* Past Holidays Toggle - Clean, NO horizontal overflow */}
-          {pastHolidaysCount > 0 && (
-            <button
-              type="button"
-              onClick={toggleHidePastHolidays}
-              title="Klik untuk buka / sembunyi cuti lepas"
-              style={{
-                flex: '1 1 auto',
-                backgroundColor: hidePastHolidays ? 'var(--accent-cyan)' : 'var(--accent-orange)',
-                border: '1.5px solid var(--border-color)',
-                borderRadius: 'var(--border-radius-sm)',
-                padding: '0.3rem 0.5rem',
-                fontSize: '0.68rem',
-                fontWeight: 900,
-                textTransform: 'uppercase',
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.25rem',
-                boxShadow: '1px 1px 0px var(--border-color)',
-                color: 'var(--text-color)',
-              }}
-            >
-              <span>{hidePastHolidays ? `⏳ AKAN DATANG (${pastHolidaysCount} LEPAS)` : `👁️ TUNJUK SEMUA`}</span>
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* 3. Inline Max AL Slider Pill */}
-      <div
-        style={{
-          backgroundColor: 'var(--bg-secondary)',
-          border: 'var(--border-width) solid var(--border-color)',
-          borderRadius: 'var(--border-radius)',
-          padding: '0.65rem 0.85rem',
-          boxShadow: 'var(--shadow-offset) var(--shadow-offset) 0px var(--border-color)',
-          marginBottom: '1rem',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '0.5rem',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <span
-            style={{
-              fontSize: '0.75rem',
-              fontWeight: 900,
-              textTransform: 'uppercase',
-              letterSpacing: '0.4px',
-            }}
-          >
-            Had AL Sekali Cuti:
-          </span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-            {[1, 2, 3, 4, 5].map((lvl) => (
-              <button
-                key={lvl}
-                type="button"
-                onClick={() => setMaxAlPerBridge(lvl)}
+              <div>
+                <div
+                  style={{
+                    fontSize: '0.68rem',
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    color: 'var(--accent-cyan-text)',
+                  }}
+                >
+                  Polisi Cuti Syarikat (Checklist)
+                </div>
+                <div
+                  style={{
+                    fontSize: '0.8rem',
+                    fontWeight: 800,
+                    color: 'var(--accent-cyan-text)',
+                    marginTop: '0.1rem',
+                  }}
+                >
+                  {observedHolidayIds.length} Cuti Aktif Digunakan
+                </div>
+              </div>
+              <div
                 style={{
-                  backgroundColor: maxAlPerBridge === lvl ? 'var(--accent-yellow)' : 'var(--bg-primary)',
+                  backgroundColor: 'var(--bg-secondary)',
                   border: '1.5px solid var(--border-color)',
                   borderRadius: 'var(--border-radius-sm)',
-                  padding: '0.1rem 0.4rem',
+                  padding: '0.25rem 0.55rem',
                   fontSize: '0.68rem',
                   fontWeight: 900,
-                  cursor: 'pointer',
-                  boxShadow: maxAlPerBridge === lvl ? '1px 1px 0px var(--border-color)' : 'none',
+                  textTransform: 'uppercase',
+                  boxShadow: '1px 1px 0px var(--border-color)',
+                  color: 'var(--text-color)',
+                  flexShrink: 0,
                 }}
               >
-                {lvl}H
+                PILIH CUTI
+              </div>
+            </div>
+
+            {/* Field 4: Expandable Advanced Settings Accordion */}
+            <div
+              style={{
+                borderTop: '2px dashed var(--border-color)',
+                paddingTop: '0.55rem',
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => setIsAdvancedOpen(!isAdvancedOpen)}
+                style={{
+                  width: '100%',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  padding: '0.2rem 0',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  cursor: 'pointer',
+                  color: 'var(--text-color)',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <Sliders size={14} color="var(--border-color)" />
+                  <span
+                    style={{
+                      fontSize: '0.74rem',
+                      fontWeight: 900,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.3px',
+                    }}
+                  >
+                    Tetapan Lanjutan (Advanced)
+                  </span>
+                </div>
+                {isAdvancedOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </button>
-            ))}
+
+              {isAdvancedOpen && (
+                <div
+                  style={{
+                    marginTop: '0.55rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.5rem',
+                  }}
+                >
+                  {/* Setting A: Weekend Days Mode */}
+                  <div
+                    style={{
+                      backgroundColor: 'var(--bg-primary)',
+                      border: '1.5px solid var(--border-color)',
+                      borderRadius: 'var(--border-radius-sm)',
+                      padding: '0.45rem 0.6rem',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      flexWrap: 'wrap',
+                      gap: '0.4rem',
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: '0.7rem',
+                        fontWeight: 800,
+                        textTransform: 'uppercase',
+                        color: 'var(--text-color)',
+                      }}
+                    >
+                      Hari Weekend:
+                    </span>
+                    <div style={{ display: 'flex', gap: '0.3rem' }}>
+                      <button
+                        type="button"
+                        onClick={() => setWeekendType('SAT_SUN')}
+                        style={{
+                          backgroundColor:
+                            weekendType === 'SAT_SUN'
+                              ? 'var(--accent-yellow)'
+                              : 'var(--bg-secondary)',
+                          border: '1.5px solid var(--border-color)',
+                          borderRadius: 'var(--border-radius-sm)',
+                          padding: '0.2rem 0.45rem',
+                          fontSize: '0.68rem',
+                          fontWeight: 900,
+                          cursor: 'pointer',
+                          color: 'var(--text-color)',
+                          boxShadow:
+                            weekendType === 'SAT_SUN'
+                              ? '1px 1px 0px var(--border-color)'
+                              : 'none',
+                        }}
+                      >
+                        SAB–AHAD
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setWeekendType('FRI_SAT')}
+                        style={{
+                          backgroundColor:
+                            weekendType === 'FRI_SAT'
+                              ? 'var(--accent-yellow)'
+                              : 'var(--bg-secondary)',
+                          border: '1.5px solid var(--border-color)',
+                          borderRadius: 'var(--border-radius-sm)',
+                          padding: '0.2rem 0.45rem',
+                          fontSize: '0.68rem',
+                          fontWeight: 900,
+                          cursor: 'pointer',
+                          color: 'var(--text-color)',
+                          boxShadow:
+                            weekendType === 'FRI_SAT'
+                              ? '1px 1px 0px var(--border-color)'
+                              : 'none',
+                        }}
+                      >
+                        JUM–SAB
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Setting B: Saturday Replacement Toggle */}
+                  <div
+                    style={{
+                      backgroundColor: 'var(--bg-primary)',
+                      border: '1.5px solid var(--border-color)',
+                      borderRadius: 'var(--border-radius-sm)',
+                      padding: '0.45rem 0.6rem',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      flexWrap: 'wrap',
+                      gap: '0.4rem',
+                    }}
+                  >
+                    <div style={{ maxWidth: '72%' }}>
+                      <div
+                        style={{
+                          fontSize: '0.7rem',
+                          fontWeight: 800,
+                          textTransform: 'uppercase',
+                          color: 'var(--text-color)',
+                        }}
+                      >
+                        Cuti Ganti Sabtu:
+                      </div>
+                      <div
+                        style={{
+                          fontSize: '0.63rem',
+                          color: 'var(--text-muted)',
+                          fontWeight: 600,
+                        }}
+                      >
+                        Ganti cuti Isnin jika cuti am jatuh Sabtu
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => toggleSaturdayReplacements(!allowSaturdayReplacements)}
+                      style={{
+                        backgroundColor: allowSaturdayReplacements
+                          ? 'var(--accent-green)'
+                          : 'var(--bg-secondary)',
+                        border: '1.5px solid var(--border-color)',
+                        borderRadius: 'var(--border-radius-sm)',
+                        padding: '0.25rem 0.5rem',
+                        fontSize: '0.68rem',
+                        fontWeight: 900,
+                        cursor: 'pointer',
+                        color: 'var(--text-color)',
+                        boxShadow: '1px 1px 0px var(--border-color)',
+                      }}
+                    >
+                      {allowSaturdayReplacements ? 'YA' : 'TIDAK'}
+                    </button>
+                  </div>
+
+                  {/* Setting C: Past Holidays Toggle */}
+                  {pastHolidaysCount > 0 && (
+                    <div
+                      style={{
+                        backgroundColor: 'var(--bg-primary)',
+                        border: '1.5px solid var(--border-color)',
+                        borderRadius: 'var(--border-radius-sm)',
+                        padding: '0.45rem 0.6rem',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                        gap: '0.4rem',
+                      }}
+                    >
+                      <div>
+                        <div
+                          style={{
+                            fontSize: '0.7rem',
+                            fontWeight: 800,
+                            textTransform: 'uppercase',
+                            color: 'var(--text-color)',
+                          }}
+                        >
+                          Cuti Lepas ({pastHolidaysCount}):
+                        </div>
+                        <div
+                          style={{
+                            fontSize: '0.63rem',
+                            color: 'var(--text-muted)',
+                            fontWeight: 600,
+                          }}
+                        >
+                          {hidePastHolidays ? 'Disembunyikan dari senarai' : 'Dipaparkan dalam senarai'}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={toggleHidePastHolidays}
+                        style={{
+                          backgroundColor: hidePastHolidays
+                            ? 'var(--accent-cyan)'
+                            : 'var(--bg-secondary)',
+                          border: '1.5px solid var(--border-color)',
+                          borderRadius: 'var(--border-radius-sm)',
+                          padding: '0.25rem 0.5rem',
+                          fontSize: '0.68rem',
+                          fontWeight: 900,
+                          cursor: 'pointer',
+                          color: 'var(--text-color)',
+                          boxShadow: '1px 1px 0px var(--border-color)',
+                        }}
+                      >
+                        {hidePastHolidays ? 'SEMBUNYI' : 'TUNJUK'}
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Setting D: Reset Defaults & Link to Full Tab */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      flexWrap: 'wrap',
+                      gap: '0.4rem',
+                      paddingTop: '0.2rem',
+                    }}
+                  >
+                    {onGoToRules && (
+                      <button
+                        type="button"
+                        onClick={onGoToRules}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          padding: 0,
+                          fontSize: '0.67rem',
+                          fontWeight: 800,
+                          color: 'var(--text-color)',
+                          cursor: 'pointer',
+                          textDecoration: 'underline',
+                        }}
+                      >
+                        Buka tab Holiday penuh →
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (window.confirm('Reset semua tetapan kepada tetapan asal?')) {
+                          resetToDefaults();
+                        }
+                      }}
+                      style={{
+                        marginLeft: 'auto',
+                        backgroundColor: 'var(--bg-secondary)',
+                        border: '1.5px solid var(--border-color)',
+                        borderRadius: 'var(--border-radius-sm)',
+                        padding: '0.25rem 0.55rem',
+                        fontSize: '0.67rem',
+                        fontWeight: 900,
+                        textTransform: 'uppercase',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.25rem',
+                        color: 'var(--text-color)',
+                        boxShadow: '1px 1px 0px var(--border-color)',
+                      }}
+                    >
+                      <RefreshCw size={11} color="var(--border-color)" />
+                      <span>RESET DEFAULT</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-        <input
-          type="range"
-          min={1}
-          max={5}
-          step={1}
-          value={maxAlPerBridge}
-          onChange={(e) => setMaxAlPerBridge(Number(e.target.value))}
-          style={{
-            width: '100%',
-            accentColor: 'var(--text-color)',
-            cursor: 'pointer',
-          }}
-        />
+        </BrutalistCard>
       </div>
 
       {/* 4. Filter Tabs & Header */}
@@ -499,6 +960,11 @@ export function BridgesView({
           </div>
         </BrutalistCard>
       )}
+
+      <HolidayConfigDrawer
+        isOpen={isHolidayDrawerOpen}
+        onClose={() => setIsHolidayDrawerOpen(false)}
+      />
 
       <LegendModal
         isOpen={isLegendOpen}
