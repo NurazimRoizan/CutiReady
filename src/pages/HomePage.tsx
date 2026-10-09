@@ -78,6 +78,7 @@ export function HomePage({ onOpenHowToUse }: HomePageProps) {
         {currentTab === 'BRIDGES' && (
           <BridgesView
             bridges={allBridges}
+            calendar={calendar}
             onOpenHowToUse={onOpenHowToUse}
             onGoToPlan={() => setCurrentTab('PLAN')}
             onGoToRules={() => setCurrentTab('RULES')}

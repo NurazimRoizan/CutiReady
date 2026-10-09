@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useLeaveStore } from '../store/useLeaveStore';
 import { BridgeOpportunity, STATE_NAMES } from '../types';
 import { SummaryStats } from '../components/SummaryStats';
@@ -30,10 +30,24 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
 
   const [copied, setCopied] = useState(false);
 
-  // Bridges that have at least one planned AL date included
-  const plannedBridges = bridges.filter((b) =>
-    b.annualLeaveDates.some((d) => plannedLeaveDates.includes(d))
-  );
+  // Only display bridges whose AL dates are fully locked, picking the most complete bridge if nested
+  const plannedBridges = useMemo(() => {
+    const exactMatches = bridges.filter(
+      (b) =>
+        b.alDaysRequired > 0 &&
+        b.annualLeaveDates.every((d) => plannedLeaveDates.includes(d))
+    );
+
+    return exactMatches.filter(
+      (b, _, self) =>
+        !self.some(
+          (other) =>
+            other.id !== b.id &&
+            other.totalDaysOff > b.totalDaysOff &&
+            b.annualLeaveDates.every((d) => other.annualLeaveDates.includes(d))
+        )
+    );
+  }, [bridges, plannedLeaveDates]);
 
   const remainingAl = Math.max(0, annualLeaveBalance - plannedLeaveDates.length);
   const stateLabel = STATE_NAMES[state] || state;

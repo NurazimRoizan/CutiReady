@@ -5,6 +5,10 @@ import {
   MalaysianState,
   WeekendType,
   HolidayDefinition,
+  GroupedHoliday,
+  HolidayStrategy,
+  StrategyType,
+  Quarter,
 } from '../types';
 import { DEFAULT_HOLIDAYS_2026 } from '../data/holidays';
 
@@ -190,4 +194,220 @@ function deduplicateAndFilterBridges(bridges: BridgeOpportunity[]): BridgeOpport
         self.findIndex((b) => b.startDate === bridge.startDate && b.endDate === bridge.endDate)
     )
     .sort((a, b) => a.startDate.localeCompare(b.startDate));
+}
+
+/**
+ * Clusters calendar days and bridge opportunities by holiday events so that each
+ * major holiday appears only once in the master list, with its strategy variations
+ * selectable via tactile strategy pills.
+ */
+export function groupBridgesByHoliday(
+  bridges: BridgeOpportunity[],
+  calendar: CalendarDay[]
+): GroupedHoliday[] {
+  // 1. Identify all contiguous non-workday clusters in calendar that contain public/replacement holidays
+  interface ClusterMeta {
+    id: string;
+    title: string;
+    holidayDates: string[];
+    primaryDate: string;
+    quarter: Quarter;
+  }
+
+  const clusters: ClusterMeta[] = [];
+  let i = 0;
+  while (i < calendar.length) {
+    if (calendar[i].type !== 'WORKDAY') {
+      const startIdx = i;
+      while (i < calendar.length && calendar[i].type !== 'WORKDAY') {
+        i++;
+      }
+      const slice = calendar.slice(startIdx, i);
+      const phDays = slice.filter(
+        (d) => d.type === 'PUBLIC_HOLIDAY' || d.type === 'REPLACEMENT_HOLIDAY'
+      );
+
+      if (phDays.length > 0) {
+        const dates = phDays.map((d) => d.date);
+        const primaryDate = dates[0];
+        const month = parseInt(primaryDate.split('-')[1], 10);
+        const quarter: Quarter = month <= 3 ? 'Q1' : month <= 6 ? 'Q2' : month <= 9 ? 'Q3' : 'Q4';
+
+        // Derive clean title from holiday names in this cluster
+        const rawNames = phDays
+          .map((d) => d.holidayName?.replace('Replacement: ', '').trim())
+          .filter(Boolean) as string[];
+
+        // Normalize repetitive suffixes like "Day 1", "Day 2", "Hari Pertama", etc.
+        const cleanedNames = Array.from(
+          new Set(
+            rawNames.map((name) =>
+              name.replace(/ (Day \d|Hari Pertama|Hari Kedua|Hari Ketiga)/i, '').trim()
+            )
+          )
+        );
+
+        const title = cleanedNames.join(' + ') || 'Cuti Umum';
+
+        clusters.push({
+          id: `cluster-${primaryDate}`,
+          title,
+          holidayDates: dates,
+          primaryDate,
+          quarter,
+        });
+      }
+    } else {
+      i++;
+    }
+  }
+
+  // 2. Map each bridge to its matching cluster
+  const clusterMap = new Map<string, BridgeOpportunity[]>();
+  clusters.forEach((c) => clusterMap.set(c.id, []));
+
+  bridges.forEach((bridge) => {
+    const bridgePhDates = new Set(
+      bridge.days
+        .filter((d) => d.type === 'PUBLIC_HOLIDAY' || d.type === 'REPLACEMENT_HOLIDAY')
+        .map((d) => d.date)
+    );
+
+    // Find the cluster that contains any of these holiday dates
+    const matched = clusters.find((c) => c.holidayDates.some((d) => bridgePhDates.has(d)));
+    if (matched) {
+      clusterMap.get(matched.id)?.push(bridge);
+    }
+  });
+
+  // 3. For each cluster with at least 1 bridge opportunity, build the GroupedHoliday with classified strategies
+  const groupedHolidays: GroupedHoliday[] = [];
+
+  const DAY_NAMES_MS = ['Ahad', 'Isn', 'Sel', 'Rab', 'Kha', 'Jum', 'Sab'];
+
+  clusters.forEach((cluster) => {
+    const matchedBridges = clusterMap.get(cluster.id) || [];
+    if (matchedBridges.length === 0) return;
+
+    const firstPhDate = cluster.holidayDates[0];
+    const lastPhDate = cluster.holidayDates[cluster.holidayDates.length - 1];
+
+    // Build classified strategies
+    const strategies: HolidayStrategy[] = matchedBridges.map((bridge) => {
+      let type: StrategyType = 'MIDWEEK';
+      let label = '';
+      let shortTag = '';
+      let description = '';
+
+      if (bridge.alDaysRequired === 0) {
+        type = 'ZERO_AL';
+        label = '⚡ 0 AL (FREE)';
+        shortTag = `${bridge.totalDaysOff}H OFF`;
+        description = `Cuti Semulajadi tanpa tolak baki AL (${bridge.totalDaysOff} hari rehat)`;
+      } else {
+        const alDates = bridge.annualLeaveDates;
+        const allBefore = alDates.length > 0 && alDates.every((d) => d < firstPhDate);
+        const allAfter = alDates.length > 0 && alDates.every((d) => d > lastPhDate);
+        const isCombo =
+          alDates.length > 0 &&
+          alDates.some((d) => d < firstPhDate) &&
+          alDates.some((d) => d > lastPhDate);
+
+        if (allBefore) {
+          type = 'BEFORE';
+          label = `⬅️ SEBELUM (${bridge.alDaysRequired} AL)`;
+          shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
+          description = `Ambil ${bridge.alDaysRequired} hari AL sebelum cuti (${bridge.totalDaysOff} hari rehat)`;
+        } else if (allAfter) {
+          type = 'AFTER';
+          label = `➡️ SELEPAS (${bridge.alDaysRequired} AL)`;
+          shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
+          description = `Ambil ${bridge.alDaysRequired} hari AL selepas cuti (${bridge.totalDaysOff} hari rehat)`;
+        } else if (isCombo) {
+          type = 'COMBO';
+          label = `🔥 COMBO (${bridge.alDaysRequired} AL)`;
+          shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
+          description = `Sambung cuti sebelum & selepas untuk ${bridge.totalDaysOff} hari rehat berturut-turut!`;
+        } else {
+          type = 'MIDWEEK';
+          label = `🌉 JAMBATAN (${bridge.alDaysRequired} AL)`;
+          shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
+          description = `Jambatan cuti tengah minggu (${bridge.totalDaysOff} hari rehat)`;
+        }
+      }
+
+      return {
+        id: bridge.id,
+        type,
+        label,
+        shortTag,
+        description,
+        isRecommended: false,
+        bridge,
+      };
+    });
+
+    // Sort strategies: 0 AL first, then fewest AL required, then max days off descending
+    strategies.sort((a, b) => {
+      if (a.type === 'ZERO_AL' && b.type !== 'ZERO_AL') return -1;
+      if (b.type === 'ZERO_AL' && a.type !== 'ZERO_AL') return 1;
+      if (a.bridge.alDaysRequired !== b.bridge.alDaysRequired) {
+        return a.bridge.alDaysRequired - b.bridge.alDaysRequired;
+      }
+      return b.bridge.totalDaysOff - a.bridge.totalDaysOff;
+    });
+
+    // Mark the best recommended strategy (0 AL baseline or highest ROI multiplier)
+    let bestStrategy = strategies[0];
+    let maxScore = -1;
+    strategies.forEach((s) => {
+      const score =
+        s.type === 'ZERO_AL'
+          ? 1000 + s.bridge.totalDaysOff
+          : s.bridge.roiMultiplier * 10 + s.bridge.totalDaysOff;
+      if (score > maxScore) {
+        maxScore = score;
+        bestStrategy = s;
+      }
+    });
+    bestStrategy.isRecommended = true;
+
+    // Format dates cleanly with Malay day names
+    const startParsed = parseISO(firstPhDate);
+    const endParsed = parseISO(lastPhDate);
+    const startDow = DAY_NAMES_MS[getDay(startParsed)];
+    const endDow = DAY_NAMES_MS[getDay(endParsed)];
+
+    let holidayDatesFormatted = '';
+    if (firstPhDate === lastPhDate) {
+      holidayDatesFormatted = `${format(startParsed, 'd MMM yyyy')} (${startDow})`;
+    } else {
+      holidayDatesFormatted = `${format(startParsed, 'd')} – ${format(endParsed, 'd MMM yyyy')} (${startDow} – ${endDow})`;
+    }
+
+    const maxDaysOff = Math.max(...strategies.map((s) => s.bridge.totalDaysOff));
+    const minAlRequired = Math.min(...strategies.map((s) => s.bridge.alDaysRequired));
+    const bestRoi = Math.max(...strategies.map((s) => s.bridge.roiMultiplier));
+
+    // End date of the furthest bridge in this cluster (for past-holiday checking)
+    const latestEndDate = matchedBridges.reduce((latest, b) => {
+      return b.endDate > latest ? b.endDate : latest;
+    }, lastPhDate);
+
+    groupedHolidays.push({
+      id: cluster.id,
+      title: cluster.title,
+      holidayDatesFormatted,
+      holidayDates: cluster.holidayDates,
+      primaryDate: cluster.primaryDate,
+      endDate: latestEndDate,
+      quarter: cluster.quarter,
+      strategies,
+      maxDaysOff,
+      minAlRequired,
+      bestRoi,
+    });
+  });
+
+  return groupedHolidays;
 }

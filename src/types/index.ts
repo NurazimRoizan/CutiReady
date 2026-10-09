@@ -101,6 +101,32 @@ export interface BridgeOpportunity {
 
 export type LeavePreset = 'MINIMUM_11' | 'CORPORATE_15' | 'ALL' | 'CUSTOM';
 
+export type StrategyType = 'ZERO_AL' | 'BEFORE' | 'AFTER' | 'COMBO' | 'MIDWEEK';
+
+export interface HolidayStrategy {
+  id: string;
+  type: StrategyType;
+  label: string;
+  shortTag: string;
+  description: string;
+  isRecommended: boolean;
+  bridge: BridgeOpportunity;
+}
+
+export interface GroupedHoliday {
+  id: string;
+  title: string;
+  holidayDatesFormatted: string;
+  holidayDates: string[];
+  primaryDate: string;
+  endDate: string;
+  quarter: Quarter;
+  strategies: HolidayStrategy[];
+  maxDaysOff: number;
+  minAlRequired: number;
+  bestRoi: number;
+}
+
 export type FilterTabType = 'ALL' | 'HIGH_ROI' | 'ZERO_AL' | 'Q1' | 'Q2' | 'Q3' | 'Q4';
 
 export type AppTab = 'BRIDGES' | 'PLAN' | 'RULES';

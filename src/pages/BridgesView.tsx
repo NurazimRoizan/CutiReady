@@ -3,15 +3,17 @@ import { format } from 'date-fns';
 import { useLeaveStore } from '../store/useLeaveStore';
 import { HeroSection } from '../components/HeroSection';
 import { FilterTabs } from '../components/FilterTabs';
-import { BridgeCard } from '../components/BridgeCard';
+import { GroupedHolidayCard } from '../components/GroupedHolidayCard';
 import { BrutalistCard } from '../components/BrutalistCard';
 import { BrutalistButton } from '../components/BrutalistButton';
 import { LegendModal } from '../components/LegendModal';
-import { FilterTabType, BridgeOpportunity } from '../types';
-import { Sun, Palette } from 'lucide-react';
+import { FilterTabType, BridgeOpportunity, CalendarDay, GroupedHoliday } from '../types';
+import { groupBridgesByHoliday } from '../engine/calendarEngine';
+import { Sun, Palette, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface BridgesViewProps {
   bridges: BridgeOpportunity[];
+  calendar: CalendarDay[];
   onOpenHowToUse: () => void;
   onGoToPlan: () => void;
   onGoToRules: () => void;
@@ -19,6 +21,7 @@ interface BridgesViewProps {
 
 export function BridgesView({
   bridges,
+  calendar,
   onOpenHowToUse,
   onGoToPlan,
   onGoToRules,
@@ -36,51 +39,58 @@ export function BridgesView({
 
   const [activeTab, setActiveTab] = useState<FilterTabType>('ALL');
   const [isLegendOpen, setIsLegendOpen] = useState(false);
+  const [expandAll, setExpandAll] = useState(false);
   const bridgesListRef = useRef<HTMLDivElement>(null);
 
   const remainingAl = Math.max(0, annualLeaveBalance - plannedLeaveDates.length);
 
   const todayStr = useMemo(() => format(new Date(), 'yyyy-MM-dd'), []);
 
-  // Count past bridges (ended before today)
-  const pastBridgesCount = useMemo(() => {
-    return bridges.filter((b) => b.endDate < todayStr).length;
-  }, [bridges, todayStr]);
+  // Group bridge opportunities by distinct holiday event
+  const groupedHolidays = useMemo(() => {
+    return groupBridgesByHoliday(bridges, calendar);
+  }, [bridges, calendar]);
 
-  // Base list of bridges filtered by hidePastHolidays
-  const baseBridges = useMemo(() => {
+  // Count past holiday events (ended before today)
+  const pastHolidaysCount = useMemo(() => {
+    return groupedHolidays.filter((h) => h.endDate < todayStr).length;
+  }, [groupedHolidays, todayStr]);
+
+  // Base list of holiday events filtered by hidePastHolidays
+  const baseHolidays = useMemo(() => {
     if (hidePastHolidays) {
-      const upcoming = bridges.filter((b) => b.endDate >= todayStr);
-      return upcoming.length > 0 ? upcoming : bridges;
+      const upcoming = groupedHolidays.filter((h) => h.endDate >= todayStr);
+      return upcoming.length > 0 ? upcoming : groupedHolidays;
     }
-    return bridges;
-  }, [bridges, hidePastHolidays, todayStr]);
+    return groupedHolidays;
+  }, [groupedHolidays, hidePastHolidays, todayStr]);
 
   const handleScrollToBridges = () => {
     bridgesListRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Compute tab counts based on baseBridges
+  // Compute tab counts based on baseHolidays
   const tabCounts = useMemo(() => {
     const counts: Record<FilterTabType, number> = {
-      ALL: baseBridges.length,
-      HIGH_ROI: baseBridges.filter((b) => b.roiMultiplier >= 3).length,
-      ZERO_AL: baseBridges.filter((b) => b.alDaysRequired === 0).length,
-      Q1: baseBridges.filter((b) => b.quarter === 'Q1').length,
-      Q2: baseBridges.filter((b) => b.quarter === 'Q2').length,
-      Q3: baseBridges.filter((b) => b.quarter === 'Q3').length,
-      Q4: baseBridges.filter((b) => b.quarter === 'Q4').length,
+      ALL: baseHolidays.length,
+      HIGH_ROI: baseHolidays.filter((h) => h.bestRoi >= 3).length,
+      ZERO_AL: baseHolidays.filter((h) => h.strategies.some((s) => s.type === 'ZERO_AL')).length,
+      Q1: baseHolidays.filter((h) => h.quarter === 'Q1').length,
+      Q2: baseHolidays.filter((h) => h.quarter === 'Q2').length,
+      Q3: baseHolidays.filter((h) => h.quarter === 'Q3').length,
+      Q4: baseHolidays.filter((h) => h.quarter === 'Q4').length,
     };
     return counts;
-  }, [baseBridges]);
+  }, [baseHolidays]);
 
-  // Filter bridges according to active tab
-  const filteredBridges = useMemo(() => {
-    if (activeTab === 'ALL') return baseBridges;
-    if (activeTab === 'HIGH_ROI') return baseBridges.filter((b) => b.roiMultiplier >= 3);
-    if (activeTab === 'ZERO_AL') return baseBridges.filter((b) => b.alDaysRequired === 0);
-    return baseBridges.filter((b) => b.quarter === activeTab);
-  }, [baseBridges, activeTab]);
+  // Filter holidays according to active tab
+  const filteredHolidays = useMemo(() => {
+    if (activeTab === 'ALL') return baseHolidays;
+    if (activeTab === 'HIGH_ROI') return baseHolidays.filter((h) => h.bestRoi >= 3);
+    if (activeTab === 'ZERO_AL')
+      return baseHolidays.filter((h) => h.strategies.some((s) => s.type === 'ZERO_AL'));
+    return baseHolidays.filter((h) => h.quarter === activeTab);
+  }, [baseHolidays, activeTab]);
 
   return (
     <div>
@@ -230,7 +240,7 @@ export function BridgesView({
           </button>
 
           {/* Past Holidays Toggle - Clean, NO horizontal overflow */}
-          {pastBridgesCount > 0 && (
+          {pastHolidaysCount > 0 && (
             <button
               type="button"
               onClick={toggleHidePastHolidays}
@@ -253,7 +263,7 @@ export function BridgesView({
                 color: 'var(--text-color)',
               }}
             >
-              <span>{hidePastHolidays ? `⏳ AKAN DATANG (${pastBridgesCount} LEPAS)` : `👁️ TUNJUK SEMUA`}</span>
+              <span>{hidePastHolidays ? `⏳ AKAN DATANG (${pastHolidaysCount} LEPAS)` : `👁️ TUNJUK SEMUA`}</span>
             </button>
           )}
         </div>
@@ -350,7 +360,29 @@ export function BridgesView({
           >
             SENARAI CUTI PANJANG 2026
           </h2>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              onClick={() => setExpandAll((prev) => !prev)}
+              style={{
+                backgroundColor: 'var(--bg-primary)',
+                border: '2px solid var(--border-color)',
+                borderRadius: 'var(--border-radius-sm)',
+                padding: '0.2rem 0.55rem',
+                fontSize: '0.7rem',
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.3rem',
+                boxShadow: '1.5px 1.5px 0px var(--border-color)',
+                color: 'var(--text-color)',
+              }}
+            >
+              {expandAll ? <ChevronUp size={13} strokeWidth={2.5} /> : <ChevronDown size={13} strokeWidth={2.5} />}
+              <span>{expandAll ? 'TUTUP SEMUA' : 'BUKA SEMUA'}</span>
+            </button>
             <button
               type="button"
               onClick={() => setIsLegendOpen(true)}
@@ -367,6 +399,7 @@ export function BridgesView({
                 alignItems: 'center',
                 gap: '0.3rem',
                 boxShadow: '1.5px 1.5px 0px var(--border-color)',
+                color: 'var(--text-color)',
               }}
             >
               <Palette size={13} strokeWidth={2.5} />
@@ -380,7 +413,7 @@ export function BridgesView({
                 textTransform: 'uppercase',
               }}
             >
-              {filteredBridges.length} DARI {bridges.length} BRIDGES
+              {filteredHolidays.length} DARI {groupedHolidays.length} CUTI
             </span>
           </div>
         </div>
@@ -392,11 +425,15 @@ export function BridgesView({
         />
       </div>
 
-      {/* 6. List of Bridge Opportunities */}
-      {filteredBridges.length > 0 ? (
+      {/* 6. List of Grouped Holiday Opportunities */}
+      {filteredHolidays.length > 0 ? (
         <div>
-          {filteredBridges.map((bridge: BridgeOpportunity) => (
-            <BridgeCard key={bridge.id} bridge={bridge} />
+          {filteredHolidays.map((holiday: GroupedHoliday) => (
+            <GroupedHolidayCard
+              key={`${holiday.id}-${expandAll}`}
+              holiday={holiday}
+              isInitiallyExpanded={expandAll}
+            />
           ))}
         </div>
       ) : (
@@ -420,7 +457,7 @@ export function BridgesView({
               Filter ni takde cuti panjang dengan had maksimum{' '}
               <strong>{maxAlPerBridge} hari AL</strong>. Cuba naikkan slider had AL atau klik tab SEMUA!
             </p>
-            {hidePastHolidays && pastBridgesCount > 0 && (
+            {hidePastHolidays && pastHolidaysCount > 0 && (
               <p
                 style={{
                   fontSize: '0.78rem',
@@ -429,7 +466,7 @@ export function BridgesView({
                   marginBottom: '1rem',
                 }}
               >
-                ({pastBridgesCount} cuti bagi tarikh yang telah berlalu disembunyikan. Korang boleh buka semula bila-bila masa.)
+                ({pastHolidaysCount} cuti bagi tarikh yang telah berlalu disembunyikan. Korang boleh buka semula bila-bila masa.)
               </p>
             )}
             <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -440,13 +477,13 @@ export function BridgesView({
               >
                 TENGOK SEMUA CUTI
               </BrutalistButton>
-              {hidePastHolidays && pastBridgesCount > 0 && (
+              {hidePastHolidays && pastHolidaysCount > 0 && (
                 <BrutalistButton
                   size="sm"
                   color="var(--accent-cyan)"
                   onClick={toggleHidePastHolidays}
                 >
-                  TUNJUK CUTI LEPAS ({pastBridgesCount})
+                  TUNJUK CUTI LEPAS ({pastHolidaysCount})
                 </BrutalistButton>
               )}
               {maxAlPerBridge < 5 && (
