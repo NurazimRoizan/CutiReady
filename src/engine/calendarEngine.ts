@@ -347,8 +347,68 @@ export function groupBridgesByHoliday(
       };
     });
 
+    // Smart curation: Deduplicate redundant variations within each category
+    // (e.g. keep only the best/most meaningful BEFORE, AFTER, COMBO options instead of 10+ permutations)
+    const curatedStrategies: HolidayStrategy[] = [];
+
+    // 1. Zero AL option (if any, keep the one with most days off)
+    const zeroAlList = strategies.filter((s) => s.type === 'ZERO_AL');
+    if (zeroAlList.length > 0) {
+      curatedStrategies.push(zeroAlList[0]);
+    }
+
+    // 2. Before options (keep at most 2: lowest AL and highest days off)
+    const beforeList = strategies.filter((s) => s.type === 'BEFORE');
+    if (beforeList.length > 0) {
+      curatedStrategies.push(beforeList[0]);
+      const maxDaysBefore = beforeList.reduce((max, s) =>
+        s.bridge.totalDaysOff > max.bridge.totalDaysOff ? s : max
+      );
+      if (maxDaysBefore.id !== beforeList[0].id) {
+        curatedStrategies.push(maxDaysBefore);
+      }
+    }
+
+    // 3. After options (keep at most 2: lowest AL and highest days off)
+    const afterList = strategies.filter((s) => s.type === 'AFTER');
+    if (afterList.length > 0) {
+      curatedStrategies.push(afterList[0]);
+      const maxDaysAfter = afterList.reduce((max, s) =>
+        s.bridge.totalDaysOff > max.bridge.totalDaysOff ? s : max
+      );
+      if (maxDaysAfter.id !== afterList[0].id) {
+        curatedStrategies.push(maxDaysAfter);
+      }
+    }
+
+    // 4. Combo option (keep the single best combo: max total days off)
+    const comboList = strategies.filter((s) => s.type === 'COMBO');
+    if (comboList.length > 0) {
+      const bestCombo = comboList.reduce((best, s) => {
+        if (s.bridge.totalDaysOff !== best.bridge.totalDaysOff) {
+          return s.bridge.totalDaysOff > best.bridge.totalDaysOff ? s : best;
+        }
+        return s.bridge.roiMultiplier > best.bridge.roiMultiplier ? s : best;
+      });
+      curatedStrategies.push(bestCombo);
+    }
+
+    // 5. Midweek option (if no before/after/combo, or if standalone)
+    const midweekList = strategies.filter((s) => s.type === 'MIDWEEK');
+    if (curatedStrategies.length === 0 && midweekList.length > 0) {
+      curatedStrategies.push(midweekList[0]);
+      const maxMidweek = midweekList.reduce((max, s) =>
+        s.bridge.totalDaysOff > max.bridge.totalDaysOff ? s : max
+      );
+      if (maxMidweek.id !== midweekList[0].id) {
+        curatedStrategies.push(maxMidweek);
+      }
+    }
+
+    const finalStrategies = curatedStrategies.length > 0 ? curatedStrategies : strategies.slice(0, 4);
+
     // Sort strategies: 0 AL first, then fewest AL required, then max days off descending
-    strategies.sort((a, b) => {
+    finalStrategies.sort((a, b) => {
       if (a.type === 'ZERO_AL' && b.type !== 'ZERO_AL') return -1;
       if (b.type === 'ZERO_AL' && a.type !== 'ZERO_AL') return 1;
       if (a.bridge.alDaysRequired !== b.bridge.alDaysRequired) {
@@ -358,9 +418,9 @@ export function groupBridgesByHoliday(
     });
 
     // Mark the best recommended strategy (0 AL baseline or highest ROI multiplier)
-    let bestStrategy = strategies[0];
+    let bestStrategy = finalStrategies[0];
     let maxScore = -1;
-    strategies.forEach((s) => {
+    finalStrategies.forEach((s) => {
       const score =
         s.type === 'ZERO_AL'
           ? 1000 + s.bridge.totalDaysOff
@@ -385,9 +445,9 @@ export function groupBridgesByHoliday(
       holidayDatesFormatted = `${format(startParsed, 'd')} – ${format(endParsed, 'd MMM yyyy')} (${startDow} – ${endDow})`;
     }
 
-    const maxDaysOff = Math.max(...strategies.map((s) => s.bridge.totalDaysOff));
-    const minAlRequired = Math.min(...strategies.map((s) => s.bridge.alDaysRequired));
-    const bestRoi = Math.max(...strategies.map((s) => s.bridge.roiMultiplier));
+    const maxDaysOff = Math.max(...finalStrategies.map((s) => s.bridge.totalDaysOff));
+    const minAlRequired = Math.min(...finalStrategies.map((s) => s.bridge.alDaysRequired));
+    const bestRoi = Math.max(...finalStrategies.map((s) => s.bridge.roiMultiplier));
 
     // End date of the furthest bridge in this cluster (for past-holiday checking)
     const latestEndDate = matchedBridges.reduce((latest, b) => {
@@ -402,7 +462,7 @@ export function groupBridgesByHoliday(
       primaryDate: cluster.primaryDate,
       endDate: latestEndDate,
       quarter: cluster.quarter,
-      strategies,
+      strategies: finalStrategies,
       maxDaysOff,
       minAlRequired,
       bestRoi,

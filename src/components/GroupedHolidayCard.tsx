@@ -86,17 +86,58 @@ export function GroupedHolidayCard({
     <BrutalistCard
       headerColor={activePlannedStrategy ? 'var(--accent-green)' : 'var(--accent-yellow)'}
       title={
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer' }} onClick={() => setIsExpanded(!isExpanded)}>
-          <Calendar size={14} strokeWidth={2.5} />
-          <span>{holiday.title}</span>
+        <div
+          onClick={() => setIsExpanded(!isExpanded)}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.15rem',
+            cursor: 'pointer',
+            minWidth: 0,
+            paddingRight: '0.25rem',
+          }}
+        >
+          {/* Row 1: Holiday Title */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              fontSize: '0.98rem',
+              fontWeight: 900,
+              textTransform: 'uppercase',
+              letterSpacing: '-0.2px',
+              lineHeight: 1.2,
+              color: 'var(--text-color)',
+            }}
+          >
+            <Calendar size={15} strokeWidth={2.5} style={{ flexShrink: 0 }} />
+            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {holiday.title}
+            </span>
+          </div>
+
+          {/* Row 2: Formatted Date Range & Quarter (Never squished!) */}
+          <div
+            style={{
+              fontSize: '0.72rem',
+              fontWeight: 800,
+              textTransform: 'uppercase',
+              letterSpacing: '0.3px',
+              lineHeight: 1.2,
+              color: 'var(--text-color)',
+              opacity: 0.85,
+            }}
+          >
+            {holiday.holidayDatesFormatted} • {holiday.quarter}
+          </div>
         </div>
       }
-      subtitle={`${holiday.holidayDatesFormatted} • ${holiday.quarter}`}
       headerAction={
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexShrink: 0 }}>
           {activePlannedStrategy && (
             <BrutalistBadge color="var(--bg-primary)">
-              🔒 DAH LOCK
+              🔒 LOCK
             </BrutalistBadge>
           )}
           <button
@@ -105,9 +146,9 @@ export function GroupedHolidayCard({
             title={isExpanded ? 'Tutup butiran cuti' : 'Buka pilihan strategi'}
             style={{
               backgroundColor: 'var(--bg-primary)',
-              border: '1.5px solid var(--border-color)',
+              border: '2px solid var(--border-color)',
               borderRadius: 'var(--border-radius-sm)',
-              padding: '0.2rem 0.45rem',
+              padding: '0.22rem 0.45rem',
               fontSize: '0.68rem',
               fontWeight: 900,
               textTransform: 'uppercase',
@@ -115,72 +156,139 @@ export function GroupedHolidayCard({
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.25rem',
-              boxShadow: '1px 1px 0px var(--border-color)',
+              boxShadow: '1.5px 1.5px 0px var(--border-color)',
               color: 'var(--text-color)',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
             }}
           >
-            <span>{holiday.strategies.length} STRATEGI</span>
-            {isExpanded ? <ChevronUp size={12} strokeWidth={3} /> : <ChevronDown size={12} strokeWidth={3} />}
+            <span>{holiday.strategies.length} CARA</span>
+            {isExpanded ? (
+              <ChevronUp size={13} strokeWidth={3} />
+            ) : (
+              <ChevronDown size={13} strokeWidth={3} />
+            )}
           </button>
         </div>
       }
       style={{ marginBottom: '1.15rem' }}
     >
-      {/* 1. Collapsed State: Fast Skim Mode */}
+      {/* 1. Collapsed State: Fast-Skim Mobile Summary */}
       {!isExpanded ? (
         <div
           onClick={() => setIsExpanded(true)}
           style={{
             cursor: 'pointer',
             display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: '0.65rem',
-            flexWrap: 'wrap',
+            flexDirection: 'column',
+            gap: '0.55rem',
           }}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-            <div
-              style={{
-                fontSize: '0.88rem',
-                fontWeight: 900,
-                textTransform: 'uppercase',
-                letterSpacing: '-0.2px',
-                color: 'var(--text-color)',
-              }}
-            >
-              {holiday.strategies.length > 1
-                ? `${holiday.strategies.length} Pilihan Strategi • Sehingga ${holiday.maxDaysOff} Hari Lepak`
-                : `${holiday.maxDaysOff} Hari Lepak • ${activeStrategy.label}`}
-            </div>
-            <div
-              style={{
-                fontSize: '0.72rem',
-                fontWeight: 700,
-                color: 'var(--text-muted)',
-              }}
-            >
-              {activePlannedStrategy
-                ? `🔒 Sedang lock: ${activePlannedStrategy.label}`
-                : activeStrategy.description}
-            </div>
-          </div>
-
-          <BrutalistButton
-            size="sm"
-            color="var(--accent-yellow)"
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsExpanded(true);
-            }}
+          {/* Top highlight row: Max days off & ROI badge */}
+          <div
             style={{
-              padding: '0.35rem 0.65rem',
-              fontSize: '0.72rem',
-              fontWeight: 900,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: '0.5rem',
             }}
           >
-            PILIH STRATEGI ▾
-          </BrutalistButton>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem' }}>
+              <span
+                style={{
+                  fontSize: '1.15rem',
+                  fontWeight: 900,
+                  color: 'var(--text-color)',
+                  lineHeight: 1,
+                  letterSpacing: '-0.3px',
+                }}
+              >
+                {holiday.maxDaysOff} HARI OFF
+              </span>
+              <span
+                style={{
+                  fontSize: '0.72rem',
+                  fontWeight: 800,
+                  color: 'var(--text-muted)',
+                  textTransform: 'uppercase',
+                }}
+              >
+                (🔥 {holiday.bestRoi}x ROI)
+              </span>
+            </div>
+
+            <BrutalistBadge color={activePlannedStrategy ? 'var(--accent-green)' : 'var(--bg-primary)'}>
+              {activePlannedStrategy ? '🔒 DAH LOCK' : `${holiday.strategies.length} PILIHAN`}
+            </BrutalistBadge>
+          </div>
+
+          {/* Strategy Chips Preview */}
+          <div
+            style={{
+              display: 'flex',
+              gap: '0.3rem',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+            }}
+          >
+            {holiday.strategies.map((strat) => {
+              const isStratPlanned =
+                strat.bridge.alDaysRequired > 0 &&
+                strat.bridge.annualLeaveDates.every((d) => plannedLeaveDates.includes(d));
+
+              return (
+                <span
+                  key={strat.id}
+                  style={{
+                    fontSize: '0.66rem',
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    padding: '0.2rem 0.45rem',
+                    borderRadius: 'var(--border-radius-sm)',
+                    border: '1.5px solid var(--border-color)',
+                    backgroundColor: isStratPlanned
+                      ? 'var(--accent-green)'
+                      : strat.type === 'ZERO_AL'
+                      ? 'var(--accent-cyan)'
+                      : 'var(--bg-primary)',
+                    color: 'var(--text-color)',
+                    boxShadow: '1px 1px 0px var(--border-color)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.2rem',
+                  }}
+                >
+                  {isStratPlanned && '🔒 '}
+                  {strat.label}
+                </span>
+              );
+            })}
+          </div>
+
+          {/* Full-width tactile action button */}
+          <div
+            style={{
+              backgroundColor: 'var(--accent-yellow)',
+              border: '2px solid var(--border-color)',
+              borderRadius: 'var(--border-radius-sm)',
+              padding: '0.45rem',
+              boxShadow: '2px 2px 0px var(--border-color)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.35rem',
+              fontSize: '0.75rem',
+              fontWeight: 900,
+              textTransform: 'uppercase',
+              letterSpacing: '0.3px',
+              color: 'var(--accent-yellow-text)',
+              marginTop: '0.15rem',
+              userSelect: 'none',
+            }}
+          >
+            <span>PILIH STRATEGI CUTI</span>
+            <ChevronDown size={14} strokeWidth={3} />
+          </div>
         </div>
       ) : (
         /* 2. Expanded State: Full Strategy Switcher & Interactive Day Strip */
@@ -464,6 +572,33 @@ export function GroupedHolidayCard({
               </div>
             </BrutalistButton>
           </div>
+
+          {/* Close Details Button */}
+          <button
+            type="button"
+            onClick={() => setIsExpanded(false)}
+            style={{
+              marginTop: '0.65rem',
+              width: '100%',
+              backgroundColor: 'var(--bg-primary)',
+              border: '1.5px solid var(--border-color)',
+              borderRadius: 'var(--border-radius-sm)',
+              padding: '0.35rem',
+              fontSize: '0.68rem',
+              fontWeight: 900,
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.25rem',
+              boxShadow: '1px 1px 0px var(--border-color)',
+              color: 'var(--text-muted)',
+            }}
+          >
+            <span>TUTUP BUTIRAN</span>
+            <ChevronUp size={12} strokeWidth={3} />
+          </button>
         </div>
       )}
     </BrutalistCard>
