@@ -117,6 +117,7 @@ export interface GroupedHoliday {
   id: string;
   title: string;
   holidayDatesFormatted: string;
+  holidayDaysFormatted: string;
   holidayDates: string[];
   primaryDate: string;
   endDate: string;

@@ -19,26 +19,36 @@ function DayStripTileComponent({
 
   let bgColor = 'var(--workday-bg)';
   let textColor = 'var(--workday-text)';
-  let typeLabel = 'KERJA';
+  let pillLine1 = 'HARI';
+  let pillLine2 = 'KERJA';
   let isDashed = false;
 
   if (day.type === 'WEEKEND') {
     bgColor = 'var(--weekend-bg)';
     textColor = 'var(--weekend-text)';
-    typeLabel = 'WEEKEND';
+    pillLine1 = 'WEEK';
+    pillLine2 = 'END';
   } else if (day.type === 'PUBLIC_HOLIDAY') {
     bgColor = 'var(--ph-bg)';
     textColor = 'var(--ph-text)';
-    typeLabel = day.holidayName ? `PH: ${day.holidayName.split(' ')[0]}` : 'CUTI PH';
+    pillLine1 = 'PUBLIC';
+    pillLine2 = 'HOLIDAY';
   } else if (day.type === 'REPLACEMENT_HOLIDAY') {
     bgColor = 'var(--replacement-bg)';
     textColor = 'var(--replacement-text)';
-    typeLabel = 'CUTI GANTI';
+    pillLine1 = 'CUTI';
+    pillLine2 = 'GANTI';
   } else if (day.type === 'WORKDAY') {
     // This workday is part of the bridge, so it's a recommended / planned AL day!
     bgColor = 'var(--al-bg)';
     textColor = 'var(--al-text)';
-    typeLabel = isPlanned ? '✓ DAH LOCK' : 'AMBIL AL';
+    if (isPlanned) {
+      pillLine1 = 'DAH';
+      pillLine2 = 'LOCK';
+    } else {
+      pillLine1 = 'AMBIL';
+      pillLine2 = 'AL';
+    }
     isDashed = !isPlanned;
   }
 
@@ -53,9 +63,9 @@ function DayStripTileComponent({
       onClick={day.type === 'WORKDAY' && onTogglePlanned ? onTogglePlanned : undefined}
       title={`${day.date} (${dayName}): ${fullHolidayTitle}`}
       style={{
-        flex: '1 0 70px',
-        minWidth: '68px',
-        maxWidth: '85px',
+        flex: '1 0 68px',
+        minWidth: '66px',
+        maxWidth: '82px',
         backgroundColor: bgColor,
         color: textColor,
         border: borderStyle,
@@ -88,31 +98,35 @@ function DayStripTileComponent({
           fontWeight: 900,
           lineHeight: 1.1,
           marginTop: '0.1rem',
-          marginBottom: '0.2rem',
+          marginBottom: '0.25rem',
           color: 'var(--text-color)',
         }}
       >
         {dateFormatted}
       </span>
-      <span
+      <div
         style={{
-          fontSize: '0.58rem',
+          fontSize: '0.54rem',
           fontWeight: 900,
           textTransform: 'uppercase',
-          letterSpacing: '0.3px',
-          padding: '0.1rem 0.3rem',
-          borderRadius: 'var(--border-radius-pill)',
+          letterSpacing: '0.2px',
+          padding: '0.15rem 0.2rem',
+          borderRadius: 'var(--border-radius-sm)',
           backgroundColor: 'var(--bg-secondary)',
           border: '1px solid var(--border-color)',
-          maxWidth: '62px',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
+          width: '100%',
+          boxSizing: 'border-box',
           color: 'var(--text-color)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          lineHeight: 1.15,
         }}
       >
-        {typeLabel}
-      </span>
+        <span>{pillLine1}</span>
+        <span>{pillLine2}</span>
+      </div>
     </div>
   );
 }

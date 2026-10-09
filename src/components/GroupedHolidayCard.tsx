@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { format, parseISO } from 'date-fns';
 import { GroupedHoliday } from '../types';
 import { BrutalistCard } from './BrutalistCard';
 import { BrutalistBadge } from './BrutalistBadge';
@@ -51,6 +52,21 @@ export function GroupedHolidayCard({
   }, [holiday.strategies, selectedStrategyId]);
 
   const activeBridge = activeStrategy.bridge;
+
+  // Format bridge date range nicely: "07 – 15 Nov 2026"
+  const bridgeDateRangeFormatted = useMemo(() => {
+    const start = parseISO(activeBridge.startDate);
+    const end = parseISO(activeBridge.endDate);
+    const startMonth = format(start, 'MMM');
+    const endMonth = format(end, 'MMM');
+    const startYear = format(start, 'yyyy');
+    const endYear = format(end, 'yyyy');
+
+    if (startMonth === endMonth && startYear === endYear) {
+      return `${format(start, 'dd')} – ${format(end, 'dd')} ${endMonth} ${endYear}`;
+    }
+    return `${format(start, 'dd MMM')} – ${format(end, 'dd MMM')} ${endYear}`;
+  }, [activeBridge.startDate, activeBridge.endDate]);
 
   // Check if current active strategy is fully planned
   const isStrategyFullyPlanned =
@@ -117,19 +133,33 @@ export function GroupedHolidayCard({
             </span>
           </div>
 
-          {/* Row 2: Formatted Date Range & Quarter (Never squished!) */}
+          {/* Row 2: Date (e.g. 8 - 9 Nov 2026) */}
           <div
             style={{
-              fontSize: '0.72rem',
+              fontSize: '0.74rem',
+              fontWeight: 900,
+              textTransform: 'uppercase',
+              letterSpacing: '0.2px',
+              lineHeight: 1.15,
+              color: 'var(--text-color)',
+            }}
+          >
+            {holiday.holidayDatesFormatted}
+          </div>
+
+          {/* Row 3: Day Names & Quarter (e.g. Ahad - Isnin • Q4) */}
+          <div
+            style={{
+              fontSize: '0.68rem',
               fontWeight: 800,
               textTransform: 'uppercase',
-              letterSpacing: '0.3px',
-              lineHeight: 1.2,
+              letterSpacing: '0.2px',
+              lineHeight: 1.15,
               color: 'var(--text-color)',
               opacity: 0.85,
             }}
           >
-            {holiday.holidayDatesFormatted} • {holiday.quarter}
+            {holiday.holidayDaysFormatted} • {holiday.quarter}
           </div>
         </div>
       }
@@ -137,7 +167,7 @@ export function GroupedHolidayCard({
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexShrink: 0 }}>
           {activePlannedStrategy && (
             <BrutalistBadge color="var(--bg-primary)">
-              🔒 LOCK
+              LOCK
             </BrutalistBadge>
           )}
           <button
@@ -148,7 +178,7 @@ export function GroupedHolidayCard({
               backgroundColor: 'var(--bg-primary)',
               border: '2px solid var(--border-color)',
               borderRadius: 'var(--border-radius-sm)',
-              padding: '0.22rem 0.45rem',
+              padding: '0.25rem 0.5rem',
               fontSize: '0.68rem',
               fontWeight: 900,
               textTransform: 'uppercase',
@@ -213,16 +243,16 @@ export function GroupedHolidayCard({
                   textTransform: 'uppercase',
                 }}
               >
-                (🔥 {holiday.bestRoi}x ROI)
+                ({holiday.bestRoi}x ROI)
               </span>
             </div>
 
             <BrutalistBadge color={activePlannedStrategy ? 'var(--accent-green)' : 'var(--bg-primary)'}>
-              {activePlannedStrategy ? '🔒 DAH LOCK' : `${holiday.strategies.length} PILIHAN`}
+              {activePlannedStrategy ? 'DAH LOCK' : `${holiday.strategies.length} PILIHAN`}
             </BrutalistBadge>
           </div>
 
-          {/* Strategy Chips Preview */}
+          {/* Strategy Chips Preview - Concise & Emoji-Free */}
           <div
             style={{
               display: 'flex',
@@ -258,7 +288,7 @@ export function GroupedHolidayCard({
                     gap: '0.2rem',
                   }}
                 >
-                  {isStratPlanned && '🔒 '}
+                  {isStratPlanned && '✓ '}
                   {strat.label}
                 </span>
               );
@@ -293,7 +323,7 @@ export function GroupedHolidayCard({
       ) : (
         /* 2. Expanded State: Full Strategy Switcher & Interactive Day Strip */
         <div>
-          {/* Strategy Selector Pills Bar */}
+          {/* Strategy Selector Horizontal Grid/Row (Concise badges that fit horizontally) */}
           {holiday.strategies.length > 1 && (
             <div style={{ marginBottom: '0.85rem' }}>
               <div
@@ -310,9 +340,14 @@ export function GroupedHolidayCard({
               </div>
               <div
                 style={{
-                  display: 'flex',
+                  display: 'grid',
+                  gridTemplateColumns:
+                    holiday.strategies.length === 2
+                      ? 'repeat(2, minmax(0, 1fr))'
+                      : holiday.strategies.length === 3
+                      ? 'repeat(3, minmax(0, 1fr))'
+                      : 'repeat(2, minmax(0, 1fr))',
                   gap: '0.35rem',
-                  flexWrap: 'wrap',
                 }}
               >
                 {holiday.strategies.map((strat) => {
@@ -327,9 +362,10 @@ export function GroupedHolidayCard({
                       type="button"
                       onClick={() => setSelectedStrategyId(strat.id)}
                       style={{
-                        display: 'inline-flex',
+                        display: 'flex',
                         alignItems: 'center',
-                        gap: '0.3rem',
+                        justifyContent: 'center',
+                        gap: '0.25rem',
                         backgroundColor: isSelected
                           ? 'var(--accent-yellow)'
                           : isStratPlanned
@@ -340,10 +376,11 @@ export function GroupedHolidayCard({
                           ? '2.5px solid var(--border-color)'
                           : '1.5px solid var(--border-color)',
                         borderRadius: 'var(--border-radius-sm)',
-                        padding: '0.3rem 0.55rem',
+                        padding: '0.4rem 0.25rem',
                         fontSize: '0.72rem',
                         fontWeight: 900,
                         textTransform: 'uppercase',
+                        textAlign: 'center',
                         cursor: 'pointer',
                         boxShadow: isSelected
                           ? '2px 2px 0px var(--border-color)'
@@ -352,22 +389,7 @@ export function GroupedHolidayCard({
                       }}
                     >
                       <span>{strat.label}</span>
-                      {strat.isRecommended && !isStratPlanned && (
-                        <span
-                          style={{
-                            fontSize: '0.58rem',
-                            backgroundColor: 'var(--accent-pink)',
-                            color: 'var(--accent-pink-text)',
-                            padding: '0.1rem 0.3rem',
-                            borderRadius: 'var(--border-radius-pill)',
-                            fontWeight: 800,
-                            lineHeight: 1,
-                          }}
-                        >
-                          DISYORKAN
-                        </span>
-                      )}
-                      {isStratPlanned && <span>🔒</span>}
+                      {isStratPlanned && <span>✓</span>}
                     </button>
                   );
                 })}
@@ -375,7 +397,7 @@ export function GroupedHolidayCard({
             </div>
           )}
 
-          {/* Strategy Details Sub-Header */}
+          {/* Strategy Details Sub-Header with Readable Date Format ("07 – 15 Nov 2026") */}
           <div
             style={{
               backgroundColor: 'var(--bg-primary)',
@@ -393,13 +415,13 @@ export function GroupedHolidayCard({
             <div>
               <div
                 style={{
-                  fontSize: '0.92rem',
+                  fontSize: '0.94rem',
                   fontWeight: 900,
                   textTransform: 'uppercase',
                   lineHeight: 1.2,
                 }}
               >
-                {activeBridge.startDate} – {activeBridge.endDate}
+                {bridgeDateRangeFormatted}
               </div>
               <div
                 style={{
@@ -419,11 +441,11 @@ export function GroupedHolidayCard({
 
               {activeBridge.alDaysRequired === 0 ? (
                 <BrutalistBadge color="var(--accent-cyan)">
-                  ⚡ 0 AL • FREE
+                  0 AL • FREE
                 </BrutalistBadge>
               ) : activeBridge.roiMultiplier >= 4 ? (
                 <BrutalistBadge color="var(--accent-green)">
-                  🔥 {activeBridge.roiMultiplier}x ROI
+                  {activeBridge.roiMultiplier}x ROI
                 </BrutalistBadge>
               ) : (
                 <BrutalistBadge color="var(--accent-pink)">

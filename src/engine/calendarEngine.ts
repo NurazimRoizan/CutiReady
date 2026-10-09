@@ -301,7 +301,7 @@ export function groupBridgesByHoliday(
 
       if (bridge.alDaysRequired === 0) {
         type = 'ZERO_AL';
-        label = '⚡ 0 AL (FREE)';
+        label = `0 AL (${bridge.totalDaysOff}H)`;
         shortTag = `${bridge.totalDaysOff}H OFF`;
         description = `Cuti Semulajadi tanpa tolak baki AL (${bridge.totalDaysOff} hari rehat)`;
       } else {
@@ -315,22 +315,22 @@ export function groupBridgesByHoliday(
 
         if (allBefore) {
           type = 'BEFORE';
-          label = `⬅️ SEBELUM (${bridge.alDaysRequired} AL)`;
+          label = `SEBELUM (${bridge.alDaysRequired} AL)`;
           shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
           description = `Ambil ${bridge.alDaysRequired} hari AL sebelum cuti (${bridge.totalDaysOff} hari rehat)`;
         } else if (allAfter) {
           type = 'AFTER';
-          label = `➡️ SELEPAS (${bridge.alDaysRequired} AL)`;
+          label = `SELEPAS (${bridge.alDaysRequired} AL)`;
           shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
           description = `Ambil ${bridge.alDaysRequired} hari AL selepas cuti (${bridge.totalDaysOff} hari rehat)`;
         } else if (isCombo) {
           type = 'COMBO';
-          label = `🔥 COMBO (${bridge.alDaysRequired} AL)`;
+          label = `COMBO (${bridge.alDaysRequired} AL)`;
           shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
           description = `Sambung cuti sebelum & selepas untuk ${bridge.totalDaysOff} hari rehat berturut-turut!`;
         } else {
           type = 'MIDWEEK';
-          label = `🌉 JAMBATAN (${bridge.alDaysRequired} AL)`;
+          label = `JAMBATAN (${bridge.alDaysRequired} AL)`;
           shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
           description = `Jambatan cuti tengah minggu (${bridge.totalDaysOff} hari rehat)`;
         }
@@ -439,10 +439,13 @@ export function groupBridgesByHoliday(
     const endDow = DAY_NAMES_MS[getDay(endParsed)];
 
     let holidayDatesFormatted = '';
+    let holidayDaysFormatted = '';
     if (firstPhDate === lastPhDate) {
-      holidayDatesFormatted = `${format(startParsed, 'd MMM yyyy')} (${startDow})`;
+      holidayDatesFormatted = format(startParsed, 'd MMM yyyy');
+      holidayDaysFormatted = startDow;
     } else {
-      holidayDatesFormatted = `${format(startParsed, 'd')} – ${format(endParsed, 'd MMM yyyy')} (${startDow} – ${endDow})`;
+      holidayDatesFormatted = `${format(startParsed, 'd')} – ${format(endParsed, 'd MMM yyyy')}`;
+      holidayDaysFormatted = `${startDow} – ${endDow}`;
     }
 
     const maxDaysOff = Math.max(...finalStrategies.map((s) => s.bridge.totalDaysOff));
@@ -458,6 +461,7 @@ export function groupBridgesByHoliday(
       id: cluster.id,
       title: cluster.title,
       holidayDatesFormatted,
+      holidayDaysFormatted,
       holidayDates: cluster.holidayDates,
       primaryDate: cluster.primaryDate,
       endDate: latestEndDate,
