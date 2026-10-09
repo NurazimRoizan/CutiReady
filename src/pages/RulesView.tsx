@@ -255,7 +255,7 @@ export function RulesView() {
               {activePreset === 'ALL' &&
                 `Boss belanja semua! Mengambil kira kesemua cuti umum persekutuan dan cuti negeri rasmi bagi ${state.replace(/_/g, ' ')}. Rezeki terpijak, layan je cuti kaw-kaw!`}
               {activePreset === 'CUSTOM' &&
-                'Korang dah godek-godek checklist cuti ikut kalendar atau polisi syarikat sendiri dari senarai kat bawah ni.'}
+                'Korang dah custom checklist cuti ikut kalendar atau polisi syarikat sendiri dari senarai kat bawah ni.'}
             </div>
           </div>
         </div>

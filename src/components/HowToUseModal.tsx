@@ -34,7 +34,7 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
       emoji: '📍',
       pill: 'Rules Weekend',
       description:
-        'Negeri lain, hari cuti & weekend lain bro (KL/Selangor = Sabtu–Ahad; Kedah/Kelantan/Terengganu = Jumaat–Sabtu). Sistem auto-adjust cuti gazet ikut negeri korang!',
+        'Negeri lain, hari cuti & weekend lain bro:\n• KL / Selangor = Sabtu–Ahad\n• Kedah / Kelantan / Terengganu = Jumaat–Sabtu\n\nSistem auto-adjust cuti gazet ikut negeri korang!',
     },
     {
       step: '02',
@@ -42,7 +42,7 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
       emoji: '🏢',
       pill: 'EA 1955 Seksyen 60D',
       description:
-        'Company korang ikut Minima Akta (11 hari), Standard Korporat (15 hari), atau jenis boss pemurah (semua cuti gazet)? Boleh toggle Cuti Ganti hari Sabtu juga!',
+        'Company korang ikut Minima Akta (11 hari), Standard Korporat (15 hari), atau jenis boss pemurah (semua cuti gazet)?\n\nBoleh toggle Cuti Ganti hari Sabtu juga!',
     },
     {
       step: '03',
@@ -50,7 +50,7 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
       emoji: '🎯',
       pill: 'ROI Sampai 5x!',
       description:
-        'Tengok kombo cuti yang auto-generate. Cari yang 0 AL (free cuti terus) atau Mega Bridge ROI padu. Tekan "+ Lock Cuti" sebelum colleague lain sapu slot!',
+        'Tengok kombo cuti yang auto-generate. Cari yang 0 AL (free cuti terus) atau Mega Bridge ROI padu.\n\nTekan "+ Lock Cuti" sebelum colleague lain sapu slot!',
     },
     {
       step: '04',
@@ -167,12 +167,13 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: '0.35rem',
+                  alignItems: 'flex-start',
+                  gap: '0.45rem',
+                  marginBottom: '0.45rem',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                  <span style={{ fontSize: '1.1rem' }}>{item.emoji}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flex: 1, minWidth: 0 }}>
+                  <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>{item.emoji}</span>
                   <h3
                     style={{
                       fontSize: '0.9rem',
@@ -180,6 +181,7 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
                       textTransform: 'uppercase',
                       fontWeight: 900,
                       color: 'var(--text-color)',
+                      lineHeight: 1.2,
                     }}
                   >
                     Step {item.step}: {item.title}
@@ -194,6 +196,7 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
                     fontSize: '0.62rem',
                     fontWeight: 800,
                     textTransform: 'uppercase',
+                    flexShrink: 0,
                   }}
                 >
                   {item.pill}
@@ -203,9 +206,10 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
                 style={{
                   fontSize: '0.8rem',
                   fontWeight: 600,
-                  lineHeight: '1.4',
+                  lineHeight: '1.45',
                   margin: 0,
                   color: 'var(--text-color)',
+                  whiteSpace: 'pre-line',
                 }}
               >
                 {item.description}

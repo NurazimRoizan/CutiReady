@@ -499,7 +499,7 @@ export function BridgesView({
                   cursor: 'pointer',
                 }}
               >
-                GODEK CUTI
+                CUSTOM CUTI
               </button>
             </div>
 

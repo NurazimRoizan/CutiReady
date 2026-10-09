@@ -192,7 +192,7 @@ export function GroupedHolidayCard({
           <button
             type="button"
             onClick={() => setIsExpanded(!isExpanded)}
-            title={isExpanded ? 'Tutup butiran cuti' : 'Buka pilihan strategi'}
+            title={isExpanded ? 'Close detail' : 'Tengok cara cuti'}
             style={{
               backgroundColor: 'var(--bg-primary)',
               border: '2px solid var(--border-color)',
@@ -609,7 +609,7 @@ export function GroupedHolidayCard({
                 <span style={{ fontSize: '0.74rem', fontWeight: 900 }}>
                   {copied ? 'DAH COPY!' : 'COPY'}
                 </span>
-                <span style={{ fontSize: '0.66rem', fontWeight: 800 }}>TEKS</span>
+                <span style={{ fontSize: '0.66rem', fontWeight: 800 }}>AYAT</span>
               </div>
             </BrutalistButton>
           </div>
@@ -637,7 +637,7 @@ export function GroupedHolidayCard({
               color: 'var(--text-muted)',
             }}
           >
-            <span>TUTUP BUTIRAN</span>
+            <span>CLOSE DETAIL</span>
             <ChevronUp size={12} strokeWidth={3} />
           </button>
         </div>

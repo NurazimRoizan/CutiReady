@@ -87,7 +87,7 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
     },
     CUSTOM: {
       title: `Custom Setting Sendiri (${observedCount} Hari)`,
-      desc: 'Korang dah godek-godek checklist cuti ikut kalendar atau polisi syarikat sendiri dari senarai kat bawah ni.',
+      desc: 'Korang dah custom checklist cuti ikut kalendar atau polisi syarikat sendiri dari senarai kat bawah ni.',
       tag: 'Checklist Sendiri',
       bg: 'var(--bg-primary)',
     },
