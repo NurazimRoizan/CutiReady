@@ -12,6 +12,7 @@ import {
   Globe,
   Lock,
   Check,
+  Info,
 } from 'lucide-react';
 
 export function RulesView() {
@@ -187,16 +188,77 @@ export function RulesView() {
 
       {/* 3. Statutory EA 1955 Presets */}
       <BrutalistCard headerColor="var(--accent-yellow)" title="2. PRESET CUTI SYARIKAT">
-        <p
+        {/* Dynamic Preset Guidance Banner */}
+        <div
           style={{
-            fontSize: '0.8rem',
-            fontWeight: 600,
-            color: 'var(--text-muted)',
-            margin: '0 0 0.65rem 0',
+            backgroundColor:
+              activePreset === 'CORPORATE_15'
+                ? 'var(--accent-cyan)'
+                : activePreset === 'ALL'
+                ? 'var(--accent-yellow)'
+                : 'var(--bg-primary)',
+            border: '2px solid var(--border-color)',
+            borderRadius: 'var(--border-radius-sm)',
+            padding: '0.65rem 0.8rem',
+            marginBottom: '0.85rem',
+            boxShadow: '1.5px 1.5px 0px var(--border-color)',
+            display: 'flex',
+            gap: '0.55rem',
+            alignItems: 'flex-start',
+            transition: 'background-color 0.15s ease',
           }}
         >
-          Ikut <strong>Akta Kerja 1955 (Seksyen 60D)</strong>, majikan wajib beri sekurang-kurangnya 11 hari cuti am berbayar. Pilih pakej syarikat korang:
-        </p>
+          <Info size={16} strokeWidth={2.5} style={{ flexShrink: 0, marginTop: '2px', color: 'var(--text-color)' }} />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div
+              style={{
+                fontSize: '0.78rem',
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                marginBottom: '0.2rem',
+                color: 'var(--text-color)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: '0.35rem',
+                flexWrap: 'wrap',
+              }}
+            >
+              <span>
+                {activePreset === 'MINIMUM_11' && 'Pakej EA 1955 (Minima 11 Hari Wajib)'}
+                {activePreset === 'CORPORATE_15' && 'Pakej Korporat (Standard 15 Hari Swasta)'}
+                {activePreset === 'ALL' && `Pakej Semua Gazet (${applicableHolidays.length} Hari Cuti)`}
+                {activePreset === 'CUSTOM' && `Polisi Cuti Tersuai (${observedCount} Hari)`}
+              </span>
+              <span
+                style={{
+                  fontSize: '0.62rem',
+                  fontWeight: 800,
+                  padding: '0.05rem 0.35rem',
+                  backgroundColor: 'var(--bg-secondary)',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: 'var(--border-radius-pill)',
+                  color: 'var(--text-color)',
+                }}
+              >
+                {activePreset === 'MINIMUM_11' && 'Minima Akta 1955'}
+                {activePreset === 'CORPORATE_15' && 'Standard Swasta / MNC'}
+                {activePreset === 'ALL' && 'Paling Pemurah'}
+                {activePreset === 'CUSTOM' && 'Checklist Manual'}
+              </span>
+            </div>
+            <div style={{ fontSize: '0.73rem', fontWeight: 600, lineHeight: 1.4, color: 'var(--text-color)' }}>
+              {activePreset === 'MINIMUM_11' &&
+                'Seksyen 60D Akta Kerja mewajibkan sekurang-kurangnya 11 hari cuti am berbayar (5 cuti wajib undang-undang + 6 cuti pilihan majikan). Hak minima pekerja swasta.'}
+              {activePreset === 'CORPORATE_15' &&
+                'Standard syarikat swasta & MNC Malaysia: Merangkumi 5 cuti wajib EA + perayaan utama persekutuan (Tahun Baru, Raya Puasa 2H, CNY 2H, Deepavali, Krismas, Wesak, dsb). Paling umum untuk pejabat swasta.'}
+              {activePreset === 'ALL' &&
+                `Boss belanja semua! Merangkumi kesemua cuti umum persekutuan dan cuti negeri rasmi bagi ${state.replace(/_/g, ' ')}.`}
+              {activePreset === 'CUSTOM' &&
+                'Korang telah ubahsuai cuti mengikut kalendar rasmi syarikat sendiri dari senarai checklist di bawah.'}
+            </div>
+          </div>
+        </div>
 
         <div
           style={{

@@ -66,6 +66,38 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
       ? federalHolidays
       : stateHolidays;
 
+  const presetInfo = {
+    MINIMUM_11: {
+      title: 'EA 1955 (Minima 11 Hari Wajib)',
+      desc: 'Seksyen 60D Akta Kerja mewajibkan sekurang-kurangnya 11 hari cuti am berbayar (5 cuti wajib undang-undang + 6 cuti pilihan majikan). Ini hak minima bagi setiap pekerja swasta.',
+      tag: 'Minima Akta 1955',
+      bg: 'var(--bg-primary)',
+    },
+    CORPORATE_15: {
+      title: 'Standard Korporat (15 Hari)',
+      desc: 'Standard syarikat swasta & MNC Malaysia: Merangkumi 5 cuti wajib EA + perayaan utama persekutuan (Tahun Baru, Raya Puasa 2H, CNY 2H, Deepavali, Krismas, Wesak, dsb). Paling umum untuk pejabat swasta.',
+      tag: 'Standard Pejabat Swasta / MNC',
+      bg: 'var(--accent-cyan)',
+    },
+    ALL: {
+      title: `Semua Gazet Rasmi (${applicableHolidays.length} Hari)`,
+      desc: `Boss belanja semua! Mengambil kira kesemua cuti umum persekutuan dan cuti negeri yang diwartakan kerajaan bagi ${state.replace(/_/g, ' ')}.`,
+      tag: 'Pakej Paling Pemurah',
+      bg: 'var(--accent-yellow)',
+    },
+    CUSTOM: {
+      title: `Polisi Tersuai (${observedCount} Hari)`,
+      desc: 'Korang telah mengubahsuai senarai cuti mengikut kalendar atau polisi syarikat sendiri dari senarai checklist di bawah.',
+      tag: 'Checklist Manual',
+      bg: 'var(--bg-primary)',
+    },
+  }[activePreset] || {
+    title: 'Polisi Cuti Syarikat',
+    desc: 'Pilih preset cuti atau tanda cuti secara manual dari checklist di bawah.',
+    tag: 'Tetapan Cuti',
+    bg: 'var(--bg-primary)',
+  };
+
   return createPortal(
     <div
       style={{
@@ -162,22 +194,62 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
             flex: 1,
           }}
         >
-          {/* Statutory EA 1955 Guidance Banner */}
+          {/* Dynamic Preset Guidance Banner */}
           <div
             style={{
-              backgroundColor: 'var(--bg-primary)',
+              backgroundColor: presetInfo.bg,
               border: '2px solid var(--border-color)',
               borderRadius: 'var(--border-radius)',
               padding: '0.65rem 0.85rem',
               marginBottom: '1rem',
+              boxShadow: '2px 2px 0px var(--border-color)',
               display: 'flex',
-              gap: '0.5rem',
+              gap: '0.55rem',
               alignItems: 'flex-start',
+              transition: 'background-color 0.15s ease',
             }}
           >
-            <Info size={16} strokeWidth={2.5} style={{ flexShrink: 0, marginTop: '2px' }} />
-            <div style={{ fontSize: '0.75rem', fontWeight: 600, lineHeight: 1.4 }}>
-              <strong>Employment Act 1955 (Section 60D):</strong> Private employers must grant at least 11 paid gazetted holidays (5 compulsory + 6 chosen by employer).
+            <Info size={16} strokeWidth={2.5} style={{ flexShrink: 0, marginTop: '2px', color: 'var(--text-color)' }} />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div
+                style={{
+                  fontSize: '0.78rem',
+                  fontWeight: 900,
+                  textTransform: 'uppercase',
+                  marginBottom: '0.2rem',
+                  color: 'var(--text-color)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '0.4rem',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <span>{presetInfo.title}</span>
+                <span
+                  style={{
+                    fontSize: '0.62rem',
+                    fontWeight: 800,
+                    padding: '0.05rem 0.35rem',
+                    backgroundColor: 'var(--bg-secondary)',
+                    border: '1px solid var(--border-color)',
+                    borderRadius: 'var(--border-radius-pill)',
+                    color: 'var(--text-color)',
+                  }}
+                >
+                  {presetInfo.tag}
+                </span>
+              </div>
+              <div
+                style={{
+                  fontSize: '0.74rem',
+                  fontWeight: 600,
+                  lineHeight: 1.4,
+                  color: 'var(--text-color)',
+                }}
+              >
+                {presetInfo.desc}
+              </div>
             </div>
           </div>
 
