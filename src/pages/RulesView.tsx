@@ -30,7 +30,10 @@ export function RulesView() {
     setAlBalance,
     maxAlPerBridge,
     setMaxAlPerBridge,
+    language,
   } = useLeaveStore();
+
+  const isEn = language === 'en';
 
   const [categoryFilter, setCategoryFilter] = useState<'ALL' | 'COMPULSORY' | 'FEDERAL' | 'STATE'>('ALL');
 
@@ -65,21 +68,21 @@ export function RulesView() {
   const presets = [
     {
       id: 'MINIMUM_11' as const,
-      label: 'EA 1955 (11H)',
+      label: isEn ? 'EA 1955 (11D)' : 'EA 1955 (11H)',
       icon: Sparkles,
-      desc: 'Minima akta: 5 wajib + 6 pilihan majikan',
+      desc: isEn ? 'Statutory min: 5 mandatory + 6 employer choice' : 'Minima akta: 5 wajib + 6 pilihan majikan',
     },
     {
       id: 'CORPORATE_15' as const,
-      label: 'Korp (15H)',
+      label: isEn ? 'Corporate (15D)' : 'Korp (15H)',
       icon: Building,
-      desc: 'Standard biasa syarikat swasta Malaysia',
+      desc: isEn ? 'Standard corporate practice across Malaysian companies' : 'Standard biasa syarikat swasta Malaysia',
     },
     {
       id: 'ALL' as const,
-      label: 'Semua Gazet',
+      label: isEn ? 'All Gazetted' : 'Semua Gazet',
       icon: Globe,
-      desc: 'Boss belanja semua cuti persekutuan & negeri!',
+      desc: isEn ? 'Company observes all federal & state public holidays!' : 'Boss belanja semua cuti persekutuan & negeri!',
     },
   ];
 
@@ -105,12 +108,12 @@ export function RulesView() {
               margin: 0,
             }}
           >
-            Polisi Syarikat & Cuti Gazet
+            {isEn ? 'Company Policy & Gazetted Holidays' : 'Polisi Syarikat & Cuti Gazet'}
           </h2>
         </div>
 
         <BrutalistBadge color="var(--accent-yellow)">
-          {observedCount} CUTI AKTIF
+          {observedCount} {isEn ? 'ACTIVE HOLIDAYS' : 'CUTI AKTIF'}
         </BrutalistBadge>
       </div>
 

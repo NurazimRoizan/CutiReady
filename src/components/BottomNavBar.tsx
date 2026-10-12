@@ -1,4 +1,6 @@
 import { AppTab } from '../types';
+import { useLeaveStore } from '../store/useLeaveStore';
+import { getTranslations } from '../i18n/translations';
 import { Zap, CalendarCheck, Settings } from 'lucide-react';
 
 interface BottomNavBarProps {
@@ -16,29 +18,33 @@ export function BottomNavBar({
   plannedCount,
   observedCount,
 }: BottomNavBarProps) {
+  const language = useLeaveStore((state) => state.language);
+  const t = getTranslations(language);
+
   const tabs = [
     {
       id: 'BRIDGES' as AppTab,
-      label: 'Combo Cuti',
+      label: t.nav.combo,
       icon: Zap,
       badge: bridgesCount > 0 ? `${bridgesCount}` : undefined,
       badgeColor: 'var(--accent-cyan)',
     },
     {
       id: 'PLAN' as AppTab,
-      label: 'My Cuti',
+      label: t.nav.myPlan,
       icon: CalendarCheck,
       badge: `${plannedCount}`,
       badgeColor: plannedCount > 0 ? 'var(--accent-pink)' : 'var(--weekend-bg)',
     },
     {
       id: 'RULES' as AppTab,
-      label: 'Holiday',
+      label: t.nav.rules,
       icon: Settings,
       badge: `${observedCount}`,
       badgeColor: 'var(--accent-yellow)',
     },
   ];
+
 
   return (
     <nav

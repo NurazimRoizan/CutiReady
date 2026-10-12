@@ -1,4 +1,6 @@
 import { FilterTabType } from '../types';
+import { useLeaveStore } from '../store/useLeaveStore';
+import { getTranslations } from '../i18n/translations';
 
 interface FilterTabsProps {
   activeTab: FilterTabType;
@@ -7,15 +9,19 @@ interface FilterTabsProps {
 }
 
 export function FilterTabs({ activeTab, onChangeTab, counts }: FilterTabsProps) {
+  const language = useLeaveStore((state) => state.language);
+  const t = getTranslations(language);
+
   const tabs: { id: FilterTabType; label: string }[] = [
-    { id: 'ALL', label: 'SEMUA' },
-    { id: 'HIGH_ROI', label: 'ROI PADU' },
-    { id: 'ZERO_AL', label: 'FREE (0 AL)' },
-    { id: 'Q1', label: 'Q1' },
-    { id: 'Q2', label: 'Q2' },
-    { id: 'Q3', label: 'Q3' },
-    { id: 'Q4', label: 'Q4' },
+    { id: 'ALL', label: t.bridges.tabs.all },
+    { id: 'HIGH_ROI', label: t.bridges.tabs.highRoi },
+    { id: 'ZERO_AL', label: t.bridges.tabs.zeroAl },
+    { id: 'Q1', label: t.bridges.tabs.q1 },
+    { id: 'Q2', label: t.bridges.tabs.q2 },
+    { id: 'Q3', label: t.bridges.tabs.q3 },
+    { id: 'Q4', label: t.bridges.tabs.q4 },
   ];
+
 
   return (
     <div

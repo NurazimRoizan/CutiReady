@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useLeaveStore } from '../store/useLeaveStore';
+import { getTranslations } from '../i18n/translations';
 import { BridgeOpportunity, STATE_NAMES } from '../types';
 import { SummaryStats } from '../components/SummaryStats';
 import { BridgeCard } from '../components/BridgeCard';
@@ -26,8 +27,10 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
     annualLeaveBalance,
     plannedLeaveDates,
     clearAllPlannedLeave,
+    language,
   } = useLeaveStore();
 
+  const t = getTranslations(language);
   const [copied, setCopied] = useState(false);
 
   // Only display bridges whose AL dates are fully locked, picking the most complete bridge if nested
@@ -67,7 +70,7 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
   };
 
   const handleClearAll = () => {
-    if (window.confirm('Betul ke nak reset semua tarikh cuti yang dah lock tu? Nanti kena pilih balik tau!')) {
+    if (window.confirm(t.plan.clearConfirm)) {
       clearAllPlannedLeave();
     }
   };
@@ -94,14 +97,14 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
               margin: 0,
             }}
           >
-            Dossier Cuti Saya
+            {t.plan.title}
           </h2>
         </div>
 
         <BrutalistBadge
           color={remainingAl > 3 ? 'var(--accent-cyan)' : 'var(--accent-pink)'}
         >
-          {remainingAl} / {annualLeaveBalance} AL BALANCE
+          {remainingAl} / {annualLeaveBalance} {t.plan.alBalanceSuffix}
         </BrutalistBadge>
       </div>
 
@@ -139,7 +142,7 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
                   letterSpacing: '0.5px',
                 }}
               >
-                Tindakan Plan ({plannedBridges.length} cuti dah lock)
+                {t.plan.actions} ({plannedBridges.length} {t.plan.lockedCount})
               </span>
 
               <button
@@ -159,7 +162,7 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
                 }}
               >
                 <Trash2 size={12} />
-                Reset Semua
+                {t.plan.clearAll}
               </button>
             </div>
 
@@ -176,7 +179,7 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
                 onClick={handleExportAll}
                 style={{ width: '100%', fontSize: '0.82rem', padding: '0.6rem 0.4rem' }}
               >
-                <span>EXPORT .ICS</span>
+                <span>{t.plan.exportIcs}</span>
               </BrutalistButton>
 
               <BrutalistButton
@@ -185,7 +188,7 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
                 onClick={handleCopySummary}
                 style={{ width: '100%', fontSize: '0.82rem', padding: '0.6rem 0.4rem' }}
               >
-                <span>{copied ? 'DAH COPY!' : 'COPY AYAT BOSS'}</span>
+                <span>{copied ? t.plan.copied : t.plan.copyBoss}</span>
               </BrutalistButton>
             </div>
           </div>
@@ -208,7 +211,7 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
                   letterSpacing: '0.5px',
                 }}
               >
-                Cuti Dah Lock Dalam Kalendar
+                {t.plan.lockedInCalendar}
               </span>
               <span
                 style={{
@@ -218,7 +221,7 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
                   textTransform: 'uppercase',
                 }}
               >
-                {plannedLeaveDates.length} HARI AL DIGUNAKAN
+                {plannedLeaveDates.length} {t.plan.alDaysUsed}
               </span>
             </div>
 
@@ -231,7 +234,7 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
         /* Empty State */
         <BrutalistCard
           headerColor="var(--accent-yellow)"
-          title="ADUH, BELUM PLAN CUTI LAGI KE?"
+          title={t.plan.emptyHeader}
         >
           <div style={{ textAlign: 'center', padding: '1.25rem 0.5rem' }}>
             <CalendarPlus
@@ -250,7 +253,7 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
                 margin: '0 0 0.5rem 0',
               }}
             >
-              Dossier Cuti Korang Kosong Lagi Ni!
+              {t.plan.emptyTitle}
             </h3>
             <p
               style={{
@@ -262,7 +265,7 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
                 maxWidth: '420px',
               }}
             >
-              Boss tengok mesti ingat korang rajin sangat OT tak balik rumah. Jom explore long weekend 2026 dan tekan <strong>"+ LOCK CUTI"</strong>. Cuti berterusan, balance AL, dengan ayat WhatsApp boss auto-generate kat sini terus!
+              {t.plan.emptyDesc}
             </p>
 
             <BrutalistButton
@@ -275,7 +278,7 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
               }}
             >
               <Sparkles size={16} />
-              <span>JOM CARI CUTI 2026!</span>
+              <span>{t.plan.emptyCta}</span>
               <ArrowRight size={16} />
             </BrutalistButton>
           </div>

@@ -6,11 +6,20 @@ import {
   UserPreferences,
   LeavePreset,
   STATE_WEEKEND_MAP,
+  AppLanguage,
 } from '../types';
 import { DEFAULT_HOLIDAYS_2026 } from '../data/holidays';
 
+export const isEnglishPath = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  const path = window.location.pathname.toLowerCase();
+  return path === '/en' || path.startsWith('/en/') || path.startsWith('/en');
+};
+
 interface LeaveStore extends UserPreferences {
   activePreset: LeavePreset;
+  language: AppLanguage;
+  setLanguage: (lang: AppLanguage) => void;
   setState: (state: MalaysianState) => void;
   setWeekendType: (type: WeekendType) => void;
   setAlBalance: (balance: number) => void;
@@ -40,6 +49,18 @@ export const useLeaveStore = create<LeaveStore>()(
       observedHolidayIds: DEFAULT_HOLIDAYS_2026.map((h) => h.id),
       activePreset: 'ALL',
       hidePastHolidays: true,
+      language: isEnglishPath() ? 'en' : 'manglish',
+
+      setLanguage: (language: AppLanguage) => {
+        set({ language });
+        if (typeof window !== 'undefined') {
+          const currentPath = window.location.pathname;
+          const targetPath = language === 'en' ? '/en' : '/';
+          if (currentPath !== targetPath) {
+            window.history.pushState(null, '', targetPath);
+          }
+        }
+      },
 
       toggleHidePastHolidays: () =>
         set((state) => ({ hidePastHolidays: !state.hidePastHolidays })),
@@ -145,6 +166,9 @@ export const useLeaveStore = create<LeaveStore>()(
       clearAllPlannedLeave: () => set({ plannedLeaveDates: [] }),
 
       resetToDefaults: () => {
+        if (typeof window !== 'undefined' && isEnglishPath()) {
+          window.history.pushState(null, '', '/');
+        }
         set({
           selectedYear: 2026,
           state: 'KUALA_LUMPUR',
@@ -156,11 +180,20 @@ export const useLeaveStore = create<LeaveStore>()(
           observedHolidayIds: DEFAULT_HOLIDAYS_2026.map((h) => h.id),
           activePreset: 'ALL',
           hidePastHolidays: true,
+          language: 'manglish',
         });
       },
     }),
     {
       name: 'cutiready-storage',
+      onRehydrateStorage: () => (state) => {
+        if (!state) return;
+        if (isEnglishPath()) {
+          state.language = 'en';
+        } else if (!state.language) {
+          state.language = 'manglish';
+        }
+      },
     }
   )
 );

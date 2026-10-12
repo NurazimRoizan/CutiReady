@@ -1,4 +1,5 @@
 import { BridgeOpportunity } from '../types';
+import { useLeaveStore } from '../store/useLeaveStore';
 import { Calendar, Flame, Zap, Award } from 'lucide-react';
 
 interface SummaryStatsProps {
@@ -7,6 +8,9 @@ interface SummaryStatsProps {
 }
 
 export function SummaryStats({ bridges, plannedLeaveDates }: SummaryStatsProps) {
+  const language = useLeaveStore((state) => state.language);
+  const isEn = language === 'en';
+
   const totalBridges = bridges.length;
   const freeBridges = bridges.filter((b) => b.alDaysRequired === 0).length;
   const maxBreak = bridges.reduce((max, b) => Math.max(max, b.totalDaysOff), 0);
@@ -21,34 +25,35 @@ export function SummaryStats({ bridges, plannedLeaveDates }: SummaryStatsProps) 
 
   const stats = [
     {
-      label: 'TOTAL COMBO',
+      label: isEn ? 'TOTAL COMBOS' : 'TOTAL COMBO',
       value: totalBridges,
-      subtext: 'Peluang Cuti',
+      subtext: isEn ? 'Leave Options' : 'Peluang Cuti',
       color: 'var(--accent-yellow)',
       icon: Calendar,
     },
     {
       label: 'FREE (0 AL)',
       value: freeBridges,
-      subtext: 'Cuti Free Je',
+      subtext: isEn ? 'Free Holidays' : 'Cuti Free Je',
       color: 'var(--accent-cyan)',
       icon: Zap,
     },
     {
-      label: 'MAX HEALING',
-      value: `${maxBreak} Hari`,
-      subtext: 'Paling Panjang',
+      label: isEn ? 'MAX BREAK' : 'MAX HEALING',
+      value: `${maxBreak} ${isEn ? 'Days' : 'Hari'}`,
+      subtext: isEn ? 'Longest Streak' : 'Paling Panjang',
       color: 'var(--accent-green)',
       icon: Flame,
     },
     {
-      label: 'DAH LOCK',
+      label: isEn ? 'LOCKED' : 'DAH LOCK',
       value: `${plannedBridges.length} / ${plannedLeaveDates.length}d`,
-      subtext: 'Cuti / Hari AL',
+      subtext: isEn ? 'Breaks / AL Days' : 'Cuti / Hari AL',
       color: 'var(--accent-pink)',
       icon: Award,
     },
   ];
+
 
   return (
     <div

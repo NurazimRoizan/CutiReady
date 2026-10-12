@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { BrutalistButton } from './BrutalistButton';
 import { BrutalistBadge } from './BrutalistBadge';
+import { useLeaveStore } from '../store/useLeaveStore';
 import { X, Palette } from 'lucide-react';
 
 interface LegendModalProps {
@@ -10,6 +11,9 @@ interface LegendModalProps {
 }
 
 export function LegendModal({ isOpen, onClose }: LegendModalProps) {
+  const language = useLeaveStore((s) => s.language);
+  const isEn = language === 'en';
+
   // Close on ESC key press & lock background scrolling
   useEffect(() => {
     if (!isOpen) return;
@@ -29,47 +33,90 @@ export function LegendModal({ isOpen, onClose }: LegendModalProps) {
 
   if (!isOpen) return null;
 
-  const calendarColors = [
-    {
-      badge: <BrutalistBadge size="sm" color="var(--ph-bg)" textColor="var(--ph-text)">🌿 Cuti Umum (PH)</BrutalistBadge>,
-      title: 'Gazetted Public Holiday',
-      desc: 'Cuti am rasmi kerajaan / gazet negeri (Seafoam Mint). Gaji jalan, 0 AL ditolak.',
-    },
-    {
-      badge: <BrutalistBadge size="sm" color="var(--replacement-bg)" textColor="var(--replacement-text)">🌙 Cuti Ganti</BrutalistBadge>,
-      title: 'Replacement Holiday',
-      desc: 'Bila PH jatuh hari weekend / rehat, automatik diganti ke hari bekerja seterusnya (Slate Plum).',
-    },
-    {
-      badge: <BrutalistBadge size="sm" color="var(--al-bg)" textColor="var(--al-text)">🌸 Ambil AL</BrutalistBadge>,
-      title: 'Recommended Annual Leave',
-      desc: 'Hari kerja strategik diapit cuti & weekend (Raspberry Coral). Apply AL hari ni untuk unlock cuti panjang!',
-    },
-    {
-      badge: <BrutalistBadge size="sm" color="var(--weekend-bg)" textColor="var(--weekend-text)">⚪ Weekend</BrutalistBadge>,
-      title: 'Hari Rehat Mingguan',
-      desc: 'Sabtu & Ahad (atau Jumaat & Sabtu untuk Kedah, Kelantan, Terengganu).',
-    },
-  ];
+  const calendarColors = isEn
+    ? [
+        {
+          badge: <BrutalistBadge size="sm" color="var(--ph-bg)" textColor="var(--ph-text)">🌿 Public Holiday (PH)</BrutalistBadge>,
+          title: 'Gazetted Public Holiday',
+          desc: 'Official federal or state gazetted public holiday (Seafoam Mint). Fully paid, 0 AL deducted.',
+        },
+        {
+          badge: <BrutalistBadge size="sm" color="var(--replacement-bg)" textColor="var(--replacement-text)">🌙 Replacement Holiday</BrutalistBadge>,
+          title: 'Replacement Holiday',
+          desc: 'When a public holiday falls on a weekend or rest day, it is automatically rolled over to the next working day (Slate Plum).',
+        },
+        {
+          badge: <BrutalistBadge size="sm" color="var(--al-bg)" textColor="var(--al-text)">🌸 Annual Leave (AL)</BrutalistBadge>,
+          title: 'Recommended Annual Leave',
+          desc: 'Strategic workday bridged between holidays and weekends (Raspberry Coral). Apply AL on this day to unlock a long break!',
+        },
+        {
+          badge: <BrutalistBadge size="sm" color="var(--weekend-bg)" textColor="var(--weekend-text)">⚪ Weekend</BrutalistBadge>,
+          title: 'Weekly Rest Days',
+          desc: 'Saturday & Sunday (or Friday & Saturday for Kedah, Kelantan, Terengganu).',
+        },
+      ]
+    : [
+        {
+          badge: <BrutalistBadge size="sm" color="var(--ph-bg)" textColor="var(--ph-text)">🌿 Cuti Umum (PH)</BrutalistBadge>,
+          title: 'Gazetted Public Holiday',
+          desc: 'Cuti am rasmi kerajaan / gazet negeri (Seafoam Mint). Gaji jalan, 0 AL ditolak.',
+        },
+        {
+          badge: <BrutalistBadge size="sm" color="var(--replacement-bg)" textColor="var(--replacement-text)">🌙 Cuti Ganti</BrutalistBadge>,
+          title: 'Replacement Holiday',
+          desc: 'Bila PH jatuh hari weekend / rehat, automatik diganti ke hari bekerja seterusnya (Slate Plum).',
+        },
+        {
+          badge: <BrutalistBadge size="sm" color="var(--al-bg)" textColor="var(--al-text)">🌸 Ambil AL</BrutalistBadge>,
+          title: 'Recommended Annual Leave',
+          desc: 'Hari kerja strategik diapit cuti & weekend (Raspberry Coral). Apply AL hari ni untuk unlock cuti panjang!',
+        },
+        {
+          badge: <BrutalistBadge size="sm" color="var(--weekend-bg)" textColor="var(--weekend-text)">⚪ Weekend</BrutalistBadge>,
+          title: 'Hari Rehat Mingguan',
+          desc: 'Sabtu & Ahad (atau Jumaat & Sabtu untuk Kedah, Kelantan, Terengganu).',
+        },
+      ];
 
-  const cardBadges = [
-    {
-      badge: <BrutalistBadge size="sm" color="var(--accent-cyan)">⚡ 0 AL • Free Cuti</BrutalistBadge>,
-      desc: 'Long weekend semulajadi tanpa tolak walau sehari pun baki AL korang (Seafoam Mint)!',
-    },
-    {
-      badge: <BrutalistBadge size="sm" color="var(--accent-yellow)">🔥 Mega ROI (≥4x)</BrutalistBadge>,
-      desc: 'Paling untung! Apply 1–2 hari AL dapat lepak 5–9 hari cuti bersambung (Raspberry Coral).',
-    },
-    {
-      badge: <BrutalistBadge size="sm" color="var(--accent-pink)">🌸 Burn [X] AL</BrutalistBadge>,
-      desc: 'Bilangan hari cuti tahunan yang perlu diapply untuk jayakan combo cuti ni (Slate Plum).',
-    },
-    {
-      badge: <BrutalistBadge size="sm" color="var(--accent-green)">✓ Dah Lock</BrutalistBadge>,
-      desc: 'Cuti yang korang dah simpan ke dalam dossier peribadi (Seafoam Mint).',
-    },
-  ];
+  const cardBadges = isEn
+    ? [
+        {
+          badge: <BrutalistBadge size="sm" color="var(--accent-cyan)">⚡ 0 AL • Free Break</BrutalistBadge>,
+          desc: 'Natural long weekend without using a single day of your annual leave (Seafoam Mint)!',
+        },
+        {
+          badge: <BrutalistBadge size="sm" color="var(--accent-yellow)">🔥 Mega ROI (≥4x)</BrutalistBadge>,
+          desc: 'Best value! Apply 1–2 AL days to enjoy 5–9 consecutive days off (Raspberry Coral).',
+        },
+        {
+          badge: <BrutalistBadge size="sm" color="var(--accent-pink)">🌸 Apply [X] AL</BrutalistBadge>,
+          desc: 'Number of annual leave days required to complete this combo break (Slate Plum).',
+        },
+        {
+          badge: <BrutalistBadge size="sm" color="var(--accent-green)">✓ Locked</BrutalistBadge>,
+          desc: 'Breaks you have saved into your personal leave dossier (Seafoam Mint).',
+        },
+      ]
+    : [
+        {
+          badge: <BrutalistBadge size="sm" color="var(--accent-cyan)">⚡ 0 AL • Free Cuti</BrutalistBadge>,
+          desc: 'Long weekend semulajadi tanpa tolak walau sehari pun baki AL korang (Seafoam Mint)!',
+        },
+        {
+          badge: <BrutalistBadge size="sm" color="var(--accent-yellow)">🔥 Mega ROI (≥4x)</BrutalistBadge>,
+          desc: 'Paling untung! Apply 1–2 hari AL dapat lepak 5–9 hari cuti bersambung (Raspberry Coral).',
+        },
+        {
+          badge: <BrutalistBadge size="sm" color="var(--accent-pink)">🌸 Burn [X] AL</BrutalistBadge>,
+          desc: 'Bilangan hari cuti tahunan yang perlu diapply untuk jayakan combo cuti ni (Slate Plum).',
+        },
+        {
+          badge: <BrutalistBadge size="sm" color="var(--accent-green)">✓ Dah Lock</BrutalistBadge>,
+          desc: 'Cuti yang korang dah simpan ke dalam dossier peribadi (Seafoam Mint).',
+        },
+      ];
+
 
   return createPortal(
     <div
@@ -128,7 +175,7 @@ export function LegendModal({ isOpen, onClose }: LegendModalProps) {
                 color: 'var(--accent-yellow-text)',
               }}
             >
-              Panduan Warna & Simbol
+              {isEn ? 'Color & Symbol Guide' : 'Panduan Warna & Simbol'}
             </h2>
           </div>
 

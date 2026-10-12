@@ -1,4 +1,6 @@
 import { BrutalistButton } from './BrutalistButton';
+import { useLeaveStore } from '../store/useLeaveStore';
+import { getTranslations } from '../i18n/translations';
 
 interface HeroSectionProps {
   onScrollToPlanner: () => void;
@@ -11,6 +13,9 @@ export function HeroSection({
   onToggleHowToUse,
   isHowToUseOpen,
 }: HeroSectionProps) {
+  const language = useLeaveStore((state) => state.language);
+  const t = getTranslations(language);
+
   return (
     <section style={{ textAlign: 'center', position: 'relative', marginBottom: '1.25rem' }}>
       {/* Main Massive Hero Header */}
@@ -25,8 +30,8 @@ export function HeroSection({
           color: 'var(--text-color)',
         }}
       >
-        The Ultimate Leave Hack<br />
-        Untuk Pekerja Malaysia<br />
+        {t.hero.title1}<br />
+        {t.hero.title2}<br />
         <span
           style={{
             backgroundColor: 'var(--accent-yellow)',
@@ -38,7 +43,7 @@ export function HeroSection({
             boxShadow: '3px 3px 0px var(--border-color)',
           }}
         >
-          Kerja Kuat, Cuti Lagi Kuat!
+          {t.hero.badge}
         </span>
       </h1>
 
@@ -53,7 +58,7 @@ export function HeroSection({
           color: 'var(--text-color)',
         }}
       >
-        Burn sikit <strong>Annual Leave (AL)</strong>, tapau <strong>40+ hari cuti panjang</strong>! Formula matematik 100% tepat ikut Akta Kerja 1955, public holiday, dan <em>Cuti Ganti</em>. Boss senyum, HR approve, anda healing!
+        {t.hero.description}
       </p>
 
       {/* Stacked Full-Width Dual Action Hero Buttons */}
@@ -68,7 +73,7 @@ export function HeroSection({
             boxShadow: 'var(--shadow-offset) var(--shadow-offset) 0px var(--border-color)',
           }}
         >
-          JOM TENGOK COMBO CUTI 2026 ↓
+          {t.hero.ctaCombo}
         </BrutalistButton>
 
         <BrutalistButton
@@ -81,7 +86,7 @@ export function HeroSection({
             boxShadow: 'var(--shadow-offset) var(--shadow-offset) 0px var(--border-color)',
           }}
         >
-          {isHowToUseOpen ? 'TUTUP GUIDE ONBOARDING ↑' : 'CARA HACK CUTI NI MACAM MANA? ↗'}
+          {isHowToUseOpen ? t.hero.ctaGuideClose : t.hero.ctaGuideOpen}
         </BrutalistButton>
       </div>
 
@@ -97,7 +102,7 @@ export function HeroSection({
         }}
       >
         <span style={{ fontSize: '0.82rem', fontWeight: 700, opacity: 0.75, color: 'var(--text-color)' }}>
-          100% Patuh Akta Kerja 1955 (Seksyen 60D)
+          {t.hero.eaNote}
         </span>
         <span
           style={{
@@ -109,7 +114,7 @@ export function HeroSection({
           }}
           onClick={onToggleHowToUse}
         >
-          (Tengok cara guna)
+          {t.hero.eaLink}
         </span>
       </div>
     </section>

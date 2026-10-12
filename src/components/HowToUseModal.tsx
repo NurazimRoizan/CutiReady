@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { BrutalistButton } from './BrutalistButton';
+import { useLeaveStore } from '../store/useLeaveStore';
 import { X, HelpCircle } from 'lucide-react';
 
 interface HowToUseModalProps {
@@ -9,6 +10,9 @@ interface HowToUseModalProps {
 }
 
 export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
+  const language = useLeaveStore((s) => s.language);
+  const isEn = language === 'en';
+
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -27,40 +31,76 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
 
   if (!isOpen) return null;
 
-  const steps = [
-    {
-      step: '01',
-      title: 'Pilih Negeri Tempat Kerja',
-      emoji: '📍',
-      pill: 'Rules Weekend',
-      description:
-        'Negeri lain, hari cuti & weekend lain bro:\n• KL / Selangor = Sabtu–Ahad\n• Kedah / Kelantan / Terengganu = Jumaat–Sabtu\n\nSistem auto-adjust cuti gazet ikut negeri korang!',
-    },
-    {
-      step: '02',
-      title: 'Match Polisi Syarikat',
-      emoji: '🏢',
-      pill: 'EA 1955 Seksyen 60D',
-      description:
-        'Company korang ikut Minima Akta (11 hari), Standard Korporat (15 hari), atau jenis boss pemurah (semua cuti gazet)?\n\nBoleh toggle Cuti Ganti hari Sabtu juga!',
-    },
-    {
-      step: '03',
-      title: 'Spot Combo & Lock In Cepat',
-      emoji: '🎯',
-      pill: 'ROI Sampai 5x!',
-      description:
-        'Tengok combo cuti yang auto-generate. Cari yang 0 AL (free cuti terus) atau Mega Combo ROI padu.\n\nTekan "+ Lock Cuti" sebelum colleague lain sapu slot!',
-    },
-    {
-      step: '04',
-      title: 'Export & WhatsApp Boss',
-      emoji: '📅',
-      pill: '1-Click Settle',
-      description:
-        'Pergi tab "My Cuti" untuk download .ics masuk Google/Apple Calendar, atau copy terus ayat WhatsApp/Slack mesra-boss untuk mohon cuti!',
-    },
-  ];
+  const steps = isEn
+    ? [
+        {
+          step: '01',
+          title: 'Select Workplace State',
+          emoji: '📍',
+          pill: 'Weekend Rules',
+          description:
+            'Different states have different weekends and gazetted holidays:\n• KL / Selangor = Saturday–Sunday\n• Kedah / Kelantan / Terengganu = Friday–Saturday\n\nThe engine auto-adjusts gazetted public holidays to your state!',
+        },
+        {
+          step: '02',
+          title: 'Match Company Policy',
+          emoji: '🏢',
+          pill: 'EA 1955 Section 60D',
+          description:
+            'Does your company observe Statutory Minimum (11 days), Corporate Standard (15 days), or all gazetted holidays?\n\nYou can also toggle Saturday replacement holidays!',
+        },
+        {
+          step: '03',
+          title: 'Spot Combos & Lock In Fast',
+          emoji: '🎯',
+          pill: 'Up to 5x ROI!',
+          description:
+            'Browse auto-generated leave bridges. Look for 0 AL (free breaks) or high-ROI mega combos.\n\nTap "+ Lock Leave" before colleagues take the slot!',
+        },
+        {
+          step: '04',
+          title: 'Export & Message Boss',
+          emoji: '📅',
+          pill: '1-Click Done',
+          description:
+            'Head to the "My Plan" tab to download .ics for Google/Apple Calendar, or copy a ready-to-send WhatsApp/Slack leave request for your manager!',
+        },
+      ]
+    : [
+        {
+          step: '01',
+          title: 'Pilih Negeri Tempat Kerja',
+          emoji: '📍',
+          pill: 'Rules Weekend',
+          description:
+            'Negeri lain, hari cuti & weekend lain bro:\n• KL / Selangor = Sabtu–Ahad\n• Kedah / Kelantan / Terengganu = Jumaat–Sabtu\n\nSistem auto-adjust cuti gazet ikut negeri korang!',
+        },
+        {
+          step: '02',
+          title: 'Match Polisi Syarikat',
+          emoji: '🏢',
+          pill: 'EA 1955 Seksyen 60D',
+          description:
+            'Company korang ikut Minima Akta (11 hari), Standard Korporat (15 hari), atau jenis boss pemurah (semua cuti gazet)?\n\nBoleh toggle Cuti Ganti hari Sabtu juga!',
+        },
+        {
+          step: '03',
+          title: 'Spot Combo & Lock In Cepat',
+          emoji: '🎯',
+          pill: 'ROI Sampai 5x!',
+          description:
+            'Tengok combo cuti yang auto-generate. Cari yang 0 AL (free cuti terus) atau Mega Combo ROI padu.\n\nTekan "+ Lock Cuti" sebelum colleague lain sapu slot!',
+        },
+        {
+          step: '04',
+          title: 'Export & WhatsApp Boss',
+          emoji: '📅',
+          pill: '1-Click Settle',
+          description:
+            'Pergi tab "My Cuti" untuk download .ics masuk Google/Apple Calendar, atau copy terus ayat WhatsApp/Slack mesra-boss untuk mohon cuti!',
+        },
+      ];
+
 
   return createPortal(
     <div
@@ -119,7 +159,7 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
                 color: 'var(--accent-yellow-text)',
               }}
             >
-              Cara Hack Cuti Macam Pro
+              {isEn ? 'How to Hack Leave Like a Pro' : 'Cara Hack Cuti Macam Pro'}
             </h2>
           </div>
 
@@ -232,7 +272,7 @@ export function HowToUseModal({ isOpen, onClose }: HowToUseModalProps) {
             onClick={onClose}
             style={{ width: '100%' }}
           >
-            FAHAM, JOM TAPAU CUTI!
+            {isEn ? "GOT IT, LET'S EXPLORE LEAVE!" : 'FAHAM, JOM TAPAU CUTI!'}
           </BrutalistButton>
         </div>
       </div>

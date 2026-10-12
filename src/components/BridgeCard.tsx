@@ -17,6 +17,8 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
   const plannedLeaveDates = useLeaveStore((s) => s.plannedLeaveDates);
   const togglePlannedBridgeDates = useLeaveStore((s) => s.togglePlannedBridgeDates);
   const togglePlannedLeaveDate = useLeaveStore((s) => s.togglePlannedLeaveDate);
+  const language = useLeaveStore((s) => s.language);
+  const isEn = language === 'en';
 
   const [copied, setCopied] = useState(false);
 
@@ -51,11 +53,11 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
 
   // Consistent signature yellow header banner to avoid clashing with day-strip calendar tiles
   const headerColor = 'var(--accent-yellow)';
-  let headerBadgeText = 'STANDARD';
+  let headerBadgeText = isEn ? 'STANDARD' : 'STANDARD';
   if (bridge.alDaysRequired === 0) {
-    headerBadgeText = '⚡ FREE CUTI (0 AL)';
+    headerBadgeText = isEn ? '⚡ FREE LEAVE (0 AL)' : '⚡ FREE CUTI (0 AL)';
   } else if (bridge.roiMultiplier >= 4) {
-    headerBadgeText = `🔥 PADU GILA (${bridge.roiMultiplier}x ROI)`;
+    headerBadgeText = isEn ? `🔥 HIGH ROI (${bridge.roiMultiplier}x)` : `🔥 PADU GILA (${bridge.roiMultiplier}x ROI)`;
   }
 
   return (
@@ -101,18 +103,20 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
               textTransform: 'uppercase',
             }}
           >
-            {bridge.totalDaysOff} Hari Lepak Tanpa Masuk Kerja
+            {isEn
+              ? `${bridge.totalDaysOff} Consecutive Days Off Work`
+              : `${bridge.totalDaysOff} Hari Lepak Tanpa Masuk Kerja`}
           </span>
         </div>
 
         <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
           <BrutalistBadge color="var(--bg-primary)">
-            {bridge.totalDaysOff} HARI OFF
+            {bridge.totalDaysOff} {isEn ? 'DAYS OFF' : 'HARI OFF'}
           </BrutalistBadge>
 
           {bridge.alDaysRequired === 0 ? (
             <BrutalistBadge color="var(--accent-cyan)">
-              ⚡ 0 AL • FREE CUTI
+              ⚡ 0 AL • {isEn ? 'FREE LEAVE' : 'FREE CUTI'}
             </BrutalistBadge>
           ) : bridge.roiMultiplier >= 4 ? (
             <>
@@ -120,12 +124,12 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
                 🔥 {bridge.roiMultiplier}x ROI
               </BrutalistBadge>
               <BrutalistBadge color="var(--accent-pink)">
-                BURN {bridge.alDaysRequired} AL JE
+                {isEn ? `APPLY ${bridge.alDaysRequired} AL ONLY` : `BURN ${bridge.alDaysRequired} AL JE`}
               </BrutalistBadge>
             </>
           ) : (
             <BrutalistBadge color="var(--accent-pink)">
-              BURN {bridge.alDaysRequired} AL ({bridge.roiMultiplier}x)
+              {isEn ? `APPLY ${bridge.alDaysRequired} AL (${bridge.roiMultiplier}x)` : `BURN ${bridge.alDaysRequired} AL (${bridge.roiMultiplier}x)`}
             </BrutalistBadge>
           )}
         </div>
@@ -199,10 +203,10 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
               }}
             >
               <span style={{ fontSize: '0.74rem', fontWeight: 900 }}>
-                {isFullyPlanned ? 'DAH LOCK' : isPartiallyPlanned ? '+ SAMBUNG' : '+ LOCK'}
+                {isFullyPlanned ? (isEn ? 'LOCKED' : 'DAH LOCK') : isPartiallyPlanned ? (isEn ? '+ EXTEND' : '+ SAMBUNG') : '+ LOCK'}
               </span>
               <span style={{ fontSize: '0.66rem', fontWeight: 800 }}>
-                {isFullyPlanned ? `(${bridge.alDaysRequired}H AL)` : 'CUTI'}
+                {isFullyPlanned ? (isEn ? `(${bridge.alDaysRequired}d AL)` : `(${bridge.alDaysRequired}H AL)`) : (isEn ? 'LEAVE' : 'CUTI')}
               </span>
             </div>
           </BrutalistButton>
@@ -256,10 +260,10 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
             }}
           >
             <span style={{ fontSize: '0.74rem', fontWeight: 900 }}>
-              {copied ? 'DAH' : 'COPY'}
+              {copied ? (isEn ? 'COPIED' : 'DAH') : 'COPY'}
             </span>
             <span style={{ fontSize: '0.66rem', fontWeight: 800 }}>
-              {copied ? 'COPIED!' : 'AYAT'}
+              {copied ? '!' : (isEn ? 'MSG' : 'AYAT')}
             </span>
           </div>
         </BrutalistButton>

@@ -132,6 +132,8 @@ export type FilterTabType = 'ALL' | 'HIGH_ROI' | 'ZERO_AL' | 'Q1' | 'Q2' | 'Q3' 
 
 export type AppTab = 'BRIDGES' | 'PLAN' | 'RULES';
 
+export type AppLanguage = 'manglish' | 'en';
+
 export interface UserPreferences {
   selectedYear: number;
   state: MalaysianState;
@@ -142,4 +144,6 @@ export interface UserPreferences {
   allowSaturdayReplacements: boolean;
   plannedLeaveDates: string[]; // User's locked-in AL choices
   hidePastHolidays?: boolean;
+  language?: AppLanguage;
 }
+

@@ -50,7 +50,10 @@ export function BridgesView({
     hidePastHolidays,
     setHidePastHolidays,
     resetToDefaults,
+    language,
   } = useLeaveStore();
+
+  const isEn = language === 'en';
 
   const [activeTab, setActiveTab] = useState<FilterTabType>('ALL');
   const [isLegendOpen, setIsLegendOpen] = useState(false);
@@ -65,10 +68,14 @@ export function BridgesView({
         label: STATE_NAMES[key],
         badge:
           key === 'KEDAH' || key === 'KELANTAN' || key === 'TERENGGANU'
-            ? 'Jum–Sab'
+            ? isEn
+              ? 'Fri–Sat'
+              : 'Jum–Sab'
+            : isEn
+            ? 'Sat–Sun'
             : 'Sab–Ahad',
       })),
-    []
+    [isEn]
   );
 
   const remainingAl = Math.max(0, annualLeaveBalance - plannedLeaveDates.length);
