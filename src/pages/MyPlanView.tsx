@@ -61,7 +61,7 @@ export function MyPlanView({ bridges, onGoToBridges }: MyPlanViewProps) {
 
   const handleCopySummary = async () => {
     try {
-      await copyFullPlanToClipboard(plannedBridges, stateLabel);
+      await copyFullPlanToClipboard(plannedBridges, stateLabel, language);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {

@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { format, parseISO } from 'date-fns';
 import { CalendarDay } from '../types';
+import { useLeaveStore } from '../store/useLeaveStore';
 
 export interface DayStripTileProps {
   day: CalendarDay;
@@ -13,14 +14,17 @@ function DayStripTileComponent({
   isPlanned = false,
   onTogglePlanned,
 }: DayStripTileProps) {
+  const language = useLeaveStore((s) => s.language);
+  const isEn = language === 'en';
+
   const parsed = parseISO(day.date);
   const dayName = format(parsed, 'EEE'); // Fri, Sat, Sun, etc.
   const dateFormatted = format(parsed, 'd MMM'); // 20 Mar
 
   let bgColor = 'var(--workday-bg)';
   let textColor = 'var(--workday-text)';
-  let pillLine1 = 'HARI';
-  let pillLine2 = 'KERJA';
+  let pillLine1 = isEn ? 'WORK' : 'HARI';
+  let pillLine2 = isEn ? 'DAY' : 'KERJA';
   let isDashed = false;
 
   if (day.type === 'WEEKEND') {
@@ -36,17 +40,17 @@ function DayStripTileComponent({
   } else if (day.type === 'REPLACEMENT_HOLIDAY') {
     bgColor = 'var(--replacement-bg)';
     textColor = 'var(--replacement-text)';
-    pillLine1 = 'CUTI';
-    pillLine2 = 'GANTI';
+    pillLine1 = isEn ? 'REPLACE' : 'CUTI';
+    pillLine2 = isEn ? 'MENT' : 'GANTI';
   } else if (day.type === 'WORKDAY') {
     // This workday is part of the bridge, so it's a recommended / planned AL day!
     bgColor = 'var(--al-bg)';
     textColor = 'var(--al-text)';
     if (isPlanned) {
-      pillLine1 = 'DAH';
-      pillLine2 = 'LOCK';
+      pillLine1 = isEn ? 'LOCKED' : 'DAH';
+      pillLine2 = isEn ? 'AL' : 'LOCK';
     } else {
-      pillLine1 = 'AMBIL';
+      pillLine1 = isEn ? 'TAKE' : 'AMBIL';
       pillLine2 = 'AL';
     }
     isDashed = !isPlanned;

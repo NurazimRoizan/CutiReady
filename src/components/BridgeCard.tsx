@@ -37,7 +37,7 @@ function BridgeCardComponent({ bridge }: BridgeCardProps) {
 
   const handleCopy = async () => {
     try {
-      await copyLeaveTextToClipboard(bridge);
+      await copyLeaveTextToClipboard(bridge, language);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {

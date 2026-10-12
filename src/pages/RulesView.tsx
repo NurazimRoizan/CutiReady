@@ -40,7 +40,14 @@ export function RulesView() {
   const stateOptions = (Object.keys(STATE_NAMES) as MalaysianState[]).map((key) => ({
     value: key,
     label: STATE_NAMES[key],
-    badge: key === 'KEDAH' || key === 'KELANTAN' || key === 'TERENGGANU' ? 'Fri-Sat' : 'Sat-Sun',
+    badge:
+      key === 'KEDAH' || key === 'KELANTAN' || key === 'TERENGGANU'
+        ? isEn
+          ? 'Fri–Sat'
+          : 'Jum–Sab'
+        : isEn
+        ? 'Sat–Sun'
+        : 'Sab–Ahad',
   }));
 
   // Filter holidays applicable to this state
@@ -118,7 +125,7 @@ export function RulesView() {
       </div>
 
       {/* 2. State & Weekend Mapping Card */}
-      <BrutalistCard headerColor="var(--accent-cyan)" title="1. NEGERI KERJA & HARI REST DAY">
+      <BrutalistCard headerColor="var(--accent-cyan)" title={isEn ? '1. WORKPLACE STATE & REST DAYS' : '1. NEGERI KERJA & HARI REST DAY'}>
         <p
           style={{
             fontSize: '0.8rem',
@@ -127,7 +134,9 @@ export function RulesView() {
             margin: '0 0 0.65rem 0',
           }}
         >
-          Cuti umum dan hari weekend auto-tukar ikut negeri tempat kerja korang. Takyah pening kira manual!
+          {isEn
+            ? 'Public holidays and weekends automatically adjust to your workplace state. No manual calculation needed!'
+            : 'Cuti umum dan hari weekend auto-tukar ikut negeri tempat kerja korang. Takyah pening kira manual!'}
         </p>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '0.5rem', alignItems: 'center' }}>
@@ -184,13 +193,19 @@ export function RulesView() {
               textTransform: 'uppercase',
             }}
           >
-            {weekendType === 'SAT_SUN' ? 'WEEKEND SABTU–AHAD' : 'WEEKEND JUMAAT–SABTU'}
+            {weekendType === 'SAT_SUN'
+              ? isEn
+                ? 'WEEKEND SATURDAY–SUNDAY'
+                : 'WEEKEND SABTU–AHAD'
+              : isEn
+              ? 'WEEKEND FRIDAY–SATURDAY'
+              : 'WEEKEND JUMAAT–SABTU'}
           </div>
         </div>
       </BrutalistCard>
 
       {/* 3. Statutory EA 1955 Presets */}
-      <BrutalistCard headerColor="var(--accent-yellow)" title="2. PRESET CUTI SYARIKAT">
+      <BrutalistCard headerColor="var(--accent-yellow)" title={isEn ? '2. STATUTORY & COMPANY LEAVE PRESETS' : '2. PRESET CUTI SYARIKAT'}>
         {/* Dynamic Preset Guidance Banner */}
         <div
           style={{
@@ -228,10 +243,16 @@ export function RulesView() {
               }}
             >
               <span>
-                {activePreset === 'MINIMUM_11' && 'Pakej EA 1955 (Minima 11 Hari Ikut Akta)'}
-                {activePreset === 'CORPORATE_15' && 'Pakej Corporate (Standard 15 Hari Swasta)'}
-                {activePreset === 'ALL' && `Pakej Semua Gazet Sapu Habis (${applicableHolidays.length} Hari Cuti)`}
-                {activePreset === 'CUSTOM' && `Custom Setting Sendiri (${observedCount} Hari)`}
+                {activePreset === 'MINIMUM_11' &&
+                  (isEn ? 'EA 1955 Package (11 Days Statutory Min)' : 'Pakej EA 1955 (Minima 11 Hari Ikut Akta)')}
+                {activePreset === 'CORPORATE_15' &&
+                  (isEn ? 'Corporate Package (Standard 15 Days Private)' : 'Pakej Corporate (Standard 15 Hari Swasta)')}
+                {activePreset === 'ALL' &&
+                  (isEn
+                    ? `All Gazetted Package (${applicableHolidays.length} Holidays)`
+                    : `Pakej Semua Gazet Sapu Habis (${applicableHolidays.length} Hari Cuti)`)}
+                {activePreset === 'CUSTOM' &&
+                  (isEn ? `Custom Setting (${observedCount} Days)` : `Custom Setting Sendiri (${observedCount} Hari)`)}
               </span>
               <span
                 style={{
@@ -244,21 +265,29 @@ export function RulesView() {
                   color: 'var(--text-color)',
                 }}
               >
-                {activePreset === 'MINIMUM_11' && 'Minima Law 1955'}
-                {activePreset === 'CORPORATE_15' && 'Standard Swasta / MNC'}
-                {activePreset === 'ALL' && 'Boss Belanja Semua'}
-                {activePreset === 'CUSTOM' && 'Checklist Sendiri'}
+                {activePreset === 'MINIMUM_11' && (isEn ? 'EA 1955 Min' : 'Minima Law 1955')}
+                {activePreset === 'CORPORATE_15' && (isEn ? 'Standard Private / MNC' : 'Standard Swasta / MNC')}
+                {activePreset === 'ALL' && (isEn ? 'All Holidays Observed' : 'Boss Belanja Semua')}
+                {activePreset === 'CUSTOM' && (isEn ? 'Custom Checklist' : 'Checklist Sendiri')}
               </span>
             </div>
             <div style={{ fontSize: '0.73rem', fontWeight: 600, lineHeight: 1.4, color: 'var(--text-color)' }}>
               {activePreset === 'MINIMUM_11' &&
-                'Ikut Seksyen 60D Akta Kerja, boss wajib bagi minima 11 hari cuti berbayar (5 wajib undang-undang + 6 company pick). Hak asas korang ni, jangan bagi boss claim tak tahu!'}
+                (isEn
+                  ? 'Under Section 60D of the Employment Act, employers must provide a minimum of 11 paid public holidays (5 statutory mandatory + 6 company chosen). This is your statutory right!'
+                  : 'Ikut Seksyen 60D Akta Kerja, boss wajib bagi minima 11 hari cuti berbayar (5 wajib undang-undang + 6 company pick). Hak asas korang ni, jangan bagi boss claim tak tahu!')}
               {activePreset === 'CORPORATE_15' &&
-                'Standard biasa private sector & MNC: 5 cuti wajib EA campur cuti perayaan besar (Tahun Baru, Raya 2H, CNY 2H, Deepavali, Krismas, Wesak, dll). Paling ngam untuk geng opis swasta!'}
+                (isEn
+                  ? 'Standard private sector & MNC practice: 5 mandatory EA holidays plus major festive breaks (New Year, Raya 2D, CNY 2D, Deepavali, Christmas, Wesak, etc.). Best fit for corporate employees!'
+                  : 'Standard biasa private sector & MNC: 5 cuti wajib EA campur cuti perayaan besar (Tahun Baru, Raya 2H, CNY 2H, Deepavali, Krismas, Wesak, dll). Paling ngam untuk geng opis swasta!')}
               {activePreset === 'ALL' &&
-                `Boss belanja semua! Mengambil kira kesemua cuti umum persekutuan dan cuti negeri rasmi bagi ${state.replace(/_/g, ' ')}. Rezeki terpijak, layan je cuti kaw-kaw!`}
+                (isEn
+                  ? `All gazetted public holidays observed! Includes all federal and state public holidays for ${state.replace(/_/g, ' ')}. Enjoy maximum time off!`
+                  : `Boss belanja semua! Mengambil kira kesemua cuti umum persekutuan dan cuti negeri rasmi bagi ${state.replace(/_/g, ' ')}. Rezeki terpijak, layan je cuti kaw-kaw!`)}
               {activePreset === 'CUSTOM' &&
-                'Korang dah custom checklist cuti ikut kalendar atau polisi syarikat sendiri dari senarai kat bawah ni.'}
+                (isEn
+                  ? 'You have customized your holiday checklist based on your company calendar or handbook from the list below.'
+                  : 'Korang dah custom checklist cuti ikut kalendar atau polisi syarikat sendiri dari senarai kat bawah ni.')}
             </div>
           </div>
         </div>
@@ -319,10 +348,12 @@ export function RulesView() {
         >
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase' }}>
-              Cuti Ganti Hari Sabtu (Cuti Ganti)
+              {isEn ? 'Saturday Replacement Holidays (In-Lieu)' : 'Cuti Ganti Hari Sabtu (Cuti Ganti)'}
             </div>
             <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-              Kalau cuti jatuh Sabtu, automatik ganti Isnin (jangan rugi cuti!)
+              {isEn
+                ? 'If a holiday falls on Saturday, automatically roll over to Monday'
+                : 'Kalau cuti jatuh Sabtu, automatik ganti Isnin (jangan rugi cuti!)'}
             </div>
           </div>
 
@@ -342,13 +373,13 @@ export function RulesView() {
               boxShadow: '1px 1px 0px var(--border-color)',
             }}
           >
-            {allowSaturdayReplacements ? 'ON LAH' : 'TAKDE'}
+            {allowSaturdayReplacements ? (isEn ? 'ON' : 'ON LAH') : (isEn ? 'OFF' : 'TAKDE')}
           </button>
         </div>
       </BrutalistCard>
 
       {/* 4. Leave Quota & Calculation Settings */}
-      <BrutalistCard headerColor="var(--accent-pink)" title="3. KUOTA AL & HAD SEKALI CUTI">
+      <BrutalistCard headerColor="var(--accent-pink)" title={isEn ? '3. AL QUOTA & MAX PER BRIDGE' : '3. KUOTA AL & HAD SEKALI CUTI'}>
         <div
           style={{
             display: 'grid',
@@ -368,7 +399,7 @@ export function RulesView() {
                 marginBottom: '0.35rem',
               }}
             >
-              Jumlah AL Setahun:
+              {isEn ? 'Total AL per Year:' : 'Jumlah AL Setahun:'}
             </label>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
               <button
@@ -398,7 +429,7 @@ export function RulesView() {
                   padding: '0.3rem',
                 }}
               >
-                {annualLeaveBalance} HARI
+                {annualLeaveBalance} {isEn ? 'DAYS' : 'HARI'}
               </div>
               <button
                 type="button"
@@ -428,7 +459,7 @@ export function RulesView() {
                   textTransform: 'uppercase',
                 }}
               >
-                Had AL / Cuti:
+                {isEn ? 'Max AL / Bridge:' : 'Had AL / Cuti:'}
               </label>
               <span
                 style={{
@@ -440,7 +471,7 @@ export function RulesView() {
                   padding: '0.05rem 0.35rem',
                 }}
               >
-                {maxAlPerBridge} {maxAlPerBridge === 1 ? 'HARI' : 'HARI'}
+                {maxAlPerBridge} {isEn ? 'DAYS' : 'HARI'}
               </span>
             </div>
             <input
@@ -479,7 +510,9 @@ export function RulesView() {
               margin: 0,
             }}
           >
-            Senarai Semak Cuti Umum ({observedCount} / {applicableHolidays.length})
+            {isEn
+              ? `4. PUBLIC HOLIDAY CHECKLIST (${observedCount} / ${applicableHolidays.length})`
+              : `4. Senarai Semak Cuti Umum (${observedCount} / ${applicableHolidays.length})`}
           </h3>
         </div>
 
@@ -495,10 +528,10 @@ export function RulesView() {
         >
           {(
             [
-              { id: 'ALL', label: `Semua (${applicableHolidays.length})` },
-              { id: 'COMPULSORY', label: `Wajib Akta (${compulsoryHolidays.length})` },
-              { id: 'FEDERAL', label: `Persekutuan (${federalHolidays.length})` },
-              { id: 'STATE', label: `Negeri (${stateHolidays.length})` },
+              { id: 'ALL', label: isEn ? `All (${applicableHolidays.length})` : `Semua (${applicableHolidays.length})` },
+              { id: 'COMPULSORY', label: isEn ? `EA Mandatory (${compulsoryHolidays.length})` : `Wajib Akta (${compulsoryHolidays.length})` },
+              { id: 'FEDERAL', label: isEn ? `Federal (${federalHolidays.length})` : `Persekutuan (${federalHolidays.length})` },
+              { id: 'STATE', label: isEn ? `State (${stateHolidays.length})` : `Negeri (${stateHolidays.length})` },
             ] as const
           ).map((tab) => (
             <button
@@ -556,7 +589,11 @@ export function RulesView() {
                 <div style={{ flexShrink: 0 }}>
                   {isCompulsory ? (
                     <div
-                      title="Compulsory under Employment Act 1955 (Cannot be untoggled)"
+                      title={
+                        isEn
+                          ? 'Compulsory under Employment Act 1955 (Cannot be untoggled)'
+                          : 'Wajib bawah Akta Kerja 1955 (Tak boleh untoggle)'
+                      }
                       style={{
                         backgroundColor: 'var(--accent-yellow)',
                         border: '1.5px solid var(--border-color)',
@@ -621,7 +658,7 @@ export function RulesView() {
                         color="var(--accent-yellow)"
                         style={{ fontSize: '0.62rem', padding: '0.05rem 0.35rem' }}
                       >
-                        EA 1955 MANDATED
+                        {isEn ? 'EA 1955 MANDATED' : 'WAJIB AKTA 1955'}
                       </BrutalistBadge>
                     )}
                     {holiday.category === 'STATE' && (
@@ -629,7 +666,7 @@ export function RulesView() {
                         color="var(--accent-purple)"
                         style={{ fontSize: '0.62rem', padding: '0.05rem 0.35rem' }}
                       >
-                        STATE
+                        {isEn ? 'STATE' : 'NEGERI'}
                       </BrutalistBadge>
                     )}
                   </div>

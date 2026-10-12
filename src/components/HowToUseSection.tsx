@@ -26,7 +26,7 @@ export function HowToUseSection({ onClose }: HowToUseSectionProps) {
     },
     {
       step: '03',
-      title: 'Discover & Lock In Combo Cuti',
+      title: 'Discover & Lock In Leave Combos',
       emoji: '🎯',
       pill: 'Up to 4.5x ROI',
       bgColor: 'var(--bg-secondary)',
@@ -146,7 +146,7 @@ export function HowToUseSection({ onClose }: HowToUseSectionProps) {
           onClick={onClose}
           style={{ width: '100%' }}
         >
-          GOT IT — SHOW ME COMBO CUTI ↑
+          GOT IT — SHOW ME LEAVE COMBOS ↑
         </BrutalistButton>
       </div>
     </section>

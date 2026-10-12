@@ -22,7 +22,10 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
     allowSaturdayReplacements,
     toggleSaturdayReplacements,
     weekendType,
+    language,
   } = useLeaveStore();
+
+  const isEn = language === 'en';
 
   const [categoryFilter, setCategoryFilter] = useState<'ALL' | 'COMPULSORY' | 'FEDERAL' | 'STATE'>('ALL');
 
@@ -68,33 +71,47 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
 
   const presetInfo = {
     MINIMUM_11: {
-      title: 'EA 1955 (Minima 11 Hari Ikut Akta)',
-      desc: 'Ikut Seksyen 60D Akta Kerja, boss wajib bagi minima 11 hari cuti berbayar (5 wajib undang-undang + 6 company pick). Hak asas korang ni, jangan bagi boss claim tak tahu!',
-      tag: 'Minima Law 1955',
+      title: isEn ? 'EA 1955 (11 Days Statutory Min)' : 'EA 1955 (Minima 11 Hari Ikut Akta)',
+      desc: isEn
+        ? 'Under Section 60D of the Employment Act, employers must provide a minimum of 11 paid public holidays (5 statutory mandatory + 6 company chosen). This is your statutory right!'
+        : 'Ikut Seksyen 60D Akta Kerja, boss wajib bagi minima 11 hari cuti berbayar (5 wajib undang-undang + 6 company pick). Hak asas korang ni, jangan bagi boss claim tak tahu!',
+      tag: isEn ? 'EA 1955 Min' : 'Minima Law 1955',
       bg: 'var(--bg-primary)',
     },
     CORPORATE_15: {
-      title: 'Standard Corporate (15 Hari)',
-      desc: 'Standard biasa private sector & MNC: 5 cuti wajib EA campur cuti perayaan besar (Tahun Baru, Raya 2H, CNY 2H, Deepavali, Krismas, Wesak, dll). Paling ngam untuk geng opis swasta!',
-      tag: 'Standard Opis Swasta',
+      title: isEn ? 'Standard Corporate (15 Days)' : 'Standard Corporate (15 Hari)',
+      desc: isEn
+        ? 'Standard private sector & MNC practice: 5 mandatory EA holidays plus major festive breaks (New Year, Raya 2D, CNY 2D, Deepavali, Christmas, Wesak, etc.). Best fit for corporate employees!'
+        : 'Standard biasa private sector & MNC: 5 cuti wajib EA campur cuti perayaan besar (Tahun Baru, Raya 2H, CNY 2H, Deepavali, Krismas, Wesak, dll). Paling ngam untuk geng opis swasta!',
+      tag: isEn ? 'Corporate / MNC Standard' : 'Standard Opis Swasta',
       bg: 'var(--accent-cyan)',
     },
     ALL: {
-      title: `Semua Gazet Sapu Habis (${applicableHolidays.length} Hari)`,
-      desc: `Boss belanja semua! Mengambil kira kesemua cuti umum persekutuan dan cuti negeri rasmi bagi ${state.replace(/_/g, ' ')}. Rezeki terpijak, layan je cuti kaw-kaw!`,
-      tag: 'Boss Belanja Semua',
+      title: isEn
+        ? `All Gazetted Holidays (${applicableHolidays.length} Days)`
+        : `Semua Gazet Sapu Habis (${applicableHolidays.length} Hari)`,
+      desc: isEn
+        ? `All gazetted public holidays observed! Includes all federal and state public holidays for ${state.replace(/_/g, ' ')}. Enjoy maximum time off!`
+        : `Boss belanja semua! Mengambil kira kesemua cuti umum persekutuan dan cuti negeri rasmi bagi ${state.replace(/_/g, ' ')}. Rezeki terpijak, layan je cuti kaw-kaw!`,
+      tag: isEn ? 'All Holidays Observed' : 'Boss Belanja Semua',
       bg: 'var(--accent-yellow)',
     },
     CUSTOM: {
-      title: `Custom Setting Sendiri (${observedCount} Hari)`,
-      desc: 'Korang dah custom checklist cuti ikut kalendar atau polisi syarikat sendiri dari senarai kat bawah ni.',
-      tag: 'Checklist Sendiri',
+      title: isEn
+        ? `Custom Setting (${observedCount} Days)`
+        : `Custom Setting Sendiri (${observedCount} Hari)`,
+      desc: isEn
+        ? 'You have customized your holiday checklist based on your company calendar or handbook from the list below.'
+        : 'Korang dah custom checklist cuti ikut kalendar atau polisi syarikat sendiri dari senarai kat bawah ni.',
+      tag: isEn ? 'Custom Checklist' : 'Checklist Sendiri',
       bg: 'var(--bg-primary)',
     },
   }[activePreset] || {
-    title: 'Polisi Cuti Syarikat',
-    desc: 'Pilih preset cuti atau tanda cuti ikut memo HR syarikat korang kat bawah ni.',
-    tag: 'Setting Cuti',
+    title: isEn ? 'Company Holiday Policy' : 'Polisi Cuti Syarikat',
+    desc: isEn
+      ? 'Choose a leave preset or toggle holidays according to your company HR handbook below.'
+      : 'Pilih preset cuti atau tanda cuti ikut memo HR syarikat korang kat bawah ni.',
+    tag: isEn ? 'Holiday Settings' : 'Setting Cuti',
     bg: 'var(--bg-primary)',
   };
 
@@ -154,7 +171,7 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
                 letterSpacing: '0.5px',
               }}
             >
-              COMPANY HOLIDAY POLICY
+              {isEn ? 'COMPANY HOLIDAY POLICY' : 'POLISI CUTI SYARIKAT'}
             </h2>
             <span
               style={{
@@ -164,7 +181,9 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
                 opacity: 0.85,
               }}
             >
-              Observing {observedCount} / {applicableHolidays.length} Holidays in {state}
+              {isEn
+                ? `Observing ${observedCount} / ${applicableHolidays.length} Holidays in ${state}`
+                : `Memerhati ${observedCount} / ${applicableHolidays.length} Cuti di ${state}`}
             </span>
           </div>
 
@@ -264,7 +283,7 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
                 marginBottom: '0.4rem',
               }}
             >
-              Quick Presets:
+              {isEn ? 'Quick Presets:' : 'Preset Cepat:'}
             </span>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.35rem' }}>
               <BrutalistButton
@@ -272,21 +291,21 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
                 color={activePreset === 'MINIMUM_11' ? 'var(--accent-yellow)' : 'var(--bg-primary)'}
                 onClick={() => applyPreset('MINIMUM_11')}
               >
-                EA 11 DAYS
+                {isEn ? 'EA 11 DAYS' : 'EA 11 HARI'}
               </BrutalistButton>
               <BrutalistButton
                 size="sm"
                 color={activePreset === 'CORPORATE_15' ? 'var(--accent-yellow)' : 'var(--bg-primary)'}
                 onClick={() => applyPreset('CORPORATE_15')}
               >
-                CORP 15D
+                {isEn ? 'CORP 15D' : 'KORP 15H'}
               </BrutalistButton>
               <BrutalistButton
                 size="sm"
                 color={activePreset === 'ALL' ? 'var(--accent-yellow)' : 'var(--bg-primary)'}
                 onClick={() => applyPreset('ALL')}
               >
-                ALL ({applicableHolidays.length})
+                {isEn ? `ALL (${applicableHolidays.length})` : `SEMUA (${applicableHolidays.length})`}
               </BrutalistButton>
             </div>
           </div>
@@ -308,10 +327,18 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
           >
             <div>
               <div style={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase' }}>
-                {weekendType === 'SAT_SUN' ? 'Saturday' : 'Friday'} Replacement (Cuti Ganti)
+                {weekendType === 'SAT_SUN'
+                  ? isEn
+                    ? 'Saturday Replacement (In-Lieu)'
+                    : 'Cuti Ganti Sabtu'
+                  : isEn
+                  ? 'Friday Replacement (In-Lieu)'
+                  : 'Cuti Ganti Jumaat'}
               </div>
               <div style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-muted)' }}>
-                Roll off-day clashes to next working day (company policy option)
+                {isEn
+                  ? 'Roll off-day clashes to next working day (company policy option)'
+                  : 'Ganti hari rehat bertindih ke hari kerja seterusnya (polisi syarikat)'}
               </div>
             </div>
 
@@ -353,28 +380,28 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
               style={{ cursor: 'pointer' }}
               onClick={() => setCategoryFilter('ALL')}
             >
-              ALL ({applicableHolidays.length})
+              {isEn ? `ALL (${applicableHolidays.length})` : `SEMUA (${applicableHolidays.length})`}
             </BrutalistBadge>
             <BrutalistBadge
               color={categoryFilter === 'COMPULSORY' ? 'var(--accent-pink)' : 'var(--bg-primary)'}
               style={{ cursor: 'pointer' }}
               onClick={() => setCategoryFilter('COMPULSORY')}
             >
-              EA 1955 ({compulsoryHolidays.length})
+              {isEn ? `EA 1955 (${compulsoryHolidays.length})` : `WAJIB AKTA (${compulsoryHolidays.length})`}
             </BrutalistBadge>
             <BrutalistBadge
               color={categoryFilter === 'FEDERAL' ? 'var(--accent-cyan)' : 'var(--bg-primary)'}
               style={{ cursor: 'pointer' }}
               onClick={() => setCategoryFilter('FEDERAL')}
             >
-              FEDERAL ({federalHolidays.length})
+              {isEn ? `FEDERAL (${federalHolidays.length})` : `PERSEKUTUAN (${federalHolidays.length})`}
             </BrutalistBadge>
             <BrutalistBadge
               color={categoryFilter === 'STATE' ? 'var(--accent-green)' : 'var(--bg-primary)'}
               style={{ cursor: 'pointer' }}
               onClick={() => setCategoryFilter('STATE')}
             >
-              STATE ({stateHolidays.length})
+              {isEn ? `STATE (${stateHolidays.length})` : `NEGERI (${stateHolidays.length})`}
             </BrutalistBadge>
           </div>
 
@@ -429,7 +456,7 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
                           }}
                         >
                           <Lock size={9} strokeWidth={3} />
-                          EA COMPULSORY
+                          {isEn ? 'EA COMPULSORY' : 'WAJIB AKTA 1955'}
                         </span>
                       )}
                     </div>
@@ -477,7 +504,7 @@ export function HolidayConfigDrawer({ isOpen, onClose }: HolidayConfigDrawerProp
         >
           <BrutalistButton onClick={onClose} style={{ width: '100%' }}>
             <Sparkles size={16} strokeWidth={2.5} />
-            <span>SAVE POLICY & UPDATE COMBO</span>
+            <span>{isEn ? 'SAVE POLICY & UPDATE COMBOS' : 'SIMPAN POLISI & KEMAS KINI COMBO'}</span>
           </BrutalistButton>
         </div>
       </div>

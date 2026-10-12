@@ -84,8 +84,8 @@ export function BridgesView({
 
   // Group bridge opportunities by distinct holiday event
   const groupedHolidays = useMemo(() => {
-    return groupBridgesByHoliday(bridges, calendar);
-  }, [bridges, calendar]);
+    return groupBridgesByHoliday(bridges, calendar, language);
+  }, [bridges, calendar, language]);
 
   // Count past holiday events (ended before today)
   const pastHolidaysCount = useMemo(() => {
@@ -147,7 +147,7 @@ export function BridgesView({
                 <button
                   type="button"
                   onClick={onGoToPlan}
-                  title="Lihat cuti yang telah dilock"
+                  title={isEn ? 'View locked leave dates' : 'Lihat cuti yang telah dilock'}
                   style={{
                     backgroundColor: 'var(--accent-pink)',
                     color: 'var(--accent-pink-text)',
@@ -160,7 +160,7 @@ export function BridgesView({
                     boxShadow: '1px 1px 0px var(--border-color)',
                   }}
                 >
-                  {plannedLeaveDates.length} LOCK →
+                  {plannedLeaveDates.length} {isEn ? 'LOCKED →' : 'LOCK →'}
                 </button>
               )}
               <div
@@ -197,7 +197,7 @@ export function BridgesView({
                   color: 'var(--text-color)',
                 }}
               >
-                Negeri Tempat Kerja:
+                {isEn ? 'Workplace State:' : 'Negeri Tempat Kerja:'}
               </label>
               <div style={{ position: 'relative' }}>
                 <select
@@ -281,7 +281,7 @@ export function BridgesView({
                       color: 'var(--text-color)',
                     }}
                   >
-                    Baki Annual Leave
+                    {isEn ? 'Annual Leave Balance' : 'Baki Annual Leave'}
                   </span>
                   <span
                     style={{
@@ -294,7 +294,7 @@ export function BridgesView({
                       border: '1px solid var(--border-color)',
                     }}
                   >
-                    {remainingAl} TINGGAL
+                    {remainingAl} {isEn ? 'LEFT' : 'TINGGAL'}
                   </span>
                 </div>
                 <div
@@ -308,7 +308,7 @@ export function BridgesView({
                   <button
                     type="button"
                     onClick={() => setAlBalance(Math.max(0, annualLeaveBalance - 1))}
-                    aria-label="Kurangkan cuti tahunan"
+                    aria-label={isEn ? 'Decrease annual leave' : 'Kurangkan cuti tahunan'}
                     style={{
                       width: '32px',
                       height: '32px',
@@ -335,12 +335,12 @@ export function BridgesView({
                     }}
                   >
                     {annualLeaveBalance}{' '}
-                    <span style={{ fontSize: '0.72rem', fontWeight: 800 }}>HARI</span>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 800 }}>{isEn ? 'DAYS' : 'HARI'}</span>
                   </div>
                   <button
                     type="button"
                     onClick={() => setAlBalance(annualLeaveBalance + 1)}
-                    aria-label="Tambah cuti tahunan"
+                    aria-label={isEn ? 'Increase annual leave' : 'Tambah cuti tahunan'}
                     style={{
                       width: '32px',
                       height: '32px',
@@ -391,7 +391,7 @@ export function BridgesView({
                       color: 'var(--text-color)',
                     }}
                   >
-                    Had AL Sekali Cuti
+                    {isEn ? 'Max AL per Bridge' : 'Had AL Sekali Cuti'}
                   </span>
                   <span
                     style={{
@@ -400,7 +400,7 @@ export function BridgesView({
                       color: 'var(--text-muted)',
                     }}
                   >
-                    MAKS {maxAlPerBridge} HARI
+                    {isEn ? `MAX ${maxAlPerBridge} DAYS` : `MAKS ${maxAlPerBridge} HARI`}
                   </span>
                 </div>
                 <div
@@ -433,7 +433,7 @@ export function BridgesView({
                         textAlign: 'center',
                       }}
                     >
-                      {lvl}H
+                      {lvl}{isEn ? 'D' : 'H'}
                     </button>
                   ))}
                 </div>
@@ -473,7 +473,7 @@ export function BridgesView({
                     color: 'var(--accent-cyan-text)',
                   }}
                 >
-                  Polisi Cuti Syarikat (Checklist)
+                  {isEn ? 'Company Leave Policy (Checklist)' : 'Polisi Cuti Syarikat (Checklist)'}
                 </div>
                 <div
                   style={{
@@ -483,7 +483,7 @@ export function BridgesView({
                     marginTop: '0.1rem',
                   }}
                 >
-                  {observedHolidayIds.length} Cuti Aktif Dalam List
+                  {observedHolidayIds.length} {isEn ? 'Active Holidays in List' : 'Cuti Aktif Dalam List'}
                 </div>
               </div>
               <button
@@ -506,7 +506,7 @@ export function BridgesView({
                   cursor: 'pointer',
                 }}
               >
-                CUSTOM CUTI
+                {isEn ? 'CUSTOMIZE' : 'CUSTOM CUTI'}
               </button>
             </div>
 
@@ -542,7 +542,7 @@ export function BridgesView({
                       letterSpacing: '0.3px',
                     }}
                   >
-                    Setting Lanjutan (Advanced)
+                    {isEn ? 'Advanced Settings' : 'Setting Lanjutan (Advanced)'}
                   </span>
                 </div>
                 {isAdvancedOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
@@ -579,7 +579,7 @@ export function BridgesView({
                         color: 'var(--text-color)',
                       }}
                     >
-                      Hari Weekend:
+                      {isEn ? 'Weekend Days:' : 'Hari Weekend:'}
                     </span>
                     <div style={{ display: 'flex', gap: '0.3rem' }}>
                       <button
@@ -603,7 +603,7 @@ export function BridgesView({
                               : 'none',
                         }}
                       >
-                        SAB–AHAD
+                        {isEn ? 'SAT–SUN' : 'SAB–AHAD'}
                       </button>
                       <button
                         type="button"
@@ -626,7 +626,7 @@ export function BridgesView({
                               : 'none',
                         }}
                       >
-                        JUM–SAB
+                        {isEn ? 'FRI–SAT' : 'JUM–SAB'}
                       </button>
                     </div>
                   </div>
@@ -654,7 +654,7 @@ export function BridgesView({
                           color: 'var(--text-color)',
                         }}
                       >
-                        Cuti Ganti Sabtu:
+                        {isEn ? 'Saturday Replacement:' : 'Cuti Ganti Sabtu:'}
                       </div>
                       <div
                         style={{
@@ -663,7 +663,9 @@ export function BridgesView({
                           fontWeight: 600,
                         }}
                       >
-                        Ganti Isnin kalau cuti am jatuh Sabtu (tak rugi cuti!)
+                        {isEn
+                          ? 'Monday off if public holiday falls on Saturday'
+                          : 'Ganti Isnin kalau cuti am jatuh Sabtu (tak rugi cuti!)'}
                       </div>
                     </div>
                     <button
@@ -711,7 +713,7 @@ export function BridgesView({
                             color: 'var(--text-color)',
                           }}
                         >
-                          Cuti Lepas ({pastHolidaysCount}):
+                          {isEn ? `Past Holidays (${pastHolidaysCount}):` : `Cuti Lepas (${pastHolidaysCount}):`}
                         </div>
                         <div
                           style={{
@@ -720,7 +722,13 @@ export function BridgesView({
                             fontWeight: 600,
                           }}
                         >
-                          {hidePastHolidays ? 'Cuti lepas dah kena hide' : 'Tunjuk semua cuti lepas'}
+                          {hidePastHolidays
+                            ? isEn
+                              ? 'Past holidays are hidden'
+                              : 'Cuti lepas dah kena hide'
+                            : isEn
+                            ? 'Show all past holidays'
+                            : 'Tunjuk semua cuti lepas'}
                         </div>
                       </div>
                       <div style={{ display: 'flex', gap: '0.3rem' }}>
@@ -796,13 +804,19 @@ export function BridgesView({
                           textDecoration: 'underline',
                         }}
                       >
-                        Pergi Tab Setting & Cuti Penuh →
+                        {isEn ? 'Go to Full Holiday & Settings Tab →' : 'Pergi Tab Setting & Cuti Penuh →'}
                       </button>
                     )}
                     <button
                       type="button"
                       onClick={() => {
-                        if (window.confirm('Betul ke nak reset semua setting balik asal bossku?')) {
+                        if (
+                          window.confirm(
+                            isEn
+                              ? 'Are you sure you want to reset all settings to default?'
+                              : 'Betul ke nak reset semua setting balik asal bossku?'
+                          )
+                        ) {
                           resetToDefaults();
                         }
                       }}
@@ -824,7 +838,7 @@ export function BridgesView({
                       }}
                     >
                       <RefreshCw size={11} color="var(--border-color)" />
-                      <span>RESET DEFAULT</span>
+                      <span>{isEn ? 'RESET DEFAULTS' : 'RESET DEFAULT'}</span>
                     </button>
                   </div>
                 </div>
@@ -855,7 +869,7 @@ export function BridgesView({
               margin: 0,
             }}
           >
-            SENARAI CUTI PANJANG 2026
+            {isEn ? '2026 LONG WEEKENDS LIST' : 'SENARAI CUTI PANJANG 2026'}
           </h2>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
             <button
@@ -878,7 +892,7 @@ export function BridgesView({
               }}
             >
               <Palette size={13} strokeWidth={2.5} />
-              <span>PANDUAN WARNA</span>
+              <span>{isEn ? 'COLOR LEGEND' : 'PANDUAN WARNA'}</span>
             </button>
             <span
               style={{
@@ -888,7 +902,7 @@ export function BridgesView({
                 textTransform: 'uppercase',
               }}
             >
-              {filteredHolidays.length} DARI {groupedHolidays.length} CUTI
+              {filteredHolidays.length} {isEn ? 'OF' : 'DARI'} {groupedHolidays.length} {isEn ? 'HOLIDAYS' : 'CUTI'}
             </span>
           </div>
         </div>
@@ -915,7 +929,11 @@ export function BridgesView({
           headerColor="var(--accent-orange)"
           title={
             hidePastHolidays && pastHolidaysCount > 0
-              ? 'CUTI LEPAS DAH KENA HIDE!'
+              ? isEn
+                ? 'PAST HOLIDAYS ARE HIDDEN!'
+                : 'CUTI LEPAS DAH KENA HIDE!'
+              : isEn
+              ? 'NO HOLIDAYS FOUND FOR THIS FILTER!'
               : 'TAK JUMPA CUTI UNTUK FILTER NI LAH!'
           }
         >
@@ -933,7 +951,11 @@ export function BridgesView({
               }}
             >
               {hidePastHolidays && pastHolidaysCount > 0
-                ? `Semua ${pastHolidaysCount} cuti lepas dah kena hide. Korang boleh buka balik bila-bila masa kat butang bawah ni!`
+                ? isEn
+                  ? `All ${pastHolidaysCount} past holidays have been hidden. You can unhide them anytime with the button below!`
+                  : `Semua ${pastHolidaysCount} cuti lepas dah kena hide. Korang boleh buka balik bila-bila masa kat butang bawah ni!`
+                : isEn
+                ? `No long weekends found with a maximum quota of ${maxAlPerBridge} AL days. Try increasing the AL limit or click the ALL tab!`
                 : `Filter ni takde cuti panjang dengan had maksimum ${maxAlPerBridge} hari AL. Cuba naikkan slider had AL atau klik tab SEMUA!`}
             </p>
             <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -943,7 +965,7 @@ export function BridgesView({
                   color="var(--accent-cyan)"
                   onClick={() => setHidePastHolidays(false)}
                 >
-                  TUNJUK BALIK CUTI LEPAS ({pastHolidaysCount})
+                  {isEn ? `SHOW PAST HOLIDAYS (${pastHolidaysCount})` : `TUNJUK BALIK CUTI LEPAS (${pastHolidaysCount})`}
                 </BrutalistButton>
               )}
               <BrutalistButton
@@ -951,7 +973,7 @@ export function BridgesView({
                 color="var(--accent-yellow)"
                 onClick={() => setActiveTab('ALL')}
               >
-                TENGOK SEMUA CUTI
+                {isEn ? 'VIEW ALL HOLIDAYS' : 'TENGOK SEMUA CUTI'}
               </BrutalistButton>
               {maxAlPerBridge < 5 && (
                 <BrutalistButton
@@ -959,7 +981,7 @@ export function BridgesView({
                   color="var(--bg-primary)"
                   onClick={() => setMaxAlPerBridge(maxAlPerBridge + 1)}
                 >
-                  +1 HARI AL LAGI
+                  {isEn ? '+1 MORE AL DAY' : '+1 HARI AL LAGI'}
                 </BrutalistButton>
               )}
             </div>

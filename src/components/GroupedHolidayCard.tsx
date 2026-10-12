@@ -21,6 +21,8 @@ export function GroupedHolidayCard({
   const plannedLeaveDates = useLeaveStore((s) => s.plannedLeaveDates);
   const togglePlannedBridgeDates = useLeaveStore((s) => s.togglePlannedBridgeDates);
   const togglePlannedLeaveDate = useLeaveStore((s) => s.togglePlannedLeaveDate);
+  const language = useLeaveStore((s) => s.language);
+  const isEn = language === 'en';
 
   const [isExpanded, setIsExpanded] = useState(isInitiallyExpanded);
   const [copied, setCopied] = useState(false);
@@ -86,7 +88,7 @@ export function GroupedHolidayCard({
 
   const handleCopy = async () => {
     try {
-      await copyLeaveTextToClipboard(activeBridge);
+      await copyLeaveTextToClipboard(activeBridge, language);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -192,7 +194,7 @@ export function GroupedHolidayCard({
           <button
             type="button"
             onClick={() => setIsExpanded(!isExpanded)}
-            title={isExpanded ? 'Close detail' : 'Tengok cara cuti'}
+            title={isExpanded ? (isEn ? 'Close details' : 'Close detail') : (isEn ? 'View leave options' : 'Tengok cara cuti')}
             style={{
               backgroundColor: 'var(--bg-primary)',
               border: '2px solid var(--border-color)',
@@ -211,7 +213,7 @@ export function GroupedHolidayCard({
               flexShrink: 0,
             }}
           >
-            <span>{holiday.strategies.length} CARA</span>
+            <span>{holiday.strategies.length} {isEn ? 'OPTIONS' : 'CARA'}</span>
             {isExpanded ? (
               <ChevronUp size={13} strokeWidth={3} />
             ) : (
@@ -252,7 +254,7 @@ export function GroupedHolidayCard({
                   letterSpacing: '-0.3px',
                 }}
               >
-                {holiday.maxDaysOff} HARI OFF
+                {holiday.maxDaysOff} {isEn ? 'DAYS OFF' : 'HARI OFF'}
               </span>
               <span
                 style={{
@@ -262,12 +264,16 @@ export function GroupedHolidayCard({
                   textTransform: 'uppercase',
                 }}
               >
-                ({holiday.bestRoi >= 10 ? 'FREE CUTI' : `${holiday.bestRoi}x ROI`})
+                ({holiday.bestRoi >= 10 ? (isEn ? 'FREE LEAVE' : 'FREE CUTI') : `${holiday.bestRoi}x ROI`})
               </span>
             </div>
 
             <BrutalistBadge color={activePlannedStrategy ? 'var(--accent-green)' : 'var(--bg-primary)'}>
-              {activePlannedStrategy ? 'DAH LOCK' : `${holiday.strategies.length} PILIHAN`}
+              {activePlannedStrategy
+                ? isEn
+                  ? 'LOCKED'
+                  : 'DAH LOCK'
+                : `${holiday.strategies.length} ${isEn ? 'OPTIONS' : 'PILIHAN'}`}
             </BrutalistBadge>
           </div>
 
@@ -335,7 +341,7 @@ export function GroupedHolidayCard({
               userSelect: 'none',
             }}
           >
-            <span>PILIH CARA CUTI</span>
+            <span>{isEn ? 'SELECT LEAVE STRATEGY' : 'PILIH CARA CUTI'}</span>
             <ChevronDown size={14} strokeWidth={3} />
           </div>
         </div>
@@ -355,7 +361,7 @@ export function GroupedHolidayCard({
                   marginBottom: '0.35rem',
                 }}
               >
-                CARA HACK CUTI NI:
+                {isEn ? 'HOW TO HACK THIS HOLIDAY:' : 'CARA HACK CUTI NI:'}
               </div>
               <div
                 style={{
@@ -455,7 +461,7 @@ export function GroupedHolidayCard({
 
             <div style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap' }}>
               <BrutalistBadge color="var(--bg-secondary)">
-                {activeBridge.totalDaysOff} HARI OFF
+                {activeBridge.totalDaysOff} {isEn ? 'DAYS OFF' : 'HARI OFF'}
               </BrutalistBadge>
 
               {activeBridge.alDaysRequired === 0 ? (
@@ -545,14 +551,20 @@ export function GroupedHolidayCard({
                 >
                   <span style={{ fontSize: '0.74rem', fontWeight: 900 }}>
                     {isStrategyFullyPlanned
-                      ? 'DAH LOCK'
+                      ? isEn
+                        ? 'LOCKED'
+                        : 'DAH LOCK'
                       : isStrategyPartiallyPlanned
-                      ? '+ SAMBUNG'
+                      ? isEn
+                        ? '+ RESUME'
+                        : '+ SAMBUNG'
                       : '+ LOCK'}
                   </span>
                   <span style={{ fontSize: '0.66rem', fontWeight: 800 }}>
                     {isStrategyFullyPlanned
-                      ? `(${activeBridge.alDaysRequired}H AL)`
+                      ? `(${activeBridge.alDaysRequired}${isEn ? 'D' : 'H'} AL)`
+                      : isEn
+                      ? 'STRATEGY'
                       : 'STRATEGI'}
                   </span>
                 </div>
@@ -607,9 +619,9 @@ export function GroupedHolidayCard({
                 }}
               >
                 <span style={{ fontSize: '0.74rem', fontWeight: 900 }}>
-                  {copied ? 'DAH COPY!' : 'COPY'}
+                  {copied ? (isEn ? 'COPIED!' : 'DAH COPY!') : 'COPY'}
                 </span>
-                <span style={{ fontSize: '0.66rem', fontWeight: 800 }}>AYAT</span>
+                <span style={{ fontSize: '0.66rem', fontWeight: 800 }}>{isEn ? 'TEXT' : 'AYAT'}</span>
               </div>
             </BrutalistButton>
           </div>
@@ -637,7 +649,7 @@ export function GroupedHolidayCard({
               color: 'var(--text-muted)',
             }}
           >
-            <span>CLOSE DETAIL</span>
+            <span>{isEn ? 'CLOSE DETAILS' : 'CLOSE DETAIL'}</span>
             <ChevronUp size={12} strokeWidth={3} />
           </button>
         </div>

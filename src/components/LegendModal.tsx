@@ -223,7 +223,7 @@ export function LegendModal({ isOpen, onClose }: LegendModalProps) {
                 gap: '0.35rem',
               }}
             >
-              <span>🗓️ Warna Strip Kalendar (Hari Ke Hari)</span>
+              <span>{isEn ? '🗓️ Calendar Day Strip Colors' : '🗓️ Warna Strip Kalendar (Hari Ke Hari)'}</span>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
@@ -277,7 +277,7 @@ export function LegendModal({ isOpen, onClose }: LegendModalProps) {
                 gap: '0.35rem',
               }}
             >
-              <span>🃏 Simbol & Badge Pada Kad Cuti</span>
+              <span>{isEn ? '🃏 Holiday Card Symbols & Badges' : '🃏 Simbol & Badge Pada Kad Cuti'}</span>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
@@ -328,7 +328,7 @@ export function LegendModal({ isOpen, onClose }: LegendModalProps) {
             onClick={onClose}
             style={{ width: '100%' }}
           >
-            FAHAM, DAH CLEAR!
+            {isEn ? 'GOT IT, CLEAR!' : 'FAHAM, DAH CLEAR!'}
           </BrutalistButton>
         </div>
       </div>

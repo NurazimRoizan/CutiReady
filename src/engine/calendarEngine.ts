@@ -9,6 +9,7 @@ import {
   HolidayStrategy,
   StrategyType,
   Quarter,
+  AppLanguage,
 } from '../types';
 import { DEFAULT_HOLIDAYS_2026 } from '../data/holidays';
 
@@ -220,8 +221,11 @@ function deduplicateAndFilterBridges(bridges: BridgeOpportunity[]): BridgeOpport
  */
 export function groupBridgesByHoliday(
   bridges: BridgeOpportunity[],
-  calendar: CalendarDay[]
+  calendar: CalendarDay[],
+  language: AppLanguage = 'manglish'
 ): GroupedHoliday[] {
+  const isEn = language === 'en';
+
   // 1. Identify all contiguous non-workday clusters in calendar that contain public/replacement holidays
   interface ClusterMeta {
     id: string;
@@ -264,7 +268,7 @@ export function groupBridgesByHoliday(
           )
         );
 
-        const title = cleanedNames.join(' + ') || 'Cuti Umum';
+        const title = cleanedNames.join(' + ') || (isEn ? 'Public Holiday' : 'Cuti Umum');
 
         clusters.push({
           id: `cluster-${primaryDate}`,
@@ -302,7 +306,9 @@ export function groupBridgesByHoliday(
   // 3. For each cluster with at least 1 bridge opportunity, build the GroupedHoliday with classified strategies
   const groupedHolidays: GroupedHoliday[] = [];
 
-  const DAY_NAMES_MS = ['Ahad', 'Isn', 'Sel', 'Rab', 'Kha', 'Jum', 'Sab'];
+  const DAY_NAMES = isEn
+    ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    : ['Ahad', 'Isn', 'Sel', 'Rab', 'Kha', 'Jum', 'Sab'];
 
   clusters.forEach((cluster) => {
     const matchedBridges = clusterMap.get(cluster.id) || [];
@@ -320,9 +326,11 @@ export function groupBridgesByHoliday(
 
       if (bridge.alDaysRequired === 0) {
         type = 'ZERO_AL';
-        label = `0 AL (${bridge.totalDaysOff}H)`;
-        shortTag = `${bridge.totalDaysOff}H OFF`;
-        description = `Cuti free naturally! Tak usik baki AL langsung (${bridge.totalDaysOff} hari lepak santai)`;
+        label = isEn ? `0 AL (${bridge.totalDaysOff}D)` : `0 AL (${bridge.totalDaysOff}H)`;
+        shortTag = isEn ? `${bridge.totalDaysOff}D OFF` : `${bridge.totalDaysOff}H OFF`;
+        description = isEn
+          ? `Natural long weekend without using annual leave (${bridge.totalDaysOff} days off)`
+          : `Cuti free naturally! Tak usik baki AL langsung (${bridge.totalDaysOff} hari lepak santai)`;
       } else {
         const alDates = bridge.annualLeaveDates;
         const allBefore = alDates.length > 0 && alDates.every((d) => d < firstPhDate);
@@ -334,24 +342,32 @@ export function groupBridgesByHoliday(
 
         if (allBefore) {
           type = 'BEFORE';
-          label = `SEBELUM (${bridge.alDaysRequired} AL)`;
-          shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
-          description = `Kaut ${bridge.alDaysRequired} hari AL sebelum cuti, dapat ${bridge.totalDaysOff} hari rehat kaw-kaw!`;
+          label = isEn ? `BEFORE (${bridge.alDaysRequired} AL)` : `SEBELUM (${bridge.alDaysRequired} AL)`;
+          shortTag = isEn ? `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}D` : `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
+          description = isEn
+            ? `Apply ${bridge.alDaysRequired} AL before the holiday for a ${bridge.totalDaysOff}-day break!`
+            : `Kaut ${bridge.alDaysRequired} hari AL sebelum cuti, dapat ${bridge.totalDaysOff} hari rehat kaw-kaw!`;
         } else if (allAfter) {
           type = 'AFTER';
-          label = `SELEPAS (${bridge.alDaysRequired} AL)`;
-          shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
-          description = `Kaut ${bridge.alDaysRequired} hari AL lepas cuti, sambung sampai ${bridge.totalDaysOff} hari rehat!`;
+          label = isEn ? `AFTER (${bridge.alDaysRequired} AL)` : `SELEPAS (${bridge.alDaysRequired} AL)`;
+          shortTag = isEn ? `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}D` : `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
+          description = isEn
+            ? `Apply ${bridge.alDaysRequired} AL after the holiday to extend to ${bridge.totalDaysOff} days off!`
+            : `Kaut ${bridge.alDaysRequired} hari AL lepas cuti, sambung sampai ${bridge.totalDaysOff} hari rehat!`;
         } else if (isCombo) {
           type = 'COMBO';
           label = `COMBO (${bridge.alDaysRequired} AL)`;
-          shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
-          description = `Combo padu sebelum & lepas! Tapau ${bridge.totalDaysOff} hari rehat direct tanpa henti!`;
+          shortTag = isEn ? `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}D` : `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
+          description = isEn
+            ? `Bridge before and after for an uninterrupted ${bridge.totalDaysOff}-day break!`
+            : `Combo padu sebelum & lepas! Tapau ${bridge.totalDaysOff} hari rehat direct tanpa henti!`;
         } else {
           type = 'MIDWEEK';
-          label = `SAMBUNG (${bridge.alDaysRequired} AL)`;
-          shortTag = `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
-          description = `Sambung tengah minggu ngam-ngam, auto enjoy ${bridge.totalDaysOff} hari cuti!`;
+          label = isEn ? `EXTEND (${bridge.alDaysRequired} AL)` : `SAMBUNG (${bridge.alDaysRequired} AL)`;
+          shortTag = isEn ? `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}D` : `${bridge.alDaysRequired} AL • ${bridge.totalDaysOff}H`;
+          description = isEn
+            ? `Bridge midweek workdays to unlock a ${bridge.totalDaysOff}-day break!`
+            : `Sambung tengah minggu ngam-ngam, auto enjoy ${bridge.totalDaysOff} hari cuti!`;
         }
       }
 
@@ -466,8 +482,8 @@ export function groupBridgesByHoliday(
     // Format dates cleanly with Malay day names
     const startParsed = parseISO(firstPhDate);
     const endParsed = parseISO(lastPhDate);
-    const startDow = DAY_NAMES_MS[getDay(startParsed)];
-    const endDow = DAY_NAMES_MS[getDay(endParsed)];
+    const startDow = DAY_NAMES[getDay(startParsed)];
+    const endDow = DAY_NAMES[getDay(endParsed)];
 
     let holidayDatesFormatted = '';
     let holidayDaysFormatted = '';
