@@ -110,12 +110,10 @@ export function LanguageToastBanner() {
         </div>
         <span
           style={{
-            fontSize: '0.74rem',
+            fontSize: 'clamp(0.68rem, 2.7vw, 0.74rem)',
             fontWeight: 800,
             color: 'var(--text-color)',
             whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
           }}
         >
           Prefer English?

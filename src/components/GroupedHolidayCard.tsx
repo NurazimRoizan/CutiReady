@@ -113,35 +113,31 @@ export function GroupedHolidayCard({
             cursor: 'pointer',
             minWidth: 0,
             width: '100%',
-            overflow: 'hidden',
           }}
         >
           {/* Row 1: Holiday Title */}
           <div
             style={{
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'flex-start',
               gap: '0.35rem',
-              fontSize: '0.92rem',
+              fontSize: 'clamp(0.84rem, 3.4vw, 0.92rem)',
               fontWeight: 900,
               textTransform: 'uppercase',
               letterSpacing: '-0.2px',
-              lineHeight: 1.2,
+              lineHeight: 1.25,
               color: 'var(--text-color)',
               minWidth: 0,
               width: '100%',
-              overflow: 'hidden',
             }}
           >
-            <Calendar size={14} strokeWidth={2.5} style={{ flexShrink: 0 }} />
+            <Calendar size={14} strokeWidth={2.5} style={{ flexShrink: 0, marginTop: '2px' }} />
             <span
               style={{
                 minWidth: 0,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
                 display: 'block',
                 flex: 1,
+                wordBreak: 'break-word',
               }}
             >
               {holiday.title}
@@ -151,15 +147,12 @@ export function GroupedHolidayCard({
           {/* Row 2: Date (e.g. 8 - 9 Nov 2026) */}
           <div
             style={{
-              fontSize: '0.74rem',
+              fontSize: 'clamp(0.7rem, 2.8vw, 0.74rem)',
               fontWeight: 900,
               textTransform: 'uppercase',
               letterSpacing: '0.2px',
               lineHeight: 1.15,
               color: 'var(--text-color)',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
             }}
           >
             {holiday.holidayDatesFormatted}
@@ -168,16 +161,13 @@ export function GroupedHolidayCard({
           {/* Row 3: Day Names & Quarter (e.g. Ahad - Isnin • Q4) */}
           <div
             style={{
-              fontSize: '0.68rem',
+              fontSize: 'clamp(0.64rem, 2.6vw, 0.68rem)',
               fontWeight: 800,
               textTransform: 'uppercase',
               letterSpacing: '0.2px',
               lineHeight: 1.15,
               color: 'var(--text-color)',
               opacity: 0.85,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
             }}
           >
             {holiday.holidayDaysFormatted} • {holiday.quarter}
@@ -200,7 +190,7 @@ export function GroupedHolidayCard({
               border: '2px solid var(--border-color)',
               borderRadius: 'var(--border-radius-sm)',
               padding: '0.25rem 0.5rem',
-              fontSize: '0.68rem',
+              fontSize: 'clamp(0.64rem, 2.6vw, 0.68rem)',
               fontWeight: 900,
               textTransform: 'uppercase',
               cursor: 'pointer',

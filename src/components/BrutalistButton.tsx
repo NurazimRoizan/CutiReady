@@ -36,9 +36,9 @@ export function BrutalistButton({
   };
 
   const fontSizeBySize = {
-    sm: '0.8rem',
-    md: '0.95rem',
-    lg: '1.1rem',
+    sm: 'clamp(0.72rem, 2.9vw, 0.8rem)',
+    md: 'clamp(0.85rem, 3.4vw, 0.95rem)',
+    lg: 'clamp(0.95rem, 3.8vw, 1.1rem)',
   };
 
   const computedTextColor =

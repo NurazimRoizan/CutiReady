@@ -126,7 +126,7 @@ export function BottomNavBar({
 
               <span
                 style={{
-                  fontSize: '0.72rem',
+                  fontSize: 'clamp(0.64rem, 2.7vw, 0.72rem)',
                   fontWeight: 900,
                   textTransform: 'uppercase',
                   letterSpacing: '0.4px',

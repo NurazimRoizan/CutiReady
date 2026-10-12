@@ -64,7 +64,6 @@ export function BrutalistCard({
               gap: '0.5rem',
               minWidth: 0,
               flex: 1,
-              overflow: 'hidden',
             }}
           >
             {title && (
@@ -72,16 +71,15 @@ export function BrutalistCard({
                 <h3
                   style={{
                     margin: 0,
-                    fontSize: '0.95rem',
+                    fontSize: 'clamp(0.82rem, 3.2vw, 0.95rem)',
                     fontWeight: 900,
                     textTransform: 'uppercase',
-                    letterSpacing: '0.5px',
-                    lineHeight: 1.2,
+                    letterSpacing: '0.4px',
+                    lineHeight: 1.25,
                     color: computedHeaderTextColor,
                     minWidth: 0,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
+                    whiteSpace: 'normal',
+                    wordBreak: 'break-word',
                   }}
                 >
                   {title}
@@ -91,7 +89,12 @@ export function BrutalistCard({
                   style={{
                     minWidth: 0,
                     flex: 1,
-                    overflow: 'hidden',
+                    fontSize: 'clamp(0.82rem, 3.2vw, 0.95rem)',
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    lineHeight: 1.25,
+                    whiteSpace: 'normal',
+                    wordBreak: 'break-word',
                   }}
                 >
                   {title}
@@ -101,7 +104,7 @@ export function BrutalistCard({
             {subtitle && (
               <span
                 style={{
-                  fontSize: '0.72rem',
+                  fontSize: 'clamp(0.66rem, 2.6vw, 0.72rem)',
                   fontWeight: 700,
                   textTransform: 'uppercase',
                   opacity: 0.85,

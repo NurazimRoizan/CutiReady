@@ -101,17 +101,20 @@ export function RulesView() {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          gap: '0.5rem',
+          flexWrap: 'wrap',
           marginBottom: '1rem',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-          <Settings size={22} strokeWidth={2.5} color="var(--text-color)" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', minWidth: 0, flex: 1 }}>
+          <Settings size={22} strokeWidth={2.5} color="var(--text-color)" style={{ flexShrink: 0 }} />
           <h2
             style={{
-              fontSize: '1.25rem',
+              fontSize: 'clamp(1.05rem, 4.2vw, 1.25rem)',
               fontWeight: 900,
               textTransform: 'uppercase',
               letterSpacing: '-0.5px',
+              lineHeight: 1.2,
               margin: 0,
             }}
           >
@@ -139,7 +142,14 @@ export function RulesView() {
             : 'Cuti umum dan hari weekend auto-tukar ikut negeri tempat kerja korang. Takyah pening kira manual!'}
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '0.5rem', alignItems: 'center' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '0.5rem',
+            alignItems: 'center',
+          }}
+        >
           <div style={{ position: 'relative' }}>
             <select
               value={state}
@@ -150,7 +160,7 @@ export function RulesView() {
                 border: '2px solid var(--border-color)',
                 borderRadius: 'var(--border-radius-sm)',
                 padding: '0.5rem 1.8rem 0.5rem 0.65rem',
-                fontSize: '0.82rem',
+                fontSize: 'clamp(0.78rem, 3.1vw, 0.85rem)',
                 fontWeight: 900,
                 color: 'var(--text-color)',
                 cursor: 'pointer',
@@ -188,9 +198,10 @@ export function RulesView() {
               borderRadius: 'var(--border-radius-sm)',
               padding: '0.5rem 0.6rem',
               textAlign: 'center',
-              fontSize: '0.74rem',
+              fontSize: 'clamp(0.7rem, 2.8vw, 0.76rem)',
               fontWeight: 900,
               textTransform: 'uppercase',
+              letterSpacing: '0.3px',
             }}
           >
             {weekendType === 'SAT_SUN'
@@ -317,7 +328,7 @@ export function RulesView() {
                   color: 'var(--text-color)',
                   border: '2px solid var(--border-color)',
                   borderRadius: 'var(--border-radius-sm)',
-                  padding: '0.55rem 0.25rem',
+                  padding: '0.55rem 0.2rem',
                   cursor: 'pointer',
                   boxShadow: isSelected
                     ? '2px 2px 0px var(--border-color)'
@@ -327,7 +338,16 @@ export function RulesView() {
                 }}
               >
                 <p.icon size={16} strokeWidth={2.5} />
-                <span style={{ fontSize: '0.72rem', fontWeight: 900, textTransform: 'uppercase', textAlign: 'center' }}>
+                <span
+                  style={{
+                    fontSize: 'clamp(0.66rem, 2.7vw, 0.74rem)',
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    textAlign: 'center',
+                    lineHeight: 1.15,
+                    wordBreak: 'break-word',
+                  }}
+                >
                   {p.label}
                 </span>
               </button>
@@ -383,7 +403,7 @@ export function RulesView() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: '1.2fr 1fr',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
             gap: '0.85rem',
             alignItems: 'center',
           }}
@@ -503,10 +523,11 @@ export function RulesView() {
         >
           <h3
             style={{
-              fontSize: '0.95rem',
+              fontSize: 'clamp(0.85rem, 3.4vw, 0.95rem)',
               fontWeight: 900,
               textTransform: 'uppercase',
               letterSpacing: '0.5px',
+              lineHeight: 1.25,
               margin: 0,
             }}
           >
@@ -543,7 +564,7 @@ export function RulesView() {
                 border: '2px solid var(--border-color)',
                 borderRadius: 'var(--border-radius-pill)',
                 padding: '0.3rem 0.65rem',
-                fontSize: '0.72rem',
+                fontSize: 'clamp(0.68rem, 2.7vw, 0.72rem)',
                 fontWeight: 900,
                 textTransform: 'uppercase',
                 cursor: 'pointer',
